@@ -1,1940 +1,1465 @@
-/* =========================================================
-   PHÚC NGUYÊN OFFICIAL PROJECT
-   OTTER'S CORNER
-   STYLE.CSS
-========================================================= */
+const $ = (selector, root = document) =>
+  root.querySelector(selector);
 
-/* =========================================================
-   1. RESET
-========================================================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    width: 100%;
-    min-height: 100%;
-    scroll-behavior: smooth;
-}
-
-body {
-    width: 100%;
-    min-height: 100vh;
-
-    font-family: Arial, Helvetica, sans-serif;
-
-    color: #18324a;
-
-    background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(255,255,255,0.35),
-            transparent 35%
-        ),
-        #c9eaff;
-
-    overflow-x: hidden;
-}
+const $$ = (selector, root = document) =>
+  [...root.querySelectorAll(selector)];
 
 
 /* =========================================================
-   2. BIẾN MÀU
+   CẤU HÌNH
 ========================================================= */
 
-:root {
+/*
+  SAU KHI LÀM GOOGLE APPS SCRIPT:
 
-    --baby-blue: #c9eaff;
+  const WISH_API_URL =
+    "https://script.google.com/macros/s/XXXXXXXX/exec";
+*/
 
-    --baby-blue-light: #e7f7ff;
+const WISH_API_URL = "";
 
-    --blue-dark: #18324a;
 
-    --blue-mid: #477da5;
+const GOOGLE_FORM_URL =
+  "https://forms.gle/D47nMUWBiiyie2gSA";
 
-    --blue-soft: #7da9c7;
 
-    --white: #ffffff;
+/* =========================================================
+   ELEMENT
+========================================================= */
 
-    --glass: rgba(255,255,255,0.38);
+const music = $("#music");
 
-    --border: rgba(255,255,255,0.7);
+const entry = $("#entry");
 
+const site = $("#site");
+
+
+/* =========================================================
+   SAO NỀN BABY BLUE
+========================================================= */
+
+function makeBackgroundStars(container, amount) {
+
+  if (!container) return;
+
+  const shapes = [
+    "✦",
+    "✧",
+    "⋆",
+    "✶",
+    "✩"
+  ];
+
+
+  for (let i = 0; i < amount; i++) {
+
+    const star = document.createElement("span");
+
+    star.className = "star";
+
+    star.textContent =
+      shapes[
+        Math.floor(
+          Math.random() * shapes.length
+        )
+      ];
+
+
+    star.style.left =
+      Math.random() * 100 + "%";
+
+
+    star.style.top =
+      Math.random() * 100 + "%";
+
+
+    star.style.fontSize =
+      7 + Math.random() * 16 + "px";
+
+
+    star.style.animationDelay =
+      Math.random() * 2.5 + "s";
+
+
+    star.style.animationDuration =
+      1.1 + Math.random() * 2.2 + "s";
+
+
+    container.appendChild(star);
+  }
+}
+
+
+makeBackgroundStars(
+  $("#globalStars"),
+  105
+);
+
+
+makeBackgroundStars(
+  $("#entryStars"),
+  75
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const navItems = [
+
+  [
+    "01",
+    "THÔNG TIN PHÚC NGUYÊN",
+    "profilePage"
+  ],
+
+  [
+    "02",
+    "PROJECTS",
+    "projectsPage"
+  ],
+
+  [
+    "03",
+    "THU & CHI PROJECT",
+    "financePage"
+  ],
+
+  [
+    "04",
+    "GỬI LỜI CHÚC & DONATE",
+    "donatePage"
+  ]
+
+];
+
+
+function buildNavigation() {
+
+  const side =
+    $("#sideNav");
+
+  const mobile =
+    $("#mobileNav");
+
+
+  navItems.forEach(
+    ([number, title, id]) => {
+
+      const button =
+        document.createElement("button");
+
+      button.dataset.page = id;
+
+      button.innerHTML = `
+        <small>${number}</small>
+        <b>${title}</b>
+        <em>✦</em>
+      `;
+
+
+      side.appendChild(button);
+
+
+      const mobileButton =
+        document.createElement("button");
+
+      mobileButton.dataset.page = id;
+
+      mobileButton.innerHTML =
+        `${number}. ${title}`;
+
+
+      mobile.appendChild(
+        mobileButton
+      );
+
+    }
+  );
+
+
+  $$("[data-page]").forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+          showPage(
+            button.dataset.page
+          );
+        }
+      );
+
+    }
+  );
+}
+
+
+buildNavigation();
+
+
+function showPage(id) {
+
+  $$(".page").forEach(
+    page => {
+
+      page.classList.toggle(
+        "active",
+        page.id === id
+      );
+
+    }
+  );
+
+
+  $$("[data-page]").forEach(
+    button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === id
+      );
+
+    }
+  );
+
+
+  $("#mobileNav")
+    .classList
+    .remove("show");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  if (id === "donatePage") {
+    loadPublicWishes();
+  }
+}
+
+
+$("#menuButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("#mobileNav")
+        .classList
+        .toggle("show");
+
+    }
+  );
+
+
+/* =========================================================
+   TRANG MỞ ĐẦU + NHẠC
+========================================================= */
+
+$("#enterButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      entry.classList.add(
+        "hidden"
+      );
+
+      site.classList.remove(
+        "hidden"
+      );
+
+
+      try {
+
+        await music.play();
+
+        $("#musicButton")
+          .textContent =
+          "♫ MUSIC ON";
+
+      }
+
+      catch {
+
+        $("#musicButton")
+          .textContent =
+          "♫ MUSIC OFF";
+
+      }
+
+    }
+  );
+
+
+$("#musicButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      if (music.paused) {
+
+        try {
+          await music.play();
+        }
+
+        catch {}
+
+        $("#musicButton")
+          .textContent =
+          "♫ MUSIC ON";
+
+      }
+
+      else {
+
+        music.pause();
+
+        $("#musicButton")
+          .textContent =
+          "♫ MUSIC OFF";
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   ACCORDION
+========================================================= */
+
+$$(".accordion-button")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        button
+          .parentElement
+          .classList
+          .toggle("open");
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   PROJECT DATA
+========================================================= */
+
+const projects = [
+
+  {
+    id: "PJ1",
+
+    title:
+      "CHEER TO GRADUATION & ROAD TO DEBUT",
+
+    short:
+      "Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu.",
+
+    media: "video",
+
+    file: "PJ1.mp4",
+
+    text: `💕 Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu 💕
+
+📨 Dear Phúc Nguyên:
+
+“Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.”
+
+✨ SHOW THE WORLD WHO YOU ARE ✨
+
+🦦 By: Otter’s Corner
+
+💫 Date: 18/01/2026
+
+📍 Location: Vietnam
+
+Otter’s Corner xin được gửi lời cảm ơn tới @le.tresor_pn và @nayngieee_ khi đã cho phép team được sử dụng hình ảnh cho chiếc ads xinh iu này.
+
+Cảm ơn designer iu quý của team @dazii2611 đã vất vả cho deadline gấp rút chúc mừng Phúc Nguyên tốt nghiệp hành trình này.`
+  },
+
+
+  {
+    id: "PJ2",
+
+    title:
+      "PHƯỚN HER CONCERT FOR UPRIZE PN",
+
+    short:
+      "Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”.",
+
+    media: "images",
+
+    files: [
+      "PJ2.jpg",
+      "PJ2.1.jpg",
+      "PJ2.2.jpg"
+    ],
+
+    text: `Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂
+
+Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện — mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`
+  },
+
+
+  {
+    id: "PJ3",
+
+    title:
+      "PHOTO FRAME x TEDxTPC2026",
+
+    short:
+      "Frame check-in lấy cảm hứng từ chủ đề Maestro.",
+
+    media: "images",
+
+    files: [
+      "PJ3.jpg",
+      "PJ3.1.jpg",
+      "PJ3.2.jpg"
+    ],
+
+    text: `🎹 Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.
+
+🎹 Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.
+
+🎹 Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee.`
+  },
+
+
+  {
+    id: "PJ4",
+
+    title:
+      "PROJECT SẮP TỚI…",
+
+    short:
+      "Một chặng đường mới đang được chuẩn bị.",
+
+    media: "placeholder",
+
+    text:
+      "Project sẽ được cập nhật sau ✦"
+  }
+
+];
+
+
+/* =========================================================
+   PROJECT PREVIEW
+========================================================= */
+
+function projectPreview(project) {
+
+  if (project.media === "video") {
+
+    return `
+      <video
+        muted
+        loop
+        autoplay
+        playsinline
+      >
+        <source
+          src="${project.file}"
+          type="video/mp4"
+        >
+      </video>
+    `;
+
+  }
+
+
+  if (project.media === "images") {
+
+    return `
+      <img
+        src="${project.files[0]}"
+        alt="${project.title}"
+        onerror="
+          this.style.display='none';
+          this.parentElement.innerHTML=
+          '<span>HÌNH ẢNH<br>(UPDATE SAU)</span>'
+        "
+      >
+    `;
+
+  }
+
+
+  return `
+    <span>
+      ✦
+      <br>
+      HÌNH ẢNH
+      <br>
+      (UPDATE SAU)
+    </span>
+  `;
 }
 
 
 /* =========================================================
-   3. NỀN SAO TOÀN WEBSITE
+   HIỂN THỊ PROJECT
 ========================================================= */
 
-.star-background {
+function renderProjects() {
 
-    position: fixed;
+  const grid =
+    $("#projectGrid");
 
-    inset: 0;
+  grid.innerHTML = "";
 
-    width: 100%;
-    height: 100%;
 
-    pointer-events: none;
+  projects.forEach(
+    project => {
 
-    overflow: hidden;
-
-    z-index: 0;
-}
-
-
-/* sao nhỏ */
-
-.star-background::before {
-
-    content: "✦  ·   ✧     ·   ✦      ·      ✧
-       ·    ✦       ·    ✧       ✦
-    ✧       ·       ✦      ·       ✧
-       ✦     ·    ✧       ·      ✦
-    ·       ✧       ✦       ·
-       ✦       ·       ✧       ✦";
-
-    position: absolute;
-
-    inset: 0;
-
-    white-space: pre-wrap;
-
-    color: rgba(255,255,255,0.95);
-
-    font-size: 18px;
-
-    line-height: 4.5;
-
-    letter-spacing: 25px;
-
-    text-shadow:
-        0 0 5px white,
-        0 0 12px rgba(255,255,255,0.9),
-        0 0 20px rgba(255,255,255,0.5);
-
-    opacity: 0.7;
-
-    animation: backgroundStars 5s ease-in-out infinite alternate;
-}
-
-
-@keyframes backgroundStars {
-
-    0% {
-        opacity: 0.35;
-        transform: translateY(0);
-    }
-
-    50% {
-        opacity: 0.8;
-    }
-
-    100% {
-        opacity: 0.45;
-        transform: translateY(-8px);
-    }
-}
-
-
-/* =========================================================
-   4. OPENING SCREEN
-========================================================= */
-
-.opening {
-
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,255,255,0.25),
-            transparent 45%
-        ),
-        var(--baby-blue);
-
-    z-index: 1000;
-
-    overflow: hidden;
-
-    opacity: 1;
-
-    visibility: visible;
-
-    transition:
-        opacity 1s ease,
-        visibility 1s ease;
-}
-
-
-/* khi rời màn hình mở đầu */
-
-.opening.hide {
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   5. SAO TRÊN OPENING
-========================================================= */
-
-.opening-stars {
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    overflow: hidden;
-
-    z-index: 1;
-}
-
-
-.opening-stars span {
-
-    position: absolute;
-
-    color: white;
-
-    font-size: 14px;
-
-    text-shadow:
-        0 0 5px white,
-        0 0 12px white,
-        0 0 20px rgba(255,255,255,0.8);
-
-    animation:
-        twinkle
-        var(--duration)
-        ease-in-out
-        infinite
-        var(--delay);
-
-}
-
-
-/* sao lấp lánh mượt */
-
-@keyframes twinkle {
-
-    0% {
-        opacity: 0.15;
-        transform: scale(0.65) rotate(0deg);
-    }
-
-    35% {
-        opacity: 0.55;
-        transform: scale(0.9) rotate(45deg);
-    }
-
-    60% {
-        opacity: 1;
-        transform: scale(1.25) rotate(90deg);
-    }
-
-    80% {
-        opacity: 0.55;
-        transform: scale(0.9) rotate(135deg);
-    }
-
-    100% {
-        opacity: 0.15;
-        transform: scale(0.65) rotate(180deg);
-    }
-
-}
-
-
-/* =========================================================
-   6. SAO BĂNG
-========================================================= */
-
-.shooting-star {
-
-    position: absolute;
-
-    width: 2px;
-
-    height: 2px;
-
-    background: white;
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 6px white,
-        0 0 12px white;
-
-    transform: rotate(-35deg);
-
-    animation: shootingStar 6s linear infinite;
-
-    opacity: 0;
-
-}
-
-
-.shooting-star::after {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-
-    right: 0;
-
-    width: 100px;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            to left,
-            rgba(255,255,255,0.9),
-            transparent
+      const article =
+        document.createElement(
+          "article"
         );
 
-}
+
+      article.className =
+        "project-card glass-card";
 
 
-@keyframes shootingStar {
+      article.innerHTML = `
 
-    0% {
+        <div class="project-number">
+          ${project.id}
+        </div>
 
-        opacity: 0;
+        <h2>
+          ${project.title}
+        </h2>
 
-        transform:
-            translate(0,0)
-            rotate(-35deg);
+        <p>
+          ${project.short}
+        </p>
 
-    }
+        <button class="detail-button">
+          Xem chi tiết →
+        </button>
 
-    8% {
+        <div class="project-media">
+          ${projectPreview(project)}
+        </div>
 
-        opacity: 1;
-
-    }
-
-    25% {
-
-        opacity: 0;
-
-        transform:
-            translate(-350px,350px)
-            rotate(-35deg);
-
-    }
-
-    100% {
-
-        opacity: 0;
-
-        transform:
-            translate(-350px,350px)
-            rotate(-35deg);
-
-    }
-
-}
+      `;
 
 
-/* =========================================================
-   7. MASCOT / ẢNH 1.PNG
-========================================================= */
-
-.mascot {
-
-    position: relative;
-
-    width: 360px;
-    height: 360px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    z-index: 10;
-
-    cursor: pointer;
-
-    animation: mascotFloat 4s ease-in-out infinite;
-
-}
-
-
-/* ánh sáng */
-
-.mascot::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 290px;
-    height: 290px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.65),
-            rgba(255,255,255,0)
+      article
+        .querySelector(
+          ".detail-button"
+        )
+        .addEventListener(
+          "click",
+          () => openProject(project)
         );
 
-    filter: blur(15px);
 
-    z-index: -1;
+      grid.appendChild(article);
 
-    animation: mascotGlow 3s ease-in-out infinite alternate;
-
+    }
+  );
 }
 
 
-.mascot img {
+renderProjects();
 
-    width: 100%;
-    height: 100%;
 
-    object-fit: contain;
+/* =========================================================
+   MỞ CHI TIẾT PROJECT
+========================================================= */
 
-    display: block;
+function openProject(project) {
 
-    filter:
-        drop-shadow(
-            0 18px 30px
-            rgba(24,50,74,0.2)
+  const modal =
+    document.createElement(
+      "div"
+    );
+
+
+  modal.className =
+    "letter-modal";
+
+
+  let media = "";
+
+
+  if (project.media === "video") {
+
+    media = `
+
+      <video
+        class="project-modal-media"
+        controls
+        autoplay
+        playsinline
+      >
+
+        <source
+          src="${project.file}"
+          type="video/mp4"
+        >
+
+      </video>
+
+    `;
+
+  }
+
+
+  else if (
+    project.media === "images"
+  ) {
+
+    media = `
+
+      <div
+        class="project-modal-media"
+        style="
+          display:grid;
+          gap:10px;
+          padding:10px;
+          max-height:none;
+        "
+      >
+
+        ${
+          project.files
+            .map(
+              file => `
+                <img
+                  src="${file}"
+                  alt=""
+                  style="
+                    width:100%;
+                    border-radius:12px;
+                  "
+                  onerror="
+                    this.style.display='none'
+                  "
+                >
+              `
+            )
+            .join("")
+        }
+
+      </div>
+
+    `;
+
+  }
+
+
+  else {
+
+    media = `
+
+      <div
+        class="project-modal-media"
+        style="
+          height:220px;
+          display:grid;
+          place-items:center;
+        "
+      >
+
+        ✦ UPDATE SAU ✦
+
+      </div>
+
+    `;
+
+  }
+
+
+  modal.innerHTML = `
+
+    <div class="letter-backdrop"></div>
+
+    <div
+      class="letter"
+      style="
+        max-height:90vh;
+        overflow:auto;
+      "
+    >
+
+      <button
+        class="close-letter"
+      >
+        ×
+      </button>
+
+      <div class="letter-top">
+
+        ${project.id}
+        ✦
+        OTTER’S CORNER
+
+      </div>
+
+
+      <h2
+        style="
+          font-family:'Playfair Display',serif;
+          color:#47739b;
+          text-align:center;
+        "
+      >
+
+        ${project.title}
+
+      </h2>
+
+
+      ${media}
+
+
+      <div
+        style="
+          white-space:pre-wrap;
+          font-size:13px;
+          line-height:1.8;
+          color:#52697d;
+        "
+      >
+
+        ${project.text}
+
+      </div>
+
+
+      <div
+        class="letter-bottom"
+        style="margin-top:20px"
+      >
+
+        ✦ By Otter’s Corner ✦
+
+      </div>
+
+    </div>
+  `;
+
+
+  document.body.appendChild(
+    modal
+  );
+
+
+  modal
+    .querySelector(
+      ".close-letter"
+    )
+    .onclick = () =>
+      modal.remove();
+
+
+  modal
+    .querySelector(
+      ".letter-backdrop"
+    )
+    .onclick = () =>
+      modal.remove();
+}
+
+
+/* =========================================================
+   THU & CHI
+========================================================= */
+
+/*
+  PJ1, PJ2, PJ3 = QUỸ NỘI BỘ = 0đ
+
+  Sau này muốn thêm giao dịch,
+  chỉ việc thêm vào rows.
+*/
+
+const finance = {
+
+  PJ1: {
+    income: 0,
+    rows: []
+  },
+
+  PJ2: {
+    income: 0,
+    rows: []
+  },
+
+  PJ3: {
+    income: 0,
+    rows: []
+  },
+
+
+  PJ4: {
+
+    income: 0,
+
+    rows: [
+
+      /*
+      Ví dụ:
+
+      {
+        date: "03/08/2026",
+        type: "Design",
+        qty: 1,
+        unit: 800000,
+        total: 800000,
+        deposit: 400000,
+        proof: "https://drive.google.com/..."
+      }
+
+      */
+
+    ]
+
+  }
+
+};
+
+
+/* =========================================================
+   ĐỊNH DẠNG TIỀN
+========================================================= */
+
+function money(number) {
+
+  return (
+    new Intl.NumberFormat(
+      "vi-VN"
+    ).format(
+      Number(number) || 0
+    ) + "đ"
+  );
+}
+
+
+/* =========================================================
+   HIỂN THỊ DROPDOWN
+========================================================= */
+
+function renderFinance() {
+
+  const select =
+    $("#projectSelect");
+
+
+  select.innerHTML =
+    projects
+      .map(
+        project => `
+          <option value="${project.id}">
+            ${project.id} — ${project.title}
+          </option>
+        `
+      )
+      .join("");
+
+
+  select.addEventListener(
+    "change",
+    renderFinanceTable
+  );
+
+
+  renderFinanceTable();
+}
+
+
+/* =========================================================
+   HIỂN THỊ BẢNG
+========================================================= */
+
+function renderFinanceTable() {
+
+  const id =
+    $("#projectSelect").value;
+
+
+  const data =
+    finance[id] || {
+      income: 0,
+      rows: []
+    };
+
+
+  const expense =
+    data.rows.reduce(
+      (sum, row) =>
+        sum +
+        (Number(row.total) || 0),
+      0
+    );
+
+
+  $("#totalIncome")
+    .textContent =
+    money(data.income);
+
+
+  $("#totalExpense")
+    .textContent =
+    money(expense);
+
+
+  $("#totalRemain")
+    .textContent =
+    money(
+      data.income - expense
+    );
+
+
+  const body =
+    $("#financeRows");
+
+
+  body.innerHTML = "";
+
+
+  if (!data.rows.length) {
+
+    body.innerHTML = `
+
+      <tr>
+
+        <td colspan="7">
+
+          Chưa có giao dịch — 0đ
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+  }
+
+
+  data.rows.forEach(
+    row => {
+
+      const tr =
+        document.createElement(
+          "tr"
         );
 
-    transition:
-        transform 0.4s ease,
-        filter 0.4s ease;
 
+      tr.innerHTML = `
+
+        <td>
+          ${row.date || ""}
+        </td>
+
+        <td>
+          ${row.type || ""}
+        </td>
+
+        <td>
+          ${row.qty ?? ""}
+        </td>
+
+        <td>
+          ${money(row.unit)}
+        </td>
+
+        <td>
+          ${money(row.total)}
+        </td>
+
+        <td>
+          ${money(row.deposit)}
+        </td>
+
+        <td>
+
+          ${
+            row.proof
+
+              ? `
+                <a
+                  href="${row.proof}"
+                  target="_blank"
+                  rel="noopener"
+                  title="Mở minh chứng"
+                >
+                  🔗
+                </a>
+              `
+
+              : "—"
+          }
+
+        </td>
+
+      `;
+
+
+      body.appendChild(tr);
+
+    }
+  );
 }
 
 
-.mascot:hover img {
+renderFinance();
 
-    transform: scale(1.07);
 
-    filter:
-        drop-shadow(
-            0 20px 40px
-            rgba(24,50,74,0.3)
+/* =========================================================
+   DONATE / PUBLIC WISH
+========================================================= */
+
+let wishesLoaded = false;
+
+
+const starColors = [
+
+  "#ffffff",
+  "#8dd8ff",
+  "#a9b6ff",
+  "#ffd5f4",
+  "#ffe79a",
+  "#b6f2dc",
+  "#d9b7ff"
+
+];
+
+
+/* =========================================================
+   CHỐNG HTML
+========================================================= */
+
+function escapeHtml(text) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    String(text ?? "");
+
+
+  return div.innerHTML;
+}
+
+
+/* =========================================================
+   TẠO SAO LỜI CHÚC
+========================================================= */
+
+function makeWishStar(
+  item,
+  index
+) {
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+
+  button.className =
+    "wish-star";
+
+
+  button.style.setProperty(
+    "--star-color",
+    starColors[
+      index %
+      starColors.length
+    ]
+  );
+
+
+  button.style.left =
+    7 +
+    Math.random() * 86 +
+    "%";
+
+
+  button.style.top =
+    10 +
+    Math.random() * 76 +
+    "%";
+
+
+  button.style.animationDelay =
+    Math.random() * 2 +
+    "s";
+
+
+  const safeName =
+    String(
+      item.name ||
+      "Một người bạn"
+    )
+      .trim()
+      .slice(0, 40);
+
+
+  const safeWish =
+    String(
+      item.wish || ""
+    )
+      .trim();
+
+
+  button.innerHTML = `
+
+    ✦
+
+    <small>
+      ${escapeHtml(safeName)}
+    </small>
+
+  `;
+
+
+  button.title =
+    safeName;
+
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      $("#letterName")
+        .textContent =
+        safeName;
+
+
+      $("#letterWish")
+        .textContent =
+        safeWish;
+
+
+      $("#letterModal")
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+  return button;
+}
+
+
+/* =========================================================
+   SAO DEMO
+========================================================= */
+
+function showDemoWishes() {
+
+  const demo = [
+
+    {
+      name: "Một người bạn",
+
+      wish:
+        "Mong Phúc Nguyên luôn tự tin, hạnh phúc và tỏa sáng trên con đường mình đã chọn. ✦"
+    },
+
+
+    {
+      name: "Otter",
+
+      wish:
+        "Chúc Nguyên luôn giữ được nụ cười thật đẹp và thật nhiều năng lượng để bước tiếp. 🪽"
+    },
+
+
+    {
+      name: "PN lover",
+
+      wish:
+        "Mong mọi ước mơ của Nguyên đều dần trở thành hiện thực. ✨"
+    }
+
+  ];
+
+
+  const sky =
+    $("#wishSky");
+
+
+  sky.innerHTML = "";
+
+
+  demo.forEach(
+    (wish, index) => {
+
+      sky.appendChild(
+        makeWishStar(
+          wish,
+          index
+        )
+      );
+
+    }
+  );
+}
+
+
+/* =========================================================
+   JSONP GOOGLE APPS SCRIPT
+========================================================= */
+
+function jsonp(url) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const callback =
+        "wishCallback_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+          Math.random() * 9999
         );
 
-}
 
-
-@keyframes mascotFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-
-}
-
-
-@keyframes mascotGlow {
-
-    from {
-        opacity: 0.45;
-        transform: scale(0.9);
-    }
-
-    to {
-        opacity: 0.8;
-        transform: scale(1.08);
-    }
-
-}
-
-
-/* =========================================================
-   8. TEXT OPENING
-========================================================= */
-
-.welcome {
-
-    position: relative;
-
-    z-index: 10;
-
-    margin-top: 5px;
-
-    font-size: 11px;
-
-    letter-spacing: 6px;
-
-    color: var(--blue-dark);
-
-    opacity: 0.7;
-
-}
-
-
-.opening h1 {
-
-    position: relative;
-
-    z-index: 10;
-
-    margin-top: 8px;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 48px;
-
-    font-weight: 600;
-
-    letter-spacing: 8px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #18324a,
-            #477da5,
-            #18324a
+      const script =
+        document.createElement(
+          "script"
         );
 
-    -webkit-background-clip: text;
 
-    -webkit-text-fill-color: transparent;
+      const timer =
+        setTimeout(
+          () => {
 
-}
+            cleanup();
 
+            reject(
+              new Error(
+                "timeout"
+              )
+            );
 
-.click {
-
-    position: relative;
-
-    z-index: 10;
-
-    margin-top: 22px;
-
-    color: var(--blue-dark);
-
-    font-size: 10px;
-
-    letter-spacing: 4px;
-
-    animation: clickPulse 2s ease-in-out infinite;
-
-}
-
-
-@keyframes clickPulse {
-
-    0%,
-    100% {
-        opacity: 0.3;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-}
-
-
-/* =========================================================
-   9. MAIN WEBSITE
-========================================================= */
-
-.main-page {
-
-    position: relative;
-
-    width: 100%;
-
-    min-height: 100vh;
-
-    padding-bottom: 80px;
-
-    background:
-        radial-gradient(
-            circle at 50% 10%,
-            rgba(255,255,255,0.35),
-            transparent 40%
-        ),
-        var(--baby-blue);
-
-    color: var(--blue-dark);
-
-    z-index: 2;
-
-}
-
-
-/* nội dung nằm trên sao */
-
-.main-content {
-
-    position: relative;
-
-    z-index: 5;
-
-    width: min(1100px, 92%);
-
-    margin: auto;
-
-    padding: 70px 0 40px;
-
-}
-
-
-/* =========================================================
-   10. HEADER
-========================================================= */
-
-.site-header {
-
-    text-align: center;
-
-    margin-bottom: 50px;
-
-}
-
-
-.site-header h1 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: clamp(35px, 6vw, 65px);
-
-    letter-spacing: 8px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #18324a,
-            #477da5,
-            #18324a
+          },
+          10000
         );
 
-    -webkit-background-clip: text;
 
-    -webkit-text-fill-color: transparent;
+      window[callback] =
+        data => {
 
-}
+          cleanup();
 
+          resolve(data);
 
-.site-header p {
+        };
 
-    margin-top: 12px;
 
-    font-size: 12px;
+      function cleanup() {
 
-    letter-spacing: 4px;
+        clearTimeout(timer);
 
-    opacity: 0.65;
+        delete window[callback];
 
-}
+        script.remove();
+      }
 
 
-/* =========================================================
-   11. MUSIC PLAYER
-========================================================= */
+      script.onerror =
+        () => {
 
-.music-player {
+          cleanup();
 
-    position: fixed;
+          reject(
+            new Error(
+              "network"
+            )
+          );
 
-    right: 20px;
+        };
 
-    bottom: 20px;
 
-    z-index: 500;
-
-    width: 55px;
-    height: 55px;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(255,255,255,0.8);
-
-    background:
-        rgba(255,255,255,0.45);
-
-    backdrop-filter: blur(10px);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 25px
-        rgba(24,50,74,0.12);
-
-    transition: 0.3s ease;
-
-}
-
-
-.music-player:hover {
-
-    transform: scale(1.08);
-
-}
-
-
-.music-player span {
-
-    font-size: 20px;
-
-}
-
-
-/* =========================================================
-   12. FOUR MENU BOXES
-========================================================= */
-
-.menu-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 20px;
-
-    margin-bottom: 40px;
-
-}
-
-
-.menu-card {
-
-    min-height: 145px;
-
-    padding: 30px;
-
-    border-radius: 22px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.75);
-
-    background:
-        rgba(255,255,255,0.32);
-
-    backdrop-filter: blur(12px);
-
-    -webkit-backdrop-filter: blur(12px);
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 12px 35px
-        rgba(24,50,74,0.08);
-
-    transition:
-        transform 0.35s ease,
-        background 0.35s ease,
-        box-shadow 0.35s ease;
-
-}
-
-
-.menu-card:hover {
-
-    transform: translateY(-7px);
-
-    background:
-        rgba(255,255,255,0.55);
-
-    box-shadow:
-        0 18px 40px
-        rgba(24,50,74,0.13);
-
-}
-
-
-.menu-card .number {
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 25px;
-
-    margin-bottom: 8px;
-
-}
-
-
-.menu-card h3 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 20px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.menu-card p {
-
-    margin-top: 8px;
-
-    font-size: 11px;
-
-    opacity: 0.6;
-
-}
-
-
-/* =========================================================
-   13. SECTION
-========================================================= */
-
-.content-section {
-
-    display: none;
-
-    animation: sectionOpen 0.5s ease;
-
-}
-
-
-.content-section.active {
-
-    display: block;
-
-}
-
-
-@keyframes sectionOpen {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(15px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-
-/* =========================================================
-   14. SECTION BOX
-========================================================= */
-
-.section-box {
-
-    padding: 35px;
-
-    margin-bottom: 25px;
-
-    border-radius: 25px;
-
-    background:
-        rgba(255,255,255,0.35);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.75);
-
-    backdrop-filter: blur(12px);
-
-    -webkit-backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 15px 40px
-        rgba(24,50,74,0.08);
-
-}
-
-
-.section-title {
-
-    margin-bottom: 25px;
-
-    text-align: center;
-
-}
-
-
-.section-title h2 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 30px;
-
-    letter-spacing: 4px;
-
-}
-
-
-.section-title p {
-
-    margin-top: 8px;
-
-    font-size: 12px;
-
-    opacity: 0.65;
-
-}
-
-
-/* =========================================================
-   15. THÔNG TIN CÁ NHÂN
-========================================================= */
-
-.profile {
-
-    display: grid;
-
-    grid-template-columns:
-        280px 1fr;
-
-    gap: 40px;
-
-    align-items: center;
-
-}
-
-
-.profile-image {
-
-    width: 100%;
-
-    aspect-ratio: 3 / 4;
-
-    border-radius: 20px;
-
-    overflow: hidden;
-
-    background:
-        rgba(255,255,255,0.4);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
-
-}
-
-
-.profile-image img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-}
-
-
-.profile-info {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 16px;
-
-}
-
-
-.profile-row {
-
-    display: flex;
-
-    gap: 12px;
-
-    padding-bottom: 12px;
-
-    border-bottom:
-        1px solid
-        rgba(24,50,74,0.12);
-
-}
-
-
-.profile-row strong {
-
-    min-width: 130px;
-
-}
-
-
-/* =========================================================
-   16. HÀNH TRÌNH
-========================================================= */
-
-.journey-placeholder {
-
-    min-height: 250px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    border-radius: 20px;
-
-    border:
-        1px dashed
-        rgba(24,50,74,0.3);
-
-    opacity: 0.65;
-
-}
-
-
-/* =========================================================
-   17. PROJECT LIST
-========================================================= */
-
-.project-list {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 25px;
-
-}
-
-
-.project-card {
-
-    overflow: hidden;
-
-    border-radius: 22px;
-
-    background:
-        rgba(255,255,255,0.4);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
-
-    box-shadow:
-        0 12px 30px
-        rgba(24,50,74,0.08);
-
-    cursor: pointer;
-
-    transition:
-        transform 0.35s ease;
-
-}
-
-
-.project-card:hover {
-
-    transform: translateY(-7px);
-
-}
-
-
-.project-cover {
-
-    width: 100%;
-
-    aspect-ratio: 16 / 9;
-
-    overflow: hidden;
-
-    background:
-        rgba(255,255,255,0.4);
-
-}
-
-
-.project-cover img,
-.project-cover video {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-}
-
-
-.project-info {
-
-    padding: 22px;
-
-}
-
-
-.project-info h3 {
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 18px;
-
-    line-height: 1.4;
-
-}
-
-
-.project-info p {
-
-    margin-top: 8px;
-
-    font-size: 11px;
-
-    opacity: 0.65;
-
-}
-
-
-/* =========================================================
-   18. PROJECT DETAIL
-========================================================= */
-
-.project-detail {
-
-    display: none;
-
-}
-
-
-.project-detail.active {
-
-    display: block;
-
-}
-
-
-.project-detail-gallery {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 18px;
-
-    margin-top: 25px;
-
-}
-
-
-.project-detail-gallery img {
-
-    width: 100%;
-
-    border-radius: 16px;
-
-    display: block;
-
-}
-
-
-/* =========================================================
-   19. THU CHI
-========================================================= */
-
-.finance-controls {
-
-    display: flex;
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-
-.finance-select {
-
-    width: 100%;
-
-    padding: 14px 18px;
-
-    border-radius: 14px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.8);
-
-    background:
-        rgba(255,255,255,0.5);
-
-    color: var(--blue-dark);
-
-    outline: none;
-
-    font-size: 13px;
-
-}
-
-
-/* tổng tiền */
-
-.finance-summary {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-
-.summary-card {
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    text-align: center;
-
-    background:
-        rgba(255,255,255,0.42);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
-
-}
-
-
-.summary-card span {
-
-    display: block;
-
-    font-size: 11px;
-
-    opacity: 0.65;
-
-    margin-bottom: 8px;
-
-}
-
-
-.summary-card strong {
-
-    font-size: 20px;
-
-}
-
-
-/* =========================================================
-   20. BẢNG THU CHI
-========================================================= */
-
-.finance-table-wrapper {
-
-    width: 100%;
-
-    overflow-x: auto;
-
-}
-
-
-.finance-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    font-size: 11px;
-
-}
-
-
-.finance-table th,
-.finance-table td {
-
-    padding: 12px 10px;
-
-    border-bottom:
-        1px solid
-        rgba(24,50,74,0.12);
-
-    text-align: left;
-
-    white-space: nowrap;
-
-}
-
-
-.finance-table th {
-
-    font-weight: 600;
-
-    background:
-        rgba(255,255,255,0.3);
-
-}
-
-
-.finance-table a {
-
-    color: #477da5;
-
-    text-decoration: none;
-
-}
-
-
-.finance-table a:hover {
-
-    text-decoration: underline;
-
-}
-
-
-/* =========================================================
-   21. DONATE / NIGHT SKY
-========================================================= */
-
-.donate-section {
-
-    position: relative;
-
-    min-height: 650px;
-
-    padding: 40px 25px;
-
-    border-radius: 25px;
-
-    overflow: hidden;
-
-    color: white;
-
-    background:
-        radial-gradient(
-            circle at 50% 20%,
-            #172d4b,
-            #07111f 75%
+      script.src =
+        url +
+        (
+          url.includes("?")
+            ? "&"
+            : "?"
+        ) +
+        "callback=" +
+        encodeURIComponent(
+          callback
         );
 
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+  );
 }
 
 
-.donate-section::before {
+/* =========================================================
+   TẢI LỜI CHÚC
+========================================================= */
 
-    content: "";
+async function loadPublicWishes() {
 
-    position: absolute;
+  if (wishesLoaded)
+    return;
 
-    inset: 0;
 
-    background:
-        radial-gradient(
-            circle at 30% 30%,
-            rgba(120,180,255,0.08),
-            transparent 30%
+  wishesLoaded = true;
+
+
+  /*
+    CHƯA KẾT NỐI GOOGLE APPS SCRIPT
+  */
+
+  if (!WISH_API_URL) {
+
+    showDemoWishes();
+
+    return;
+  }
+
+
+  try {
+
+    const data =
+      await jsonp(
+        WISH_API_URL
+      );
+
+
+    const sky =
+      $("#wishSky");
+
+
+    sky.innerHTML = "";
+
+
+    const wishes =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    wishes.forEach(
+      (item, index) => {
+
+        sky.appendChild(
+          makeWishStar(
+            item,
+            index
+          )
         );
 
-    pointer-events: none;
-
-}
-
-
-/* sao donate */
-
-.donate-stars {
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-}
+      }
+    );
 
 
-.donate-stars span {
+    if (!wishes.length) {
 
-    position: absolute;
-
-    font-size: 16px;
-
-    color: white;
-
-    text-shadow:
-        0 0 5px currentColor,
-        0 0 12px currentColor,
-        0 0 20px currentColor;
-
-    cursor: pointer;
-
-    pointer-events: auto;
-
-    animation:
-        donateTwinkle
-        var(--duration)
-        ease-in-out
-        infinite
-        alternate;
-
-    transition:
-        transform 0.3s ease;
-
-}
-
-
-.donate-stars span:hover {
-
-    transform: scale(1.8);
-
-}
-
-
-@keyframes donateTwinkle {
-
-    from {
-
-        opacity: 0.3;
-
-        filter: brightness(0.8);
+      showDemoWishes();
 
     }
 
-    to {
+  }
 
-        opacity: 1;
+  catch (error) {
 
-        filter: brightness(1.5);
-
-    }
-
-}
-
-
-/* nội dung donate */
-
-.donate-content {
-
-    position: relative;
-
-    z-index: 5;
-
-    text-align: center;
-
-}
+    console.warn(
+      "Không tải được lời chúc:",
+      error
+    );
 
 
-.donate-content h2 {
+    showDemoWishes();
 
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 32px;
-
-    letter-spacing: 3px;
-
-}
-
-
-.donate-content p {
-
-    margin-top: 12px;
-
-    font-size: 12px;
-
-    line-height: 1.8;
-
-    opacity: 0.75;
-
-}
-
-
-.donate-button {
-
-    display: inline-block;
-
-    margin-top: 25px;
-
-    padding: 13px 25px;
-
-    border-radius: 30px;
-
-    color: white;
-
-    background:
-        rgba(255,255,255,0.12);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.4);
-
-    text-decoration: none;
-
-    transition: 0.3s ease;
-
-}
-
-
-.donate-button:hover {
-
-    background:
-        rgba(255,255,255,0.25);
-
-    transform: translateY(-3px);
-
+  }
 }
 
 
 /* =========================================================
-   22. STAR LETTER
+   ĐÓNG LÁ THƯ
 ========================================================= */
 
-.star-letter {
+$("#closeLetter")
+  .addEventListener(
+    "click",
+    () => {
 
-    position: fixed;
+      $("#letterModal")
+        .classList
+        .add("hidden");
 
-    inset: 0;
-
-    z-index: 2000;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(3,10,20,0.75);
-
-    backdrop-filter: blur(8px);
-
-}
+    }
+  );
 
 
-.star-letter.active {
+$("#letterModal .letter-backdrop")
+  .addEventListener(
+    "click",
+    () => {
 
-    display: flex;
+      $("#letterModal")
+        .classList
+        .add("hidden");
 
-}
-
-
-.letter-paper {
-
-    width: min(500px, 95%);
-
-    padding: 40px 30px;
-
-    border-radius: 10px;
-
-    color: #18324a;
-
-    background:
-        linear-gradient(
-            135deg,
-            #fffdf3,
-            #f5ead0
-        );
-
-    box-shadow:
-        0 25px 70px
-        rgba(0,0,0,0.4);
-
-    animation:
-        letterOpen
-        0.5s ease;
-
-}
+    }
+  );
 
 
-@keyframes letterOpen {
+document.addEventListener(
+  "keydown",
+  event => {
 
-    from {
+    if (
+      event.key === "Escape"
+    ) {
 
-        opacity: 0;
-
-        transform:
-            scale(0.8)
-            rotate(-2deg);
+      $("#letterModal")
+        .classList
+        .add("hidden");
 
     }
 
-    to {
-
-        opacity: 1;
-
-        transform:
-            scale(1)
-            rotate(0);
-
-    }
-
-}
-
-
-.letter-paper h3 {
-
-    font-family:
-        Georgia,
-        serif;
-
-    margin-bottom: 15px;
-
-}
-
-
-.letter-paper p {
-
-    line-height: 1.8;
-
-    font-size: 14px;
-
-}
-
-
-.close-letter {
-
-    margin-top: 25px;
-
-    padding: 10px 20px;
-
-    border: none;
-
-    border-radius: 20px;
-
-    background: #18324a;
-
-    color: white;
-
-    cursor: pointer;
-
-}
+  }
+);
 
 
 /* =========================================================
-   23. FOOTER
+   GOOGLE FORM
 ========================================================= */
 
-footer {
+const formButton =
+  document.querySelector(
+    ".form-button"
+  );
 
-    position: relative;
 
-    z-index: 5;
+if (formButton) {
 
-    text-align: center;
-
-    padding: 30px 20px;
-
-    font-size: 11px;
-
-    letter-spacing: 1px;
-
-    opacity: 0.6;
+  formButton.href =
+    GOOGLE_FORM_URL;
 
 }
-
-
-/* =========================================================
-   24. BACK BUTTON
-========================================================= */
-
-.back-button {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    margin-bottom: 20px;
-
-    padding: 10px 20px;
-
-    border-radius: 20px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
-
-    background:
-        rgba(255,255,255,0.35);
-
-    color: var(--blue-dark);
-
-    cursor: pointer;
-
-    transition: 0.3s ease;
-
-}
-
-
-.back-button:hover {
-
-    background:
-        rgba(255,255,255,0.6);
-
-}
-
-
-/* =========================================================
-   25. RESPONSIVE TABLET
-========================================================= */
-
-@media (max-width: 800px) {
-
-    .profile {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .profile-image {
-
-        width: 240px;
-
-        margin: auto;
-
-    }
-
-    .project-list {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
-
-/* =========================================================
-   26. RESPONSIVE MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .mascot {
-
-        width: 280px;
-        height: 280px;
-
-    }
-
-
-    .mascot::before {
-
-        width: 230px;
-        height: 230px;
-
-    }
-
-
-    .opening h1 {
-
-        font-size: 31px;
-
-        letter-spacing: 5px;
-
-    }
-
-
-    .welcome {
-
-        font-size: 9px;
-
-        letter-spacing: 4px;
-
-    }
-
-
-    .click {
-
-        font-size: 8px;
-
-        letter-spacing: 3px;
-
-    }
-
-
-    .main-content {
-
-        width: 92%;
-
-        padding-top: 45px;
-
-    }
-
-
-    .menu-grid {
-
-        grid-template-columns: 1fr;
-
-        gap: 14px;
-
-    }
-
-
-    .menu-card {
-
-        min-height: 110px;
-
-        padding: 22px;
-
-    }
-
-
-    .section-box {
-
-        padding: 22px;
-
-    }
-
-
-    .profile-row {
-
-        flex-direction: column;
-
-        gap: 5px;
-
-    }
-
-
-    .finance-summary {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .finance-controls {
-
-        flex-direction: column;
-
-    }
-
-
-    .project-detail-gallery {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .donate-section {
-
-        min-height: 600px;
-
-        padding: 30px 15px;
-
-    }
-
-
-    .donate-content h2 {
-
-        font-size: 25px;
-
-    }
-
-}
-
-
-/* =========================================================
-   27. ACCESSIBILITY
-========================================================= */
-
-button,
-select,
-a {
-
-    -webkit-tap-highlight-color: transparent;
-
-}
-
-
-button:focus,
-select:focus,
-a:focus {
-
-    outline: 2px solid
-        rgba(71,125,165,0.5);
-
-    outline-offset: 3px;
-
-}
-
-
-/* =========================================================
-   END
-========================================================= */
