@@ -1,11 +1,10 @@
 /* =========================================================
    PHÚC NGUYÊN | OTTER'S CORNER
-   STYLE.CSS
 ========================================================= */
 
 
 /* =========================================================
-   01. RESET
+   RESET
 ========================================================= */
 
 * {
@@ -15,46 +14,44 @@
 }
 
 html {
+    width: 100%;
+    min-height: 100%;
     scroll-behavior: smooth;
 }
 
-html,
 body {
     width: 100%;
-    min-height: 100%;
-}
+    min-height: 100vh;
 
-body {
     background: #c9eaff;
     color: #18324a;
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
     overflow-x: hidden;
 }
 
 
 /* =========================================================
-   02. BIẾN MÀU
+   BIẾN MÀU
 ========================================================= */
 
 :root {
 
     --baby-blue: #c9eaff;
+    --baby-blue-light: #e7f6ff;
+    --baby-blue-dark: #8fc9e8;
 
-    --baby-blue-light: #e8f7ff;
-
-    --baby-blue-dark: #a9d9f3;
-
-    --blue-dark: #18324a;
-
-    --blue-mid: #477da5;
+    --navy: #18324a;
+    --navy-light: #315c7c;
 
     --white: #ffffff;
 
-    --soft-white: rgba(255, 255, 255, 0.72);
-
-    --glass: rgba(255, 255, 255, 0.28);
-
-    --border: rgba(255, 255, 255, 0.7);
+    --glass: rgba(255, 255, 255, 0.38);
+    --glass-border: rgba(255, 255, 255, 0.7);
 
     --shadow:
         0 20px 60px rgba(24, 50, 74, 0.12);
@@ -63,233 +60,141 @@ body {
 
 
 /* =========================================================
-   03. NỀN TOÀN WEBSITE
+   SAO TOÀN WEBSITE
 ========================================================= */
 
-body::before {
-
-    content: "";
+.global-stars,
+.opening-stars,
+.shooting-stars {
 
     position: fixed;
 
     inset: 0;
-
-    z-index: -10;
-
-    background:
-        radial-gradient(
-            circle at 20% 20%,
-            rgba(255,255,255,0.55),
-            transparent 28%
-        ),
-
-        radial-gradient(
-            circle at 80% 70%,
-            rgba(255,255,255,0.35),
-            transparent 30%
-        ),
-
-        linear-gradient(
-            135deg,
-            #d7f1ff,
-            #c9eaff,
-            #bfe4fa
-        );
-
-}
-
-
-/* =========================================================
-   04. NỀN SAO
-========================================================= */
-
-.star-background {
-
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
 
     pointer-events: none;
 
     overflow: hidden;
 
-    z-index: 0;
-
 }
 
 
-/* lớp sao */
+/* sao nền */
 
-.stars-layer {
+.global-stars {
+    z-index: 1;
+}
+
+
+.global-stars::before,
+.global-stars::after {
+
+    content: "";
 
     position: absolute;
 
-    inset: -50px;
-
-    width: calc(100% + 100px);
-
-    height: calc(100% + 100px);
-
-    pointer-events: none;
-
-}
-
-
-/* =========================================================
-   SAO NHỎ
-========================================================= */
-
-.stars-small {
+    inset: 0;
 
     background-image:
 
         radial-gradient(
             circle,
             rgba(255,255,255,0.95) 0 1px,
-            transparent 1.5px
-        ),
-
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.8) 0 1px,
-            transparent 1.5px
-        );
-
-    background-size:
-        95px 95px,
-        137px 137px;
-
-    background-position:
-        10px 20px,
-        40px 70px;
-
-    animation:
-        starsMoveSmall 18s linear infinite,
-        starsFadeSmall 3s ease-in-out infinite alternate;
-
-}
-
-
-/* =========================================================
-   SAO VỪA
-========================================================= */
-
-.stars-medium {
-
-    background-image:
-
-        radial-gradient(
-            circle,
-            rgba(255,255,255,1) 0 1.5px,
             transparent 2px
         ),
 
         radial-gradient(
             circle,
-            rgba(255,255,255,0.9) 0 1px,
-            transparent 2px
+            rgba(255,255,255,0.8) 0 1.5px,
+            transparent 2.5px
         );
 
     background-size:
-        180px 180px,
-        230px 230px;
-
-    background-position:
-        80px 40px,
-        20px 120px;
+        75px 75px,
+        130px 130px;
 
     animation:
-        starsMoveMedium 28s linear infinite,
-        starsFadeMedium 2.8s ease-in-out infinite alternate;
+        starsMove 18s linear infinite,
+        starsGlow 3s ease-in-out infinite alternate;
 
+    opacity: 0.65;
 }
 
 
-/* =========================================================
-   SAO LỚN
-========================================================= */
-
-.stars-large {
-
-    background-image:
-
-        radial-gradient(
-            circle,
-            #ffffff 0 2px,
-            transparent 3px
-        ),
-
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.95) 0 2px,
-            transparent 3px
-        );
+.global-stars::after {
 
     background-size:
-        310px 310px,
-        420px 420px;
+        110px 110px,
+        180px 180px;
 
-    background-position:
-        100px 50px,
-        250px 200px;
+    animation-duration:
+        25s,
+        4.5s;
+
+    opacity: 0.45;
+
+    transform: rotate(12deg);
+}
+
+
+/* sao lấp lánh dạng ký tự */
+
+.opening-stars::before {
+
+    content:
+        "✦   ✧       ·       ✦        ·
+        
+        ·       ✦       ✧        ·       ✦
+        
+        ✧        ·       ✦        ·       ✧
+        
+        ✦       ·       ✧        ✦       ·
+        
+        ·       ✧       ✦        ·       ✧
+        
+        ✦        ·       ✧       ·       ✦";
+
+    position: absolute;
+
+    inset: 15px;
+
+    white-space: pre;
+
+    color: white;
+
+    font-size: 20px;
+
+    line-height: 4.3;
+
+    letter-spacing: 16px;
+
+    text-shadow:
+        0 0 5px white,
+        0 0 12px white,
+        0 0 24px rgba(255,255,255,0.9);
 
     animation:
-        starsMoveLarge 35s linear infinite,
-        starsFadeLarge 2s ease-in-out infinite alternate;
+        smoothTwinkle 3s ease-in-out infinite alternate;
 
 }
 
 
-/* =========================================================
-   ANIMATION SAO
-========================================================= */
-
-@keyframes starsMoveSmall {
+@keyframes starsMove {
 
     from {
-        transform: translate(0, 0);
+        transform: translateY(0);
     }
 
     to {
-        transform: translate(-40px, -30px);
+        transform: translateY(-75px);
     }
 
 }
 
 
-@keyframes starsMoveMedium {
-
-    from {
-        transform: translate(0, 0);
-    }
-
-    to {
-        transform: translate(35px, -45px);
-    }
-
-}
-
-
-@keyframes starsMoveLarge {
-
-    from {
-        transform: translate(0, 0);
-    }
-
-    to {
-        transform: translate(-25px, 40px);
-    }
-
-}
-
-
-@keyframes starsFadeSmall {
+@keyframes starsGlow {
 
     0% {
-        opacity: 0.25;
+        opacity: 0.3;
     }
 
     50% {
@@ -303,37 +208,20 @@ body::before {
 }
 
 
-@keyframes starsFadeMedium {
-
-    0% {
-        opacity: 0.2;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.3;
-    }
-
-}
-
-
-@keyframes starsFadeLarge {
+@keyframes smoothTwinkle {
 
     0% {
         opacity: 0.25;
-        transform: scale(0.95);
+        transform: scale(0.98);
     }
 
     50% {
-        opacity: 1;
-        transform: scale(1.08);
+        opacity: 0.85;
+        transform: scale(1);
     }
 
     100% {
-        opacity: 0.3;
+        opacity: 0.35;
         transform: scale(0.98);
     }
 
@@ -341,82 +229,57 @@ body::before {
 
 
 /* =========================================================
-   05. SAO BĂNG
+   SAO BĂNG
 ========================================================= */
 
-.shooting-star {
-
-    position: absolute;
-
-    width: 2px;
-
-    height: 2px;
-
-    background: #ffffff;
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 6px #ffffff,
-        0 0 15px #ffffff;
-
-    opacity: 0;
-
-    transform: rotate(-35deg);
-
+.shooting-stars {
+    z-index: 2;
 }
 
 
-/* đuôi sao băng */
-
-.shooting-star::after {
+.shooting-stars::before,
+.shooting-stars::after {
 
     content: "";
 
     position: absolute;
 
-    width: 100px;
+    width: 2px;
+    height: 2px;
 
-    height: 1px;
+    background: white;
 
-    right: 0;
+    border-radius: 50%;
 
-    top: 0;
-
-    background:
-        linear-gradient(
-            to left,
-            rgba(255,255,255,0.95),
-            transparent
-        );
-
-}
-
-
-/* sao băng 1 */
-
-.shooting-star-1 {
-
-    top: 18%;
-
-    left: 15%;
+    box-shadow:
+        0 0 6px white,
+        0 0 15px white,
+        -90px 90px 0 rgba(255,255,255,0.5);
 
     animation:
-        shootingStar 7s ease-in-out infinite;
+        shootingStar 7s linear infinite;
+
+    opacity: 0;
 
 }
 
 
-/* sao băng 2 */
+.shooting-stars::before {
 
-.shooting-star-2 {
-
-    top: 42%;
-
+    top: 8%;
     left: 75%;
 
-    animation:
-        shootingStar 9s ease-in-out 4s infinite;
+    animation-delay: 2s;
+
+}
+
+
+.shooting-stars::after {
+
+    top: 30%;
+    left: 40%;
+
+    animation-delay: 5s;
 
 }
 
@@ -433,37 +296,29 @@ body::before {
 
     }
 
-    8% {
-
+    5% {
         opacity: 1;
-
     }
 
-    22% {
+    18% {
 
         opacity: 0;
 
         transform:
-            translate(330px, 230px)
+            translate(-260px, 260px)
             rotate(-35deg);
 
     }
 
     100% {
-
         opacity: 0;
-
-        transform:
-            translate(330px, 230px)
-            rotate(-35deg);
-
     }
 
 }
 
 
 /* =========================================================
-   06. OPENING
+   OPENING
 ========================================================= */
 
 .opening {
@@ -473,10 +328,11 @@ body::before {
     inset: 0;
 
     width: 100%;
-
     height: 100vh;
 
     display: flex;
+
+    flex-direction: column;
 
     align-items: center;
 
@@ -484,15 +340,15 @@ body::before {
 
     text-align: center;
 
-    background:
-        linear-gradient(
-            135deg,
-            #d8f2ff,
-            #c9eaff,
-            #bce1f7
-        );
+    background: var(--baby-blue);
 
     z-index: 100;
+
+    overflow: hidden;
+
+    opacity: 1;
+
+    visibility: visible;
 
     transition:
         opacity 0.9s ease,
@@ -512,122 +368,69 @@ body::before {
 }
 
 
-.opening-content {
-
-    position: relative;
-
-    z-index: 10;
-
-    display: flex;
-
-    align-items: center;
-
-    flex-direction: column;
-
-}
-
-
 /* =========================================================
-   07. NÚT 1.PNG
+   MASCOT
 ========================================================= */
 
-.enter-button {
+.mascot {
 
     position: relative;
 
     width: 350px;
-
     height: 350px;
-
-    border: none;
-
-    background: transparent;
-
-    cursor: pointer;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    padding: 0;
+    z-index: 10;
+
+    cursor: pointer;
 
 }
 
 
-/* quầng sáng */
-
-.enter-button::before {
+.mascot::before {
 
     content: "";
 
     position: absolute;
 
-    width: 270px;
-
-    height: 270px;
+    width: 280px;
+    height: 280px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255,255,255,0.65),
-            rgba(255,255,255,0.05),
-            transparent 70%
+            rgba(255,255,255,0.75),
+            rgba(255,255,255,0)
         );
 
-    filter: blur(15px);
+    filter: blur(20px);
 
     animation:
-        glowPulse 3s ease-in-out infinite;
+        mascotGlow 3s ease-in-out infinite;
 
 }
 
 
-/* vòng sáng */
-
-.enter-button::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 310px;
-
-    height: 310px;
-
-    border-radius: 50%;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
-
-    box-shadow:
-        0 0 25px rgba(255,255,255,0.5);
-
-    animation:
-        ringPulse 3s ease-in-out infinite;
-
-}
-
-
-.enter-button img {
+.mascot img {
 
     position: relative;
 
-    z-index: 2;
-
     width: 100%;
-
     height: 100%;
 
     object-fit: contain;
 
+    z-index: 2;
+
     filter:
         drop-shadow(
-            0 15px 30px
+            0 20px 30px
             rgba(24,50,74,0.18)
         );
 
@@ -641,13 +444,13 @@ body::before {
 }
 
 
-.enter-button:hover img {
+.mascot:hover img {
 
     transform: scale(1.06);
 
     filter:
         drop-shadow(
-            0 20px 40px
+            0 25px 40px
             rgba(24,50,74,0.25)
         );
 
@@ -658,88 +461,62 @@ body::before {
 
     0%,
     100% {
-
-        transform:
-            translateY(0);
-
+        transform: translateY(0);
     }
 
     50% {
-
-        transform:
-            translateY(-10px);
-
+        transform: translateY(-10px);
     }
 
 }
 
 
-@keyframes glowPulse {
+@keyframes mascotGlow {
 
     0%,
     100% {
-
-        opacity: 0.45;
-
-        transform: scale(0.9);
-
+        opacity: 0.5;
+        transform: scale(0.95);
     }
 
     50% {
-
         opacity: 0.9;
-
-        transform: scale(1.08);
-
-    }
-
-}
-
-
-@keyframes ringPulse {
-
-    0%,
-    100% {
-
-        opacity: 0.3;
-
-        transform: scale(0.94);
-
-    }
-
-    50% {
-
-        opacity: 0.8;
-
-        transform: scale(1.04);
-
+        transform: scale(1.05);
     }
 
 }
 
 
 /* =========================================================
-   08. OPENING TEXT
+   OPENING TEXT
 ========================================================= */
 
-.opening-small {
+.welcome {
 
-    margin-top: 15px;
+    position: relative;
+
+    z-index: 10;
+
+    margin-top: 4px;
 
     font-size: 11px;
 
     letter-spacing: 6px;
 
-    color: var(--blue-dark);
+    color: var(--navy);
 
     opacity: 0.65;
 
 }
 
 
-.opening-title {
+.opening h1 {
 
-    margin-top: 8px;
+    position: relative;
+
+    z-index: 10;
+
+    margin-top: 10px;
 
     font-family:
         Georgia,
@@ -756,48 +533,33 @@ body::before {
         linear-gradient(
             90deg,
             #18324a,
-            #477da5,
-            #18324a,
-            #477da5,
+            #4c84a8,
             #18324a
         );
-
-    background-size: 250% auto;
 
     -webkit-background-clip: text;
 
     -webkit-text-fill-color: transparent;
 
-    animation:
-        gradientText 5s linear infinite;
-
 }
 
 
-@keyframes gradientText {
+.click {
 
-    to {
+    position: relative;
 
-        background-position:
-            250% center;
-
-    }
-
-}
-
-
-.opening-click {
+    z-index: 10;
 
     margin-top: 22px;
 
     font-size: 10px;
 
-    letter-spacing: 5px;
+    letter-spacing: 4px;
 
-    color: var(--blue-dark);
+    color: var(--navy);
 
     animation:
-        clickPulse 2s ease-in-out infinite;
+        clickPulse 2.4s ease-in-out infinite;
 
 }
 
@@ -817,70 +579,64 @@ body::before {
 
 
 /* =========================================================
-   09. MAIN PAGE
+   MAIN PAGE
 ========================================================= */
 
 .main-page {
 
     position: relative;
 
-    z-index: 2;
-
     width: 100%;
 
     min-height: 100vh;
 
-    background: transparent;
+    padding-bottom: 80px;
 
-    opacity: 0;
+    background:
+        linear-gradient(
+            180deg,
+            #c9eaff 0%,
+            #dff3ff 50%,
+            #c9eaff 100%
+        );
 
-    visibility: hidden;
+    color: var(--navy);
 
-    transition:
-        opacity 0.9s ease,
-        visibility 0.9s ease;
+    overflow: hidden;
 
 }
 
 
-.main-page.visible {
+/* nội dung nằm trên sao */
 
-    opacity: 1;
+.site-header,
+.hero,
+.menu-container,
+.content-section {
 
-    visibility: visible;
+    position: relative;
+
+    z-index: 5;
 
 }
 
 
 /* =========================================================
-   10. HEADER
+   HEADER
 ========================================================= */
 
 .site-header {
 
     width: 100%;
 
-    min-height: 90px;
-
     padding:
-        25px
-        6vw;
+        28px 6vw;
 
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,0.6);
-
-    background:
-        rgba(255,255,255,0.16);
-
-    backdrop-filter:
-        blur(12px);
 
 }
 
@@ -891,12 +647,14 @@ body::before {
 
     flex-direction: column;
 
+    gap: 4px;
+
 }
 
 
 .header-logo span {
 
-    font-size: 12px;
+    font-size: 14px;
 
     font-weight: 700;
 
@@ -907,8 +665,6 @@ body::before {
 
 .header-logo small {
 
-    margin-top: 5px;
-
     font-size: 8px;
 
     letter-spacing: 2px;
@@ -918,76 +674,106 @@ body::before {
 }
 
 
-.header-title {
+.music-button {
 
-    display: flex;
+    width: 42px;
+    height: 42px;
 
-    flex-direction: column;
+    border: 1px solid
+        rgba(24,50,74,0.2);
 
-    align-items: flex-end;
+    border-radius: 50%;
 
-}
+    background:
+        rgba(255,255,255,0.45);
 
-
-.header-title span {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    color: var(--navy);
 
     font-size: 18px;
 
-    letter-spacing: 4px;
+    cursor: pointer;
 
-    font-weight: 600;
+    backdrop-filter: blur(10px);
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease;
 
 }
 
 
-.header-title small {
+.music-button:hover {
 
-    margin-top: 4px;
+    transform: scale(1.08);
 
-    font-size: 8px;
+    background:
+        rgba(255,255,255,0.75);
 
-    letter-spacing: 2px;
+}
 
-    opacity: 0.55;
+
+.music-button.playing {
+
+    animation:
+        musicPulse 1.4s ease-in-out infinite;
+
+}
+
+
+@keyframes musicPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 rgba(255,255,255,0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 25px rgba(255,255,255,0.8);
+    }
 
 }
 
 
 /* =========================================================
-   11. HERO
+   HERO
 ========================================================= */
 
-.hero-section {
+.hero {
 
-    padding:
-        110px 20px 80px;
+    min-height: 42vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
 
     text-align: center;
 
+    padding:
+        40px 20px 30px;
+
 }
 
 
-.hero-subtitle {
+.hero-small {
 
     font-size: 10px;
 
-    line-height: 1.8;
+    letter-spacing: 6px;
 
-    letter-spacing: 5px;
-
-    opacity: 0.6;
+    opacity: 0.55;
 
 }
 
 
-.hero-section h2 {
+.hero h2 {
 
-    margin-top: 15px;
+    margin-top: 10px;
 
     font-family:
         Georgia,
@@ -995,7 +781,7 @@ body::before {
         serif;
 
     font-size:
-        clamp(42px, 7vw, 82px);
+        clamp(44px, 8vw, 86px);
 
     letter-spacing:
         clamp(5px, 1vw, 12px);
@@ -1004,7 +790,7 @@ body::before {
         linear-gradient(
             90deg,
             #18324a,
-            #477da5,
+            #4f86aa,
             #18324a
         );
 
@@ -1017,108 +803,82 @@ body::before {
 
 .hero-description {
 
-    margin-top: 20px;
+    max-width: 500px;
 
-    font-size: 12px;
+    margin-top: 15px;
 
-    line-height: 2;
+    font-size: 13px;
+
+    line-height: 1.8;
 
     letter-spacing: 2px;
 
-    opacity: 0.65;
+    opacity: 0.6;
 
 }
 
 
 /* =========================================================
-   12. MENU
+   4 MENU
 ========================================================= */
 
-.menu-section {
+.menu-container {
 
-    width: min(
-        1100px,
-        88%
-    );
+    width: min(1100px, 88%);
 
     margin:
-        0 auto 100px;
+        0 auto 70px;
 
     display: grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        repeat(4, 1fr);
 
-    gap: 22px;
+    gap: 18px;
 
 }
 
 
 .menu-card {
 
-    position: relative;
+    min-height: 150px;
 
-    min-height: 180px;
-
-    padding: 30px;
+    padding: 25px 20px;
 
     border:
         1px solid
-        rgba(255,255,255,0.8);
+        rgba(255,255,255,0.7);
 
-    border-radius: 4px;
+    border-radius: 22px;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.5),
-            rgba(255,255,255,0.18)
-        );
+        rgba(255,255,255,0.34);
 
     backdrop-filter:
-        blur(14px);
+        blur(12px);
 
-    color: var(--blue-dark);
+    box-shadow:
+        0 15px 40px
+        rgba(24,50,74,0.07);
+
+    color: var(--navy);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
 
     text-align: left;
 
     cursor: pointer;
 
-    overflow: hidden;
-
-    box-shadow:
-        0 15px 40px
-        rgba(24,50,74,0.06);
-
     transition:
-        transform 0.4s ease,
-        box-shadow 0.4s ease,
-        background 0.4s ease;
-
-}
-
-
-.menu-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 160px;
-
-    height: 160px;
-
-    border-radius: 50%;
-
-    top: -80px;
-
-    right: -80px;
-
-    background:
-        rgba(255,255,255,0.3);
-
-    transition:
-        transform 0.5s ease;
+        transform 0.35s ease,
+        background 0.35s ease,
+        box-shadow 0.35s ease;
 
 }
 
@@ -1126,148 +886,84 @@ body::before {
 .menu-card:hover {
 
     transform:
-        translateY(-7px);
-
-    box-shadow:
-        0 25px 60px
-        rgba(24,50,74,0.12);
+        translateY(-8px);
 
     background:
-        rgba(255,255,255,0.5);
+        rgba(255,255,255,0.65);
 
-}
-
-
-.menu-card:hover::before {
-
-    transform:
-        scale(1.5);
+    box-shadow:
+        0 25px 55px
+        rgba(24,50,74,0.12);
 
 }
 
 
 .menu-number {
 
-    display: block;
+    font-family:
+        Georgia,
+        serif;
 
-    font-size: 10px;
+    font-size: 12px;
 
-    letter-spacing: 3px;
-
-    opacity: 0.5;
+    opacity: 0.55;
 
 }
 
 
 .menu-title {
 
-    display: block;
-
-    margin-top: 25px;
-
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: 25px;
+    font-size: 23px;
 
-    letter-spacing: 3px;
-
-    font-weight: 600;
+    letter-spacing: 2px;
 
 }
 
 
 .menu-subtitle {
 
-    display: block;
+    font-size: 8px;
 
-    margin-top: 8px;
+    letter-spacing: 2px;
 
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    opacity: 0.6;
-
-}
-
-
-.menu-arrow {
-
-    position: absolute;
-
-    right: 25px;
-
-    bottom: 20px;
-
-    font-size: 18px;
-
-    animation:
-        starArrow 2s ease-in-out infinite;
-
-}
-
-
-@keyframes starArrow {
-
-    0%,
-    100% {
-
-        transform:
-            rotate(0deg)
-            scale(1);
-
-    }
-
-    50% {
-
-        transform:
-            rotate(20deg)
-            scale(1.25);
-
-    }
+    opacity: 0.55;
 
 }
 
 
 /* =========================================================
-   13. CONTENT SECTION
+   CONTENT SECTIONS
 ========================================================= */
 
 .content-section {
 
     display: none;
 
-    position: relative;
+    position: fixed;
 
-    width: min(
-        1100px,
-        90%
-    );
+    inset: 0;
 
-    margin:
-        0 auto 100px;
+    width: 100%;
+
+    height: 100vh;
+
+    overflow-y: auto;
 
     padding:
-        60px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.7);
+        80px 20px 100px;
 
     background:
-        rgba(255,255,255,0.22);
+        rgba(201,234,255,0.96);
 
     backdrop-filter:
-        blur(18px);
+        blur(12px);
 
-    box-shadow:
-        var(--shadow);
-
-    animation:
-        sectionAppear 0.6s ease;
+    z-index: 50;
 
 }
 
@@ -1276,17 +972,20 @@ body::before {
 
     display: block;
 
+    animation:
+        sectionOpen 0.5s ease;
+
 }
 
 
-@keyframes sectionAppear {
+@keyframes sectionOpen {
 
     from {
 
         opacity: 0;
 
         transform:
-            translateY(20px);
+            translateY(15px);
 
     }
 
@@ -1302,41 +1001,47 @@ body::before {
 }
 
 
-/* =========================================================
-   14. CLOSE
-========================================================= */
+.section-inner {
+
+    width:
+        min(1050px, 92%);
+
+    margin: 0 auto;
+
+}
+
 
 .close-section {
 
-    position: absolute;
+    position: fixed;
 
-    top: 20px;
+    top: 25px;
+    right: 30px;
 
-    right: 25px;
-
-    width: 38px;
-
-    height: 38px;
+    width: 45px;
+    height: 45px;
 
     border:
         1px solid
-        rgba(24,50,74,0.2);
+        rgba(24,50,74,0.15);
 
     border-radius: 50%;
 
     background:
-        rgba(255,255,255,0.35);
+        rgba(255,255,255,0.55);
 
-    color:
-        var(--blue-dark);
+    color: var(--navy);
 
-    font-size: 22px;
+    font-size: 28px;
+
+    line-height: 1;
 
     cursor: pointer;
 
+    z-index: 100;
+
     transition:
-        transform 0.3s ease,
-        background 0.3s ease;
+        transform 0.3s ease;
 
 }
 
@@ -1346,37 +1051,25 @@ body::before {
     transform:
         rotate(90deg);
 
-    background:
-        rgba(255,255,255,0.7);
-
 }
 
 
-/* =========================================================
-   15. SECTION HEADING
-========================================================= */
+.section-label {
 
-.section-heading {
-
-    margin-bottom: 50px;
-
-}
-
-
-.section-heading > span {
-
-    font-size: 10px;
+    font-size: 9px;
 
     letter-spacing: 4px;
 
-    opacity: 0.5;
+    opacity: 0.55;
 
 }
 
 
-.section-heading h2 {
+.content-section h2 {
 
-    margin-top: 8px;
+    margin-top: 12px;
+
+    margin-bottom: 35px;
 
     font-family:
         Georgia,
@@ -1384,15 +1077,22 @@ body::before {
         serif;
 
     font-size:
-        clamp(28px, 4vw, 48px);
+        clamp(34px, 6vw, 65px);
 
-    letter-spacing: 4px;
+    letter-spacing: 3px;
+
+}
+
+
+.content-section h2 span {
+
+    display: block;
 
     background:
         linear-gradient(
             90deg,
             #18324a,
-            #477da5
+            #5b91b2
         );
 
     -webkit-background-clip: text;
@@ -1403,17 +1103,51 @@ body::before {
 
 
 /* =========================================================
-   16. PROFILE
+   PROFILE
 ========================================================= */
 
-.profile-content {
+.profile-cover {
+
+    width: 100%;
+
+    max-height: 480px;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    margin-bottom: 35px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.profile-cover img {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    max-height: 480px;
+
+    object-fit: cover;
+
+}
+
+
+.profile-information {
 
     display: grid;
 
     grid-template-columns:
-        0.8fr 1.2fr;
+        minmax(250px, 0.8fr)
+        minmax(300px, 1.2fr);
 
-    gap: 60px;
+    gap: 45px;
 
     align-items: center;
 
@@ -1424,19 +1158,17 @@ body::before {
 
     width: 100%;
 
-    max-width: 380px;
-
-    margin: auto;
-
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
 
     overflow: hidden;
 
-    border-radius: 3px;
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,0.4);
 
     box-shadow:
-        0 20px 50px
-        rgba(24,50,74,0.15);
+        var(--shadow);
 
 }
 
@@ -1444,217 +1176,192 @@ body::before {
 .profile-photo img {
 
     width: 100%;
-
     height: 100%;
 
     object-fit: cover;
 
-    display: block;
-
-    transition:
-        transform 0.6s ease;
-
 }
 
 
-.profile-photo:hover img {
-
-    transform:
-        scale(1.04);
-
-}
-
-
-.profile-info {
+.profile-details {
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 22px;
+    gap: 20px;
 
 }
 
 
-.profile-info p {
+.profile-details p {
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 6px;
+    gap: 5px;
 
-    padding-bottom: 15px;
+    font-size: 15px;
 
-    border-bottom:
-        1px solid
-        rgba(24,50,74,0.12);
-
-    font-size: 14px;
-
-    line-height: 1.7;
+    line-height: 1.6;
 
 }
 
 
-.profile-info strong {
+.profile-details strong {
 
     font-size: 9px;
 
     letter-spacing: 3px;
 
-    opacity: 0.55;
-
-}
-
-
-/* =========================================================
-   17. JOURNEY
-========================================================= */
-
-.journey {
-
-    margin-top: 80px;
-
-    text-align: center;
-
-}
-
-
-.journey h3 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 28px;
-
-    letter-spacing: 4px;
-
-}
-
-
-.journey > p {
-
-    margin-top: 12px;
-
-    font-size: 12px;
-
-    line-height: 1.8;
-
-    opacity: 0.6;
-
-}
-
-
-.journey-placeholder {
-
-    margin-top: 30px;
-
-    min-height: 200px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-    border:
-        1px dashed
-        rgba(24,50,74,0.25);
-
-    background:
-        rgba(255,255,255,0.16);
-
-}
-
-
-.journey-placeholder span {
-
-    font-size: 35px;
-
-    animation:
-        starTwinkleSoft 2s infinite;
-
-}
-
-
-.journey-placeholder p {
-
-    margin-top: 10px;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
+    text-transform: uppercase;
 
     opacity: 0.5;
 
 }
 
 
-@keyframes starTwinkleSoft {
+/* =========================================================
+   JOURNEY
+========================================================= */
 
-    0%,
-    100% {
+.journey {
 
-        opacity: 0.3;
+    margin-top: 70px;
 
-        transform:
-            scale(0.8);
+    padding:
+        45px;
 
-    }
+    border-radius: 25px;
 
-    50% {
+    background:
+        rgba(255,255,255,0.32);
 
-        opacity: 1;
+    border:
+        1px solid
+        rgba(255,255,255,0.7);
 
-        transform:
-            scale(1.2);
+}
 
-    }
+
+.journey h3 {
+
+    margin-top: 10px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 30px;
+
+}
+
+
+.journey > p:not(.section-label) {
+
+    margin-top: 15px;
+
+    max-width: 650px;
+
+    line-height: 1.8;
+
+    opacity: 0.65;
+
+}
+
+
+.coming-soon {
+
+    margin-top: 30px;
+
+    min-height: 150px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    border:
+        1px dashed
+        rgba(24,50,74,0.25);
+
+    border-radius: 20px;
+
+}
+
+
+.coming-soon span {
+
+    font-size: 30px;
+
+    animation:
+        smoothTwinkle 2s infinite;
+
+}
+
+
+.coming-soon p {
+
+    margin-top: 10px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
 
 }
 
 
 /* =========================================================
-   18. PROJECT
+   PROJECT
 ========================================================= */
 
-.project-item {
+.project-card {
 
     display: grid;
 
     grid-template-columns:
-        0.9fr 1.1fr;
+        1fr 1fr;
 
-    gap: 45px;
+    gap: 40px;
 
-    padding:
-        0 0 60px;
+    padding: 25px;
 
-    margin-bottom: 60px;
+    margin-bottom: 25px;
 
-    border-bottom:
+    border-radius: 25px;
+
+    background:
+        rgba(255,255,255,0.35);
+
+    border:
         1px solid
-        rgba(24,50,74,0.12);
+        rgba(255,255,255,0.7);
+
+    box-shadow:
+        0 15px 40px
+        rgba(24,50,74,0.06);
 
 }
 
 
 .project-cover {
 
-    width: 100%;
+    position: relative;
+
+    aspect-ratio: 16 / 10;
 
     overflow: hidden;
 
-    background:
-        rgba(255,255,255,0.3);
+    border-radius: 18px;
 
-    aspect-ratio:
-        4 / 5;
+    background:
+        rgba(24,50,74,0.08);
 
 }
 
@@ -1663,28 +1370,56 @@ body::before {
 .project-cover video {
 
     width: 100%;
-
     height: 100%;
-
-    object-fit: cover;
 
     display: block;
 
-}
-
-
-.project-info {
-
-    align-self: center;
+    object-fit: cover;
 
 }
 
 
 .project-number {
 
+    position: absolute;
+
+    left: 15px;
+    bottom: 15px;
+
+    padding:
+        7px 12px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(255,255,255,0.8);
+
+    backdrop-filter:
+        blur(8px);
+
     font-size: 9px;
 
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+
+}
+
+
+.project-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+
+
+.project-date {
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
 
     opacity: 0.5;
 
@@ -1697,187 +1432,136 @@ body::before {
 
     font-family:
         Georgia,
-        "Times New Roman",
         serif;
 
-    font-size:
-        clamp(24px, 3vw, 38px);
+    font-size: 27px;
 
-    line-height: 1.15;
-
-    letter-spacing: 2px;
+    line-height: 1.2;
 
 }
 
 
-.project-info p {
+.project-info > p:not(.project-date) {
 
-    margin-top: 20px;
+    margin-top: 15px;
 
-    font-size: 13px;
+    line-height: 1.8;
 
-    line-height: 1.9;
-
-    opacity: 0.75;
-
-}
-
-
-.project-info .quote {
-
-    padding-left: 18px;
-
-    border-left:
-        2px solid
-        rgba(71,125,165,0.5);
-
-    font-style: italic;
-
-}
-
-
-.project-highlight {
-
-    font-weight: 700;
-
-    letter-spacing: 2px;
-
-}
-
-
-.project-meta {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    margin-top: 25px;
-
-    font-size: 9px;
-
-    letter-spacing: 1px;
+    font-size: 14px;
 
     opacity: 0.65;
 
 }
 
 
-.project-gallery {
+.project-detail-button {
 
-    display: grid;
+    align-self: flex-start;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    margin-top: 22px;
 
-    gap: 12px;
+    padding:
+        11px 18px;
 
-    margin-top: 30px;
+    border:
+        1px solid
+        rgba(24,50,74,0.2);
 
-}
+    border-radius: 30px;
 
+    background:
+        transparent;
 
-.project-gallery img {
+    color: var(--navy);
 
-    width: 100%;
+    font-size: 9px;
 
-    aspect-ratio: 1 / 1;
-
-    object-fit: cover;
+    letter-spacing: 2px;
 
     cursor: pointer;
 
     transition:
-        transform 0.4s ease;
+        background 0.3s ease,
+        color 0.3s ease;
 
 }
 
 
-.project-gallery img:hover {
+.project-detail-button:hover {
 
-    transform:
-        scale(1.03);
+    background:
+        var(--navy);
+
+    color:
+        white;
 
 }
 
 
-/* =========================================================
-   19. PROJECT SẮP TỚI
-========================================================= */
+.project-coming {
 
-.coming-project {
+    min-height: 200px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     text-align: center;
 
-    padding:
-        60px 20px;
+}
 
-    border:
-        1px dashed
-        rgba(24,50,74,0.25);
+
+.project-coming span {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 50px;
+
+    opacity: 0.25;
 
 }
 
 
-.coming-project span {
+.project-coming h3 {
 
-    font-size: 9px;
+    margin-top: 10px;
 
-    letter-spacing: 4px;
+    font-family:
+        Georgia,
+        serif;
+
+}
+
+
+.project-coming p {
+
+    margin-top: 10px;
 
     opacity: 0.5;
 
 }
 
 
-.coming-project h3 {
-
-    margin-top: 15px;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 28px;
-
-    letter-spacing: 3px;
-
-}
-
-
-.coming-project p {
-
-    margin-top: 12px;
-
-    font-size: 11px;
-
-    opacity: 0.6;
-
-}
-
-
 /* =========================================================
-   20. THU CHI
+   FINANCE
 ========================================================= */
 
-.finance-selector {
+.project-selector {
 
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-
-    max-width: 500px;
-
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 
 }
 
 
-.finance-selector label {
+.project-selector label {
+
+    display: block;
+
+    margin-bottom: 10px;
 
     font-size: 9px;
 
@@ -1888,45 +1572,29 @@ body::before {
 }
 
 
-.finance-selector select {
+.project-selector select {
 
     width: 100%;
 
+    max-width: 600px;
+
     padding:
-        15px;
+        15px 18px;
 
     border:
         1px solid
-        rgba(24,50,74,0.18);
+        rgba(24,50,74,0.15);
+
+    border-radius: 14px;
 
     background:
-        rgba(255,255,255,0.45);
+        rgba(255,255,255,0.6);
 
-    color:
-        var(--blue-dark);
-
-    font-family:
-        inherit;
+    color: var(--navy);
 
     outline: none;
 
-    cursor: pointer;
-
-}
-
-
-.finance-content {
-
-    min-height: 220px;
-
-    padding: 30px;
-
-    background:
-        rgba(255,255,255,0.2);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.6);
+    font-size: 14px;
 
 }
 
@@ -1940,52 +1608,51 @@ body::before {
 
     gap: 15px;
 
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 
 }
 
 
-.finance-box {
+.finance-summary > div {
 
     padding: 25px;
 
-    text-align: center;
+    border-radius: 20px;
 
     background:
         rgba(255,255,255,0.4);
 
     border:
         1px solid
-        rgba(255,255,255,0.65);
+        rgba(255,255,255,0.7);
 
 }
 
 
-.finance-box span {
+.finance-summary span {
 
     display: block;
 
-    font-size: 9px;
+    font-size: 8px;
 
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 
     opacity: 0.55;
 
 }
 
 
-.finance-box strong {
+.finance-summary strong {
 
     display: block;
 
-    margin-top: 10px;
+    margin-top: 8px;
 
     font-family:
         Georgia,
-        "Times New Roman",
         serif;
 
-    font-size: 23px;
+    font-size: 25px;
 
 }
 
@@ -1996,31 +1663,7 @@ body::before {
 
     overflow-x: auto;
 
-}
-
-
-.finance-table {
-
-    width: 100%;
-
-    min-width: 850px;
-
-    border-collapse: collapse;
-
-    font-size: 11px;
-
-}
-
-
-.finance-table th {
-
-    padding: 12px 8px;
-
-    text-align: left;
-
-    font-size: 8px;
-
-    letter-spacing: 1px;
+    border-radius: 20px;
 
     background:
         rgba(255,255,255,0.4);
@@ -2028,159 +1671,61 @@ body::before {
 }
 
 
-.finance-table td {
+.finance-table-wrapper table {
 
-    padding: 12px 8px;
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+
+}
+
+
+.finance-table-wrapper th,
+.finance-table-wrapper td {
+
+    padding:
+        15px 12px;
+
+    text-align: left;
 
     border-bottom:
         1px solid
-        rgba(24,50,74,0.1);
-
-}
-
-
-.finance-table a {
-
-    color:
-        var(--blue-mid);
-
-    text-decoration: none;
-
-}
-
-
-.finance-table a:hover {
-
-    text-decoration: underline;
-
-}
-
-
-/* =========================================================
-   21. DONATE — BẮT ĐẦU NỀN TRỜI ĐÊM
-========================================================= */
-
-.donate-section {
-
-    width: 100%;
-
-    max-width: none;
-
-    margin: 0;
-
-    padding: 0;
-
-    border: none;
-
-    background: transparent;
-
-    box-shadow: none;
-
-    backdrop-filter: none;
-
-}
-
-
-.donate-section .close-section {
-
-    position: fixed;
-
-    z-index: 50;
-
-    top: 25px;
-
-    right: 30px;
-
-    color: white;
-
-    border-color:
-        rgba(255,255,255,0.3);
-
-    background:
-        rgba(255,255,255,0.08);
-
-}
-
-
-.night-sky {
-
-    position: relative;
-
-    min-height: 100vh;
-
-    width: 100%;
-
-    overflow: hidden;
-
-    color: white;
-
-    background:
-        radial-gradient(
-            ellipse at center bottom,
-            #172d50 0%,
-            #09162d 45%,
-            #030914 100%
-        );
-
-}
-
-
-/* =========================================================
-   DONATE HEADING
-========================================================= */
-
-.donate-heading {
-
-    position: relative;
-
-    z-index: 10;
-
-    padding-top: 120px;
-
-    text-align: center;
-
-}
-
-
-.donate-heading > span {
-
-    font-size: 10px;
-
-    letter-spacing: 5px;
-
-    opacity: 0.5;
-
-}
-
-
-.donate-heading h2 {
-
-    margin-top: 10px;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:
-        clamp(38px, 6vw, 70px);
-
-    letter-spacing: 6px;
-
-    color: white;
-
-}
-
-
-.donate-heading p {
-
-    margin-top: 20px;
+        rgba(24,50,74,0.08);
 
     font-size: 12px;
 
-    line-height: 2;
+}
 
-    letter-spacing: 2px;
+
+.finance-table-wrapper th {
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    opacity: 0.6;
+
+}
+
+
+.finance-note {
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,0.3);
+
+    font-size: 12px;
+
+    line-height: 1.8;
 
     opacity: 0.65;
 
@@ -2188,8 +1733,71 @@ body::before {
 
 
 /* =========================================================
-   SAO LỜI CHÚC
+   DONATE — NỀN TRỜI ĐÊM
 ========================================================= */
+
+.donate-section {
+
+    padding:
+        0 !important;
+
+    background:
+        #050b1d !important;
+
+    color: white;
+
+}
+
+
+.night-sky {
+
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(34,68,120,0.35),
+            transparent 45%
+        ),
+
+        linear-gradient(
+            180deg,
+            #030714,
+            #07132c 60%,
+            #020612
+        );
+
+}
+
+
+.night-sky::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.8) 0 1px,
+            transparent 2px
+        );
+
+    background-size:
+        90px 90px;
+
+    opacity: 0.18;
+
+}
+
 
 .wish-stars {
 
@@ -2197,165 +1805,125 @@ body::before {
 
     inset: 0;
 
-    z-index: 2;
-
-}
-
-
-/* từng sao */
-
-.wish-star {
-
-    position: absolute;
-
-    width: 18px;
-
-    height: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
-    color: white;
-
-    font-size: 17px;
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            currentColor
-        );
-
-    animation:
-        wishStarTwinkle
-        2.5s
-        ease-in-out
-        infinite;
-
-}
-
-
-.wish-star-name {
-
-    position: absolute;
-
-    top: 21px;
-
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    white-space: nowrap;
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-    color: rgba(255,255,255,0.65);
-
-}
-
-
-@keyframes wishStarTwinkle {
-
-    0%,
-    100% {
-
-        opacity: 0.45;
-
-        transform:
-            scale(0.85);
-
-    }
-
-    50% {
-
-        opacity: 1;
-
-        transform:
-            scale(1.25);
-
-    }
+    z-index: 3;
 
 }
 
 
 /* =========================================================
-   DONATE BOX
+   DONATE CONTENT
 ========================================================= */
 
-.donate-form-box {
+.donate-content {
 
-    position: absolute;
+    position: relative;
 
     z-index: 10;
 
-    left: 50%;
-
-    bottom: 80px;
-
-    transform:
-        translateX(-50%);
-
     width:
-        min(500px, 88%);
+        min(700px, 90%);
 
-    padding: 30px;
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        110px 20px 100px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
 
     text-align: center;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.18);
+}
 
-    background:
-        rgba(255,255,255,0.07);
 
-    backdrop-filter:
-        blur(12px);
+.donate-content .section-label {
+
+    color: white;
 
 }
 
 
-.donate-form-box p {
+.donate-content h2 {
 
-    font-size: 10px;
+    color: white;
 
-    line-height: 1.8;
-
-    opacity: 0.55;
+    margin-bottom: 20px;
 
 }
 
 
-.donate-button {
+.donate-content h2 span {
 
-    display: inline-block;
+    color: #b7dcff;
+
+    -webkit-text-fill-color: #b7dcff;
+
+}
+
+
+.donate-description {
+
+    max-width: 550px;
+
+    line-height: 1.9;
+
+    font-size: 15px;
+
+    opacity: 0.75;
+
+}
+
+
+.donate-private {
 
     margin-top: 20px;
 
+    font-size: 11px;
+
+    line-height: 1.8;
+
+    opacity: 0.5;
+
+}
+
+
+.donate-form-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
     padding:
-        14px 25px;
+        15px 28px;
 
     border:
         1px solid
         rgba(255,255,255,0.4);
 
+    border-radius: 50px;
+
+    background:
+        rgba(255,255,255,0.08);
+
     color: white;
 
     text-decoration: none;
 
-    font-size: 9px;
+    font-size: 10px;
 
     letter-spacing: 3px;
 
-    background:
-        rgba(255,255,255,0.08);
+    backdrop-filter:
+        blur(10px);
 
     transition:
         background 0.3s ease,
@@ -2364,7 +1932,7 @@ body::before {
 }
 
 
-.donate-button:hover {
+.donate-form-button:hover {
 
     background:
         rgba(255,255,255,0.18);
@@ -2375,84 +1943,566 @@ body::before {
 }
 
 
+.donate-question {
+
+    max-width: 550px;
+
+    margin-top: 35px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+    font-style: italic;
+
+    opacity: 0.8;
+
+}
+
+
+.star-instruction {
+
+    margin-top: 35px;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.45;
+
+}
+
+
 /* =========================================================
-   22. FOOTER
+   SAO DO WISH
+========================================================= */
+
+.wish-star {
+
+    position: absolute;
+
+    width: 13px;
+    height: 13px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+    animation:
+        wishTwinkle 2.5s ease-in-out infinite;
+
+}
+
+
+.wish-star::before {
+
+    content: "✦";
+
+    font-size: 20px;
+
+    text-shadow:
+        0 0 5px white,
+        0 0 12px white,
+        0 0 25px currentColor;
+
+}
+
+
+.wish-star-name {
+
+    position: absolute;
+
+    top: 22px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width: 100px;
+
+    text-align: center;
+
+    color: white;
+
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    opacity: 0.65;
+
+    white-space: nowrap;
+
+}
+
+
+@keyframes wishTwinkle {
+
+    0%,
+    100% {
+
+        opacity: 0.35;
+
+        transform:
+            scale(0.8);
+
+    }
+
+    50% {
+
+        opacity: 1;
+
+        transform:
+            scale(1.15);
+
+    }
+
+}
+
+
+/* =========================================================
+   PROJECT MODAL
+========================================================= */
+
+.project-modal,
+.wish-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 200;
+
+    padding: 30px;
+
+}
+
+
+.project-modal.active,
+.wish-modal.active {
+
+    display: flex;
+
+    animation:
+        modalFade 0.35s ease;
+
+}
+
+
+.project-modal-background,
+.wish-modal-background {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(7,25,42,0.55);
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+@keyframes modalFade {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================================
+   PROJECT MODAL CONTENT
+========================================================= */
+
+.project-modal-content {
+
+    position: relative;
+
+    width:
+        min(900px, 95%);
+
+    max-height:
+        90vh;
+
+    overflow-y: auto;
+
+    padding:
+        55px;
+
+    border-radius: 28px;
+
+    background:
+        #dff3ff;
+
+    color:
+        var(--navy);
+
+    z-index: 2;
+
+}
+
+
+.project-modal-close {
+
+    position: absolute;
+
+    top: 18px;
+    right: 22px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--navy);
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+}
+
+
+.project-detail {
+
+    display: none;
+
+}
+
+
+.project-detail.active {
+
+    display: block;
+
+}
+
+
+.project-detail h2 {
+
+    margin-top: 10px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(28px, 5vw, 50px);
+
+    line-height: 1.15;
+
+}
+
+
+.project-detail p {
+
+    margin-top: 18px;
+
+    line-height: 1.9;
+
+    font-size: 14px;
+
+    opacity: 0.75;
+
+}
+
+
+.project-detail h3 {
+
+    margin-top: 25px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 22px;
+
+}
+
+
+.project-detail-gallery {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+    margin-top: 30px;
+
+}
+
+
+.project-detail-gallery img {
+
+    width: 100%;
+
+    border-radius: 18px;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   WISH LETTER
+========================================================= */
+
+.wish-letter {
+
+    position: relative;
+
+    z-index: 5;
+
+    width:
+        min(500px, 90%);
+
+    padding:
+        50px 40px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf4,
+            #f4e8c8
+        );
+
+    color: #29313a;
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,0.5);
+
+    text-align: center;
+
+    transform:
+        rotate(-1deg);
+
+}
+
+
+.wish-close {
+
+    position: absolute;
+
+    top: 12px;
+    right: 17px;
+
+    border: 0;
+
+    background: transparent;
+
+    font-size: 25px;
+
+    color: #29313a;
+
+    cursor: pointer;
+
+}
+
+
+.letter-seal {
+
+    font-size: 35px;
+
+    color: #4e82a5;
+
+    animation:
+        smoothTwinkle 2s infinite;
+
+}
+
+
+.letter-to {
+
+    margin-top: 10px;
+
+    font-size: 8px;
+
+    letter-spacing: 4px;
+
+    opacity: 0.5;
+
+}
+
+
+.wish-letter h3 {
+
+    margin-top: 20px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 18px;
+
+}
+
+
+.letter-line {
+
+    width: 70px;
+
+    height: 1px;
+
+    margin:
+        20px auto;
+
+    background:
+        rgba(41,49,58,0.25);
+
+}
+
+
+#wishText {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 17px;
+
+    line-height: 1.9;
+
+}
+
+
+.letter-star {
+
+    margin-top: 25px;
+
+    color: #4e82a5;
+
+    font-size: 20px;
+
+}
+
+
+/* =========================================================
+   FOOTER
 ========================================================= */
 
 .site-footer {
+
+    position: relative;
+
+    z-index: 10;
 
     width: 100%;
 
     padding:
         30px 20px;
 
+    background:
+        rgba(201,234,255,0.9);
+
     text-align: center;
 
-    font-size: 8px;
+    color: var(--navy);
+
+    font-size: 9px;
 
     letter-spacing: 2px;
-
-    opacity: 0.55;
 
 }
 
 
 /* =========================================================
-   23. RESPONSIVE TABLET
+   RESPONSIVE — TABLET
 ========================================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
+
+    .menu-container {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
 
 
-    .profile-content {
+    .project-card {
 
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr;
 
-        gap: 40px;
+    }
+
+
+    .profile-information {
+
+        grid-template-columns:
+            1fr;
 
     }
 
 
     .profile-photo {
 
-        max-width: 320px;
-
-    }
-
-
-    .project-item {
-
-        grid-template-columns: 1fr;
-
-        gap: 30px;
-
-    }
-
-
-    .project-cover {
-
-        max-width: 600px;
+        max-width: 420px;
 
         margin: auto;
 
     }
 
-
-    .content-section {
-
-        padding: 45px 30px;
-
-    }
-
-
 }
 
 
 /* =========================================================
-   24. RESPONSIVE MOBILE
+   RESPONSIVE — MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
+
+
+    .opening h1 {
+
+        font-size: 32px;
+
+        letter-spacing: 5px;
+
+    }
+
+
+    .mascot {
+
+        width: 280px;
+        height: 280px;
+
+    }
+
+
+    .mascot::before {
+
+        width: 230px;
+        height: 230px;
+
+    }
 
 
     .site-header {
@@ -2463,259 +2513,146 @@ body::before {
     }
 
 
-    .header-logo span {
+    .hero {
 
-        font-size: 9px;
-
-        letter-spacing: 2px;
+        min-height: 35vh;
 
     }
 
 
-    .header-logo small {
+    .hero h2 {
 
-        font-size: 6px;
-
-    }
-
-
-    .header-title span {
-
-        font-size: 12px;
-
-        letter-spacing: 2px;
+        font-size: 43px;
 
     }
 
 
-    .header-title small {
-
-        font-size: 6px;
-
-    }
-
-
-    /* opening */
-
-    .enter-button {
-
-        width: 270px;
-
-        height: 270px;
-
-    }
-
-
-    .enter-button::before {
-
-        width: 220px;
-
-        height: 220px;
-
-    }
-
-
-    .enter-button::after {
-
-        width: 240px;
-
-        height: 240px;
-
-    }
-
-
-    .opening-title {
-
-        font-size: 30px;
-
-        letter-spacing: 5px;
-
-    }
-
-
-    .opening-small {
-
-        font-size: 8px;
-
-        letter-spacing: 4px;
-
-    }
-
-
-    .opening-click {
-
-        font-size: 8px;
-
-        letter-spacing: 3px;
-
-    }
-
-
-    /* hero */
-
-    .hero-section {
-
-        padding:
-            80px 20px 55px;
-
-    }
-
-
-    .hero-subtitle {
-
-        font-size: 8px;
-
-        letter-spacing: 3px;
-
-    }
-
-
-    .hero-section h2 {
-
-        font-size: 40px;
-
-        letter-spacing: 4px;
-
-    }
-
-
-    /* menu */
-
-    .menu-section {
+    .menu-container {
 
         width: 90%;
 
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr 1fr;
 
-        gap: 15px;
-
-        margin-bottom: 70px;
+        gap: 12px;
 
     }
 
 
     .menu-card {
 
-        min-height: 145px;
+        min-height: 130px;
 
-        padding: 24px;
+        padding: 18px;
+
+        border-radius: 18px;
 
     }
 
 
     .menu-title {
 
-        font-size: 21px;
+        font-size: 17px;
 
     }
 
 
-    /* content */
+    .menu-subtitle {
+
+        font-size: 7px;
+
+    }
+
 
     .content-section {
 
+        padding:
+            75px 15px 80px;
+
+    }
+
+
+    .section-inner {
+
         width: 94%;
 
-        padding:
-            40px 20px;
+    }
 
-        margin-bottom: 60px;
+
+    .content-section h2 {
+
+        font-size: 35px;
 
     }
 
 
-    .section-heading {
+    .profile-information {
 
-        padding-right: 35px;
-
-        margin-bottom: 35px;
+        gap: 25px;
 
     }
 
 
-    .section-heading h2 {
+    .profile-photo {
 
-        font-size: 27px;
-
-        letter-spacing: 2px;
+        width: 80%;
 
     }
 
 
-    /* profile */
+    .journey {
 
-    .profile-info p {
-
-        font-size: 12px;
+        padding: 25px;
 
     }
 
 
-    /* finance */
-
-    .finance-summary {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .finance-content {
+    .project-card {
 
         padding: 15px;
 
-    }
-
-
-    /* donate */
-
-    .donate-heading {
-
-        padding-top: 100px;
+        border-radius: 20px;
 
     }
 
 
-    .donate-heading h2 {
+    .project-info h3 {
 
-        font-size: 38px;
-
-        letter-spacing: 3px;
+        font-size: 23px;
 
     }
 
 
-    .donate-form-box {
+    .finance-summary {
 
-        bottom: 40px;
+        grid-template-columns:
+            1fr;
 
-        padding: 22px 15px;
+    }
+
+
+    .project-modal-content {
+
+        padding:
+            45px 20px 30px;
 
     }
 
 
-}
+    .project-detail-gallery {
 
-
-/* =========================================================
-   25. REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        animation-duration:
-            0.01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        scroll-behavior:
-            auto !important;
+        grid-template-columns:
+            1fr;
 
     }
+
+
+    .wish-letter {
+
+        padding:
+            40px 25px;
+
+    }
+
 
 }
