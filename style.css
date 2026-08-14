@@ -1,59 +1,39 @@
 /* =========================================================
-
    PHÚC NGUYÊN | OTTER'S CORNER
-
    STYLE.CSS
-
 ========================================================= */
 
+
 /* =========================================================
-
    01. RESET
-
 ========================================================= */
 
 * {
-
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
-
 }
 
 html {
-
     scroll-behavior: smooth;
-
 }
 
 html,
-
 body {
-
     width: 100%;
-
     min-height: 100%;
-
 }
 
 body {
-
     background: #c9eaff;
-
     color: #18324a;
-
     font-family: Arial, Helvetica, sans-serif;
-
     overflow-x: hidden;
-
 }
+
 
 /* =========================================================
-
    02. BIẾN MÀU
-
 ========================================================= */
 
 :root {
@@ -77,15 +57,13 @@ body {
     --border: rgba(255, 255, 255, 0.7);
 
     --shadow:
-
         0 20px 60px rgba(24, 50, 74, 0.12);
 
 }
 
+
 /* =========================================================
-
    03. NỀN TOÀN WEBSITE
-
 ========================================================= */
 
 body::before {
@@ -99,45 +77,30 @@ body::before {
     z-index: -10;
 
     background:
-
         radial-gradient(
-
             circle at 20% 20%,
-
             rgba(255,255,255,0.55),
-
             transparent 28%
-
         ),
 
         radial-gradient(
-
             circle at 80% 70%,
-
             rgba(255,255,255,0.35),
-
             transparent 30%
-
         ),
 
         linear-gradient(
-
             135deg,
-
             #d7f1ff,
-
             #c9eaff,
-
             #bfe4fa
-
         );
 
 }
 
+
 /* =========================================================
-
    04. NỀN SAO
-
 ========================================================= */
 
 .star-background {
@@ -147,7 +110,6 @@ body::before {
     inset: 0;
 
     width: 100%;
-
     height: 100%;
 
     pointer-events: none;
@@ -157,6 +119,7 @@ body::before {
     z-index: 0;
 
 }
+
 
 /* lớp sao */
 
@@ -174,10 +137,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    SAO NHỎ
-
 ========================================================= */
 
 .stars-small {
@@ -185,49 +147,34 @@ body::before {
     background-image:
 
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,0.95) 0 1px,
-
             transparent 1.5px
-
         ),
 
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,0.8) 0 1px,
-
             transparent 1.5px
-
         );
 
     background-size:
-
         95px 95px,
-
         137px 137px;
 
     background-position:
-
         10px 20px,
-
         40px 70px;
 
     animation:
-
         starsMoveSmall 18s linear infinite,
-
         starsFadeSmall 3s ease-in-out infinite alternate;
 
 }
 
+
 /* =========================================================
-
    SAO VỪA
-
 ========================================================= */
 
 .stars-medium {
@@ -235,49 +182,34 @@ body::before {
     background-image:
 
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,1) 0 1.5px,
-
             transparent 2px
-
         ),
 
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,0.9) 0 1px,
-
             transparent 2px
-
         );
 
     background-size:
-
         180px 180px,
-
         230px 230px;
 
     background-position:
-
         80px 40px,
-
         20px 120px;
 
     animation:
-
         starsMoveMedium 28s linear infinite,
-
         starsFadeMedium 2.8s ease-in-out infinite alternate;
 
 }
 
+
 /* =========================================================
-
    SAO LỚN
-
 ========================================================= */
 
 .stars-large {
@@ -285,175 +217,131 @@ body::before {
     background-image:
 
         radial-gradient(
-
             circle,
-
             #ffffff 0 2px,
-
             transparent 3px
-
         ),
 
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,0.95) 0 2px,
-
             transparent 3px
-
         );
 
     background-size:
-
         310px 310px,
-
         420px 420px;
 
     background-position:
-
         100px 50px,
-
         250px 200px;
 
     animation:
-
         starsMoveLarge 35s linear infinite,
-
         starsFadeLarge 2s ease-in-out infinite alternate;
 
 }
 
+
 /* =========================================================
-
    ANIMATION SAO
-
 ========================================================= */
 
 @keyframes starsMoveSmall {
 
     from {
-
         transform: translate(0, 0);
-
     }
 
     to {
-
         transform: translate(-40px, -30px);
-
     }
 
 }
+
 
 @keyframes starsMoveMedium {
 
     from {
-
         transform: translate(0, 0);
-
     }
 
     to {
-
         transform: translate(35px, -45px);
-
     }
 
 }
+
 
 @keyframes starsMoveLarge {
 
     from {
-
         transform: translate(0, 0);
-
     }
 
     to {
-
         transform: translate(-25px, 40px);
-
     }
 
 }
+
 
 @keyframes starsFadeSmall {
 
     0% {
-
         opacity: 0.25;
-
     }
 
     50% {
-
         opacity: 0.8;
-
     }
 
     100% {
-
         opacity: 0.35;
-
     }
 
 }
+
 
 @keyframes starsFadeMedium {
 
     0% {
-
         opacity: 0.2;
-
     }
 
     50% {
-
         opacity: 1;
-
     }
 
     100% {
-
         opacity: 0.3;
-
     }
 
 }
+
 
 @keyframes starsFadeLarge {
 
     0% {
-
         opacity: 0.25;
-
         transform: scale(0.95);
-
     }
 
     50% {
-
         opacity: 1;
-
         transform: scale(1.08);
-
     }
 
     100% {
-
         opacity: 0.3;
-
         transform: scale(0.98);
-
     }
 
 }
 
+
 /* =========================================================
-
    05. SAO BĂNG
-
 ========================================================= */
 
 .shooting-star {
@@ -469,9 +357,7 @@ body::before {
     border-radius: 50%;
 
     box-shadow:
-
         0 0 6px #ffffff,
-
         0 0 15px #ffffff;
 
     opacity: 0;
@@ -479,6 +365,7 @@ body::before {
     transform: rotate(-35deg);
 
 }
+
 
 /* đuôi sao băng */
 
@@ -497,18 +384,14 @@ body::before {
     top: 0;
 
     background:
-
         linear-gradient(
-
             to left,
-
             rgba(255,255,255,0.95),
-
             transparent
-
         );
 
 }
+
 
 /* sao băng 1 */
 
@@ -519,10 +402,10 @@ body::before {
     left: 15%;
 
     animation:
-
         shootingStar 7s ease-in-out infinite;
 
 }
+
 
 /* sao băng 2 */
 
@@ -533,10 +416,10 @@ body::before {
     left: 75%;
 
     animation:
-
         shootingStar 9s ease-in-out 4s infinite;
 
 }
+
 
 @keyframes shootingStar {
 
@@ -545,9 +428,7 @@ body::before {
         opacity: 0;
 
         transform:
-
             translate(0, 0)
-
             rotate(-35deg);
 
     }
@@ -563,9 +444,7 @@ body::before {
         opacity: 0;
 
         transform:
-
             translate(330px, 230px)
-
             rotate(-35deg);
 
     }
@@ -575,19 +454,16 @@ body::before {
         opacity: 0;
 
         transform:
-
             translate(330px, 230px)
-
             rotate(-35deg);
 
     }
 
 }
 
+
 /* =========================================================
-
    06. OPENING
-
 ========================================================= */
 
 .opening {
@@ -609,28 +485,21 @@ body::before {
     text-align: center;
 
     background:
-
         linear-gradient(
-
             135deg,
-
             #d8f2ff,
-
             #c9eaff,
-
             #bce1f7
-
         );
 
     z-index: 100;
 
     transition:
-
         opacity 0.9s ease,
-
         visibility 0.9s ease;
 
 }
+
 
 .opening.hidden {
 
@@ -641,6 +510,7 @@ body::before {
     pointer-events: none;
 
 }
+
 
 .opening-content {
 
@@ -656,10 +526,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    07. NÚT 1.PNG
-
 ========================================================= */
 
 .enter-button {
@@ -686,6 +555,7 @@ body::before {
 
 }
 
+
 /* quầng sáng */
 
 .enter-button::before {
@@ -701,26 +571,20 @@ body::before {
     border-radius: 50%;
 
     background:
-
         radial-gradient(
-
             circle,
-
             rgba(255,255,255,0.65),
-
             rgba(255,255,255,0.05),
-
             transparent 70%
-
         );
 
     filter: blur(15px);
 
     animation:
-
         glowPulse 3s ease-in-out infinite;
 
 }
+
 
 /* vòng sáng */
 
@@ -737,20 +601,17 @@ body::before {
     border-radius: 50%;
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.7);
 
     box-shadow:
-
         0 0 25px rgba(255,255,255,0.5);
 
     animation:
-
         ringPulse 3s ease-in-out infinite;
 
 }
+
 
 .enter-button img {
 
@@ -765,51 +626,40 @@ body::before {
     object-fit: contain;
 
     filter:
-
         drop-shadow(
-
             0 15px 30px
-
             rgba(24,50,74,0.18)
-
         );
 
     animation:
-
         mascotFloat 4s ease-in-out infinite;
 
     transition:
-
         transform 0.4s ease,
-
         filter 0.4s ease;
 
 }
+
 
 .enter-button:hover img {
 
     transform: scale(1.06);
 
     filter:
-
         drop-shadow(
-
             0 20px 40px
-
             rgba(24,50,74,0.25)
-
         );
 
 }
 
+
 @keyframes mascotFloat {
 
     0%,
-
     100% {
 
         transform:
-
             translateY(0);
 
     }
@@ -817,17 +667,16 @@ body::before {
     50% {
 
         transform:
-
             translateY(-10px);
 
     }
 
 }
 
+
 @keyframes glowPulse {
 
     0%,
-
     100% {
 
         opacity: 0.45;
@@ -846,10 +695,10 @@ body::before {
 
 }
 
+
 @keyframes ringPulse {
 
     0%,
-
     100% {
 
         opacity: 0.3;
@@ -868,10 +717,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    08. OPENING TEXT
-
 ========================================================= */
 
 .opening-small {
@@ -888,16 +736,14 @@ body::before {
 
 }
 
+
 .opening-title {
 
     margin-top: 8px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 48px;
@@ -907,21 +753,13 @@ body::before {
     letter-spacing: 8px;
 
     background:
-
         linear-gradient(
-
             90deg,
-
             #18324a,
-
             #477da5,
-
             #18324a,
-
             #477da5,
-
             #18324a
-
         );
 
     background-size: 250% auto;
@@ -931,22 +769,22 @@ body::before {
     -webkit-text-fill-color: transparent;
 
     animation:
-
         gradientText 5s linear infinite;
 
 }
+
 
 @keyframes gradientText {
 
     to {
 
         background-position:
-
             250% center;
 
     }
 
 }
+
 
 .opening-click {
 
@@ -959,33 +797,27 @@ body::before {
     color: var(--blue-dark);
 
     animation:
-
         clickPulse 2s ease-in-out infinite;
 
 }
 
+
 @keyframes clickPulse {
 
     0%,
-
     100% {
-
         opacity: 0.3;
-
     }
 
     50% {
-
         opacity: 1;
-
     }
 
 }
 
+
 /* =========================================================
-
    09. MAIN PAGE
-
 ========================================================= */
 
 .main-page {
@@ -1005,12 +837,11 @@ body::before {
     visibility: hidden;
 
     transition:
-
         opacity 0.9s ease,
-
         visibility 0.9s ease;
 
 }
+
 
 .main-page.visible {
 
@@ -1020,10 +851,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    10. HEADER
-
 ========================================================= */
 
 .site-header {
@@ -1033,9 +863,7 @@ body::before {
     min-height: 90px;
 
     padding:
-
         25px
-
         6vw;
 
     display: flex;
@@ -1045,20 +873,17 @@ body::before {
     justify-content: space-between;
 
     border-bottom:
-
         1px solid
-
         rgba(255,255,255,0.6);
 
     background:
-
         rgba(255,255,255,0.16);
 
     backdrop-filter:
-
         blur(12px);
 
 }
+
 
 .header-logo {
 
@@ -1067,6 +892,7 @@ body::before {
     flex-direction: column;
 
 }
+
 
 .header-logo span {
 
@@ -1077,6 +903,7 @@ body::before {
     letter-spacing: 3px;
 
 }
+
 
 .header-logo small {
 
@@ -1090,6 +917,7 @@ body::before {
 
 }
 
+
 .header-title {
 
     display: flex;
@@ -1100,14 +928,12 @@ body::before {
 
 }
 
+
 .header-title span {
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 18px;
@@ -1117,6 +943,7 @@ body::before {
     font-weight: 600;
 
 }
+
 
 .header-title small {
 
@@ -1130,21 +957,20 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    11. HERO
-
 ========================================================= */
 
 .hero-section {
 
     padding:
-
         110px 20px 80px;
 
     text-align: center;
 
 }
+
 
 .hero-subtitle {
 
@@ -1158,38 +984,28 @@ body::before {
 
 }
 
+
 .hero-section h2 {
 
     margin-top: 15px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size:
-
         clamp(42px, 7vw, 82px);
 
     letter-spacing:
-
         clamp(5px, 1vw, 12px);
 
     background:
-
         linear-gradient(
-
             90deg,
-
             #18324a,
-
             #477da5,
-
             #18324a
-
         );
 
     -webkit-background-clip: text;
@@ -1197,6 +1013,7 @@ body::before {
     -webkit-text-fill-color: transparent;
 
 }
+
 
 .hero-description {
 
@@ -1212,35 +1029,30 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    12. MENU
-
 ========================================================= */
 
 .menu-section {
 
     width: min(
-
         1100px,
-
         88%
-
     );
 
     margin:
-
         0 auto 100px;
 
     display: grid;
 
     grid-template-columns:
-
         repeat(2, 1fr);
 
     gap: 22px;
 
 }
+
 
 .menu-card {
 
@@ -1251,27 +1063,19 @@ body::before {
     padding: 30px;
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.8);
 
     border-radius: 4px;
 
     background:
-
         linear-gradient(
-
             135deg,
-
             rgba(255,255,255,0.5),
-
             rgba(255,255,255,0.18)
-
         );
 
     backdrop-filter:
-
         blur(14px);
 
     color: var(--blue-dark);
@@ -1283,20 +1087,16 @@ body::before {
     overflow: hidden;
 
     box-shadow:
-
         0 15px 40px
-
         rgba(24,50,74,0.06);
 
     transition:
-
         transform 0.4s ease,
-
         box-shadow 0.4s ease,
-
         background 0.4s ease;
 
 }
+
 
 .menu-card::before {
 
@@ -1315,40 +1115,36 @@ body::before {
     right: -80px;
 
     background:
-
         rgba(255,255,255,0.3);
 
     transition:
-
         transform 0.5s ease;
 
 }
 
+
 .menu-card:hover {
 
     transform:
-
         translateY(-7px);
 
     box-shadow:
-
         0 25px 60px
-
         rgba(24,50,74,0.12);
 
     background:
-
         rgba(255,255,255,0.5);
 
 }
 
+
 .menu-card:hover::before {
 
     transform:
-
         scale(1.5);
 
 }
+
 
 .menu-number {
 
@@ -1362,6 +1158,7 @@ body::before {
 
 }
 
+
 .menu-title {
 
     display: block;
@@ -1369,11 +1166,8 @@ body::before {
     margin-top: 25px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 25px;
@@ -1383,6 +1177,7 @@ body::before {
     font-weight: 600;
 
 }
+
 
 .menu-subtitle {
 
@@ -1398,6 +1193,7 @@ body::before {
 
 }
 
+
 .menu-arrow {
 
     position: absolute;
@@ -1409,21 +1205,18 @@ body::before {
     font-size: 18px;
 
     animation:
-
         starArrow 2s ease-in-out infinite;
 
 }
 
+
 @keyframes starArrow {
 
     0%,
-
     100% {
 
         transform:
-
             rotate(0deg)
-
             scale(1);
 
     }
@@ -1431,19 +1224,16 @@ body::before {
     50% {
 
         transform:
-
             rotate(20deg)
-
             scale(1.25);
 
     }
 
 }
 
+
 /* =========================================================
-
    13. CONTENT SECTION
-
 ========================================================= */
 
 .content-section {
@@ -1453,50 +1243,41 @@ body::before {
     position: relative;
 
     width: min(
-
         1100px,
-
         90%
-
     );
 
     margin:
-
         0 auto 100px;
 
     padding:
-
         60px;
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.7);
 
     background:
-
         rgba(255,255,255,0.22);
 
     backdrop-filter:
-
         blur(18px);
 
     box-shadow:
-
         var(--shadow);
 
     animation:
-
         sectionAppear 0.6s ease;
 
 }
+
 
 .content-section.active {
 
     display: block;
 
 }
+
 
 @keyframes sectionAppear {
 
@@ -1505,7 +1286,6 @@ body::before {
         opacity: 0;
 
         transform:
-
             translateY(20px);
 
     }
@@ -1515,17 +1295,15 @@ body::before {
         opacity: 1;
 
         transform:
-
             translateY(0);
 
     }
 
 }
 
+
 /* =========================================================
-
    14. CLOSE
-
 ========================================================= */
 
 .close-section {
@@ -1541,19 +1319,15 @@ body::before {
     height: 38px;
 
     border:
-
         1px solid
-
         rgba(24,50,74,0.2);
 
     border-radius: 50%;
 
     background:
-
         rgba(255,255,255,0.35);
 
     color:
-
         var(--blue-dark);
 
     font-size: 22px;
@@ -1561,29 +1335,25 @@ body::before {
     cursor: pointer;
 
     transition:
-
         transform 0.3s ease,
-
         background 0.3s ease;
 
 }
 
+
 .close-section:hover {
 
     transform:
-
         rotate(90deg);
 
     background:
-
         rgba(255,255,255,0.7);
 
 }
 
+
 /* =========================================================
-
    15. SECTION HEADING
-
 ========================================================= */
 
 .section-heading {
@@ -1591,6 +1361,7 @@ body::before {
     margin-bottom: 50px;
 
 }
+
 
 .section-heading > span {
 
@@ -1602,34 +1373,26 @@ body::before {
 
 }
 
+
 .section-heading h2 {
 
     margin-top: 8px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size:
-
         clamp(28px, 4vw, 48px);
 
     letter-spacing: 4px;
 
     background:
-
         linear-gradient(
-
             90deg,
-
             #18324a,
-
             #477da5
-
         );
 
     -webkit-background-clip: text;
@@ -1638,10 +1401,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    16. PROFILE
-
 ========================================================= */
 
 .profile-content {
@@ -1649,7 +1411,6 @@ body::before {
     display: grid;
 
     grid-template-columns:
-
         0.8fr 1.2fr;
 
     gap: 60px;
@@ -1657,6 +1418,7 @@ body::before {
     align-items: center;
 
 }
+
 
 .profile-photo {
 
@@ -1673,12 +1435,11 @@ body::before {
     border-radius: 3px;
 
     box-shadow:
-
         0 20px 50px
-
         rgba(24,50,74,0.15);
 
 }
+
 
 .profile-photo img {
 
@@ -1691,18 +1452,18 @@ body::before {
     display: block;
 
     transition:
-
         transform 0.6s ease;
 
 }
 
+
 .profile-photo:hover img {
 
     transform:
-
         scale(1.04);
 
 }
+
 
 .profile-info {
 
@@ -1713,6 +1474,7 @@ body::before {
     gap: 22px;
 
 }
+
 
 .profile-info p {
 
@@ -1725,9 +1487,7 @@ body::before {
     padding-bottom: 15px;
 
     border-bottom:
-
         1px solid
-
         rgba(24,50,74,0.12);
 
     font-size: 14px;
@@ -1735,6 +1495,7 @@ body::before {
     line-height: 1.7;
 
 }
+
 
 .profile-info strong {
 
@@ -1746,10 +1507,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    17. JOURNEY
-
 ========================================================= */
 
 .journey {
@@ -1760,14 +1520,12 @@ body::before {
 
 }
 
+
 .journey h3 {
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 28px;
@@ -1775,6 +1533,7 @@ body::before {
     letter-spacing: 4px;
 
 }
+
 
 .journey > p {
 
@@ -1787,6 +1546,7 @@ body::before {
     opacity: 0.6;
 
 }
+
 
 .journey-placeholder {
 
@@ -1803,26 +1563,24 @@ body::before {
     flex-direction: column;
 
     border:
-
         1px dashed
-
         rgba(24,50,74,0.25);
 
     background:
-
         rgba(255,255,255,0.16);
 
 }
+
 
 .journey-placeholder span {
 
     font-size: 35px;
 
     animation:
-
         starTwinkleSoft 2s infinite;
 
 }
+
 
 .journey-placeholder p {
 
@@ -1836,16 +1594,15 @@ body::before {
 
 }
 
+
 @keyframes starTwinkleSoft {
 
     0%,
-
     100% {
 
         opacity: 0.3;
 
         transform:
-
             scale(0.8);
 
     }
@@ -1855,17 +1612,15 @@ body::before {
         opacity: 1;
 
         transform:
-
             scale(1.2);
 
     }
 
 }
 
+
 /* =========================================================
-
    18. PROJECT
-
 ========================================================= */
 
 .project-item {
@@ -1873,24 +1628,21 @@ body::before {
     display: grid;
 
     grid-template-columns:
-
         0.9fr 1.1fr;
 
     gap: 45px;
 
     padding:
-
         0 0 60px;
 
     margin-bottom: 60px;
 
     border-bottom:
-
         1px solid
-
         rgba(24,50,74,0.12);
 
 }
+
 
 .project-cover {
 
@@ -1899,17 +1651,15 @@ body::before {
     overflow: hidden;
 
     background:
-
         rgba(255,255,255,0.3);
 
     aspect-ratio:
-
         4 / 5;
 
 }
 
-.project-cover img,
 
+.project-cover img,
 .project-cover video {
 
     width: 100%;
@@ -1922,11 +1672,13 @@ body::before {
 
 }
 
+
 .project-info {
 
     align-self: center;
 
 }
+
 
 .project-number {
 
@@ -1938,20 +1690,17 @@ body::before {
 
 }
 
+
 .project-info h3 {
 
     margin-top: 12px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size:
-
         clamp(24px, 3vw, 38px);
 
     line-height: 1.15;
@@ -1959,6 +1708,7 @@ body::before {
     letter-spacing: 2px;
 
 }
+
 
 .project-info p {
 
@@ -1972,19 +1722,19 @@ body::before {
 
 }
 
+
 .project-info .quote {
 
     padding-left: 18px;
 
     border-left:
-
         2px solid
-
         rgba(71,125,165,0.5);
 
     font-style: italic;
 
 }
+
 
 .project-highlight {
 
@@ -1993,6 +1743,7 @@ body::before {
     letter-spacing: 2px;
 
 }
+
 
 .project-meta {
 
@@ -2012,12 +1763,12 @@ body::before {
 
 }
 
+
 .project-gallery {
 
     display: grid;
 
     grid-template-columns:
-
         repeat(2, 1fr);
 
     gap: 12px;
@@ -2025,6 +1776,7 @@ body::before {
     margin-top: 30px;
 
 }
+
 
 .project-gallery img {
 
@@ -2037,23 +1789,21 @@ body::before {
     cursor: pointer;
 
     transition:
-
         transform 0.4s ease;
 
 }
 
+
 .project-gallery img:hover {
 
     transform:
-
         scale(1.03);
 
 }
 
+
 /* =========================================================
-
    19. PROJECT SẮP TỚI
-
 ========================================================= */
 
 .coming-project {
@@ -2061,16 +1811,14 @@ body::before {
     text-align: center;
 
     padding:
-
         60px 20px;
 
     border:
-
         1px dashed
-
         rgba(24,50,74,0.25);
 
 }
+
 
 .coming-project span {
 
@@ -2082,16 +1830,14 @@ body::before {
 
 }
 
+
 .coming-project h3 {
 
     margin-top: 15px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 28px;
@@ -2099,6 +1845,7 @@ body::before {
     letter-spacing: 3px;
 
 }
+
 
 .coming-project p {
 
@@ -2110,10 +1857,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    20. THU CHI
-
 ========================================================= */
 
 .finance-selector {
@@ -2130,6 +1876,7 @@ body::before {
 
 }
 
+
 .finance-selector label {
 
     font-size: 9px;
@@ -2140,30 +1887,25 @@ body::before {
 
 }
 
+
 .finance-selector select {
 
     width: 100%;
 
     padding:
-
         15px;
 
     border:
-
         1px solid
-
         rgba(24,50,74,0.18);
 
     background:
-
         rgba(255,255,255,0.45);
 
     color:
-
         var(--blue-dark);
 
     font-family:
-
         inherit;
 
     outline: none;
@@ -2172,6 +1914,7 @@ body::before {
 
 }
 
+
 .finance-content {
 
     min-height: 220px;
@@ -2179,23 +1922,20 @@ body::before {
     padding: 30px;
 
     background:
-
         rgba(255,255,255,0.2);
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.6);
 
 }
+
 
 .finance-summary {
 
     display: grid;
 
     grid-template-columns:
-
         repeat(3, 1fr);
 
     gap: 15px;
@@ -2204,6 +1944,7 @@ body::before {
 
 }
 
+
 .finance-box {
 
     padding: 25px;
@@ -2211,16 +1952,14 @@ body::before {
     text-align: center;
 
     background:
-
         rgba(255,255,255,0.4);
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.65);
 
 }
+
 
 .finance-box span {
 
@@ -2234,6 +1973,7 @@ body::before {
 
 }
 
+
 .finance-box strong {
 
     display: block;
@@ -2241,16 +1981,14 @@ body::before {
     margin-top: 10px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size: 23px;
 
 }
+
 
 .finance-table-wrapper {
 
@@ -2259,6 +1997,7 @@ body::before {
     overflow-x: auto;
 
 }
+
 
 .finance-table {
 
@@ -2272,6 +2011,7 @@ body::before {
 
 }
 
+
 .finance-table th {
 
     padding: 12px 8px;
@@ -2283,32 +2023,31 @@ body::before {
     letter-spacing: 1px;
 
     background:
-
         rgba(255,255,255,0.4);
 
 }
+
 
 .finance-table td {
 
     padding: 12px 8px;
 
     border-bottom:
-
         1px solid
-
         rgba(24,50,74,0.1);
 
 }
 
+
 .finance-table a {
 
     color:
-
         var(--blue-mid);
 
     text-decoration: none;
 
 }
+
 
 .finance-table a:hover {
 
@@ -2316,10 +2055,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    21. DONATE — BẮT ĐẦU NỀN TRỜI ĐÊM
-
 ========================================================= */
 
 .donate-section {
@@ -2342,6 +2080,7 @@ body::before {
 
 }
 
+
 .donate-section .close-section {
 
     position: fixed;
@@ -2355,14 +2094,13 @@ body::before {
     color: white;
 
     border-color:
-
         rgba(255,255,255,0.3);
 
     background:
-
         rgba(255,255,255,0.08);
 
 }
+
 
 .night-sky {
 
@@ -2377,25 +2115,18 @@ body::before {
     color: white;
 
     background:
-
         radial-gradient(
-
             ellipse at center bottom,
-
             #172d50 0%,
-
             #09162d 45%,
-
             #030914 100%
-
         );
 
 }
 
+
 /* =========================================================
-
    DONATE HEADING
-
 ========================================================= */
 
 .donate-heading {
@@ -2410,6 +2141,7 @@ body::before {
 
 }
 
+
 .donate-heading > span {
 
     font-size: 10px;
@@ -2420,20 +2152,17 @@ body::before {
 
 }
 
+
 .donate-heading h2 {
 
     margin-top: 10px;
 
     font-family:
-
         Georgia,
-
         "Times New Roman",
-
         serif;
 
     font-size:
-
         clamp(38px, 6vw, 70px);
 
     letter-spacing: 6px;
@@ -2441,6 +2170,7 @@ body::before {
     color: white;
 
 }
+
 
 .donate-heading p {
 
@@ -2456,10 +2186,9 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    SAO LỜI CHÚC
-
 ========================================================= */
 
 .wish-stars {
@@ -2471,6 +2200,7 @@ body::before {
     z-index: 2;
 
 }
+
 
 /* từng sao */
 
@@ -2495,26 +2225,19 @@ body::before {
     font-size: 17px;
 
     filter:
-
         drop-shadow(
-
             0 0 8px
-
             currentColor
-
         );
 
     animation:
-
         wishStarTwinkle
-
         2.5s
-
         ease-in-out
-
         infinite;
 
 }
+
 
 .wish-star-name {
 
@@ -2525,7 +2248,6 @@ body::before {
     left: 50%;
 
     transform:
-
         translateX(-50%);
 
     white-space: nowrap;
@@ -2538,16 +2260,15 @@ body::before {
 
 }
 
+
 @keyframes wishStarTwinkle {
 
     0%,
-
     100% {
 
         opacity: 0.45;
 
         transform:
-
             scale(0.85);
 
     }
@@ -2557,17 +2278,15 @@ body::before {
         opacity: 1;
 
         transform:
-
             scale(1.25);
 
     }
 
 }
 
+
 /* =========================================================
-
    DONATE BOX
-
 ========================================================= */
 
 .donate-form-box {
@@ -2581,11 +2300,9 @@ body::before {
     bottom: 80px;
 
     transform:
-
         translateX(-50%);
 
     width:
-
         min(500px, 88%);
 
     padding: 30px;
@@ -2593,20 +2310,17 @@ body::before {
     text-align: center;
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.18);
 
     background:
-
         rgba(255,255,255,0.07);
 
     backdrop-filter:
-
         blur(12px);
 
 }
+
 
 .donate-form-box p {
 
@@ -2618,6 +2332,7 @@ body::before {
 
 }
 
+
 .donate-button {
 
     display: inline-block;
@@ -2625,13 +2340,10 @@ body::before {
     margin-top: 20px;
 
     padding:
-
         14px 25px;
 
     border:
-
         1px solid
-
         rgba(255,255,255,0.4);
 
     color: white;
@@ -2643,33 +2355,28 @@ body::before {
     letter-spacing: 3px;
 
     background:
-
         rgba(255,255,255,0.08);
 
     transition:
-
         background 0.3s ease,
-
         transform 0.3s ease;
 
 }
 
+
 .donate-button:hover {
 
     background:
-
         rgba(255,255,255,0.18);
 
     transform:
-
         translateY(-3px);
 
 }
 
+
 /* =========================================================
-
    22. FOOTER
-
 ========================================================= */
 
 .site-footer {
@@ -2677,7 +2384,6 @@ body::before {
     width: 100%;
 
     padding:
-
         30px 20px;
 
     text-align: center;
@@ -2690,13 +2396,13 @@ body::before {
 
 }
 
+
 /* =========================================================
-
    23. RESPONSIVE TABLET
-
 ========================================================= */
 
 @media (max-width: 800px) {
+
 
     .profile-content {
 
@@ -2706,11 +2412,13 @@ body::before {
 
     }
 
+
     .profile-photo {
 
         max-width: 320px;
 
     }
+
 
     .project-item {
 
@@ -2720,6 +2428,7 @@ body::before {
 
     }
 
+
     .project-cover {
 
         max-width: 600px;
@@ -2728,29 +2437,31 @@ body::before {
 
     }
 
+
     .content-section {
 
         padding: 45px 30px;
 
     }
 
+
 }
 
+
 /* =========================================================
-
    24. RESPONSIVE MOBILE
-
 ========================================================= */
 
 @media (max-width: 600px) {
 
+
     .site-header {
 
         padding:
-
             20px;
 
     }
+
 
     .header-logo span {
 
@@ -2760,11 +2471,13 @@ body::before {
 
     }
 
+
     .header-logo small {
 
         font-size: 6px;
 
     }
+
 
     .header-title span {
 
@@ -2774,11 +2487,13 @@ body::before {
 
     }
 
+
     .header-title small {
 
         font-size: 6px;
 
     }
+
 
     /* opening */
 
@@ -2790,6 +2505,7 @@ body::before {
 
     }
 
+
     .enter-button::before {
 
         width: 220px;
@@ -2797,6 +2513,7 @@ body::before {
         height: 220px;
 
     }
+
 
     .enter-button::after {
 
@@ -2806,6 +2523,7 @@ body::before {
 
     }
 
+
     .opening-title {
 
         font-size: 30px;
@@ -2813,6 +2531,7 @@ body::before {
         letter-spacing: 5px;
 
     }
+
 
     .opening-small {
 
@@ -2822,6 +2541,7 @@ body::before {
 
     }
 
+
     .opening-click {
 
         font-size: 8px;
@@ -2830,15 +2550,16 @@ body::before {
 
     }
 
+
     /* hero */
 
     .hero-section {
 
         padding:
-
             80px 20px 55px;
 
     }
+
 
     .hero-subtitle {
 
@@ -2848,6 +2569,7 @@ body::before {
 
     }
 
+
     .hero-section h2 {
 
         font-size: 40px;
@@ -2855,6 +2577,7 @@ body::before {
         letter-spacing: 4px;
 
     }
+
 
     /* menu */
 
@@ -2870,6 +2593,7 @@ body::before {
 
     }
 
+
     .menu-card {
 
         min-height: 145px;
@@ -2878,11 +2602,13 @@ body::before {
 
     }
 
+
     .menu-title {
 
         font-size: 21px;
 
     }
+
 
     /* content */
 
@@ -2891,12 +2617,12 @@ body::before {
         width: 94%;
 
         padding:
-
             40px 20px;
 
         margin-bottom: 60px;
 
     }
+
 
     .section-heading {
 
@@ -2906,6 +2632,7 @@ body::before {
 
     }
 
+
     .section-heading h2 {
 
         font-size: 27px;
@@ -2913,6 +2640,7 @@ body::before {
         letter-spacing: 2px;
 
     }
+
 
     /* profile */
 
@@ -2922,6 +2650,7 @@ body::before {
 
     }
 
+
     /* finance */
 
     .finance-summary {
@@ -2930,11 +2659,13 @@ body::before {
 
     }
 
+
     .finance-content {
 
         padding: 15px;
 
     }
+
 
     /* donate */
 
@@ -2944,6 +2675,7 @@ body::before {
 
     }
 
+
     .donate-heading h2 {
 
         font-size: 38px;
@@ -2951,6 +2683,7 @@ body::before {
         letter-spacing: 3px;
 
     }
+
 
     .donate-form-box {
 
@@ -2960,32 +2693,27 @@ body::before {
 
     }
 
+
 }
 
+
 /* =========================================================
-
    25. REDUCED MOTION
-
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
     *,
-
     *::before,
-
     *::after {
 
         animation-duration:
-
             0.01ms !important;
 
         animation-iteration-count:
-
             1 !important;
 
         scroll-behavior:
-
             auto !important;
 
     }
