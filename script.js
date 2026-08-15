@@ -1,73 +1,79 @@
-/* =========================================================
-   PHÚC NGUYÊN WEBSITE
-   OTTER'S CORNER
-========================================================= */
+/* =====================================================
+   PHÚC NGUYÊN — A LITTLE STAR
+   SCRIPT.JS
+===================================================== */
 
 
-/* =========================================================
-   GOOGLE APPS SCRIPT URL
-=========================================================
+/* =====================================================
+   CONFIG
+===================================================== */
 
-   SAU KHI DEPLOY Code.gs:
-
-   Ví dụ:
-   https://script.google.com/macros/s/XXXXXXXXXXXX/exec
-
-   Dán URL đó vào bên dưới.
-========================================================= */
-
-const GOOGLE_SCRIPT_URL =
-  "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+const APPS_SCRIPT_URL =
+  "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE";
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+/* =====================================================
+   GLOBAL STATE
+===================================================== */
 
-const introScreen =
-  document.getElementById("introScreen");
+let wishes = [];
 
-const mainWebsite =
-  document.getElementById("mainWebsite");
+let selectedColor = "yellow";
 
-const enterButton =
-  document.getElementById("enterButton");
+let musicOn = false;
 
-const musicButton =
-  document.getElementById("musicButton");
 
-const bgMusic =
-  document.getElementById("bgMusic");
+/* =====================================================
+   DOM
+===================================================== */
 
-const navCards =
-  document.querySelectorAll(".nav-card");
+const navItems =
+  document.querySelectorAll(".nav-item");
 
 const sections =
-  document.querySelectorAll(".content-section");
+  document.querySelectorAll(".page-section");
 
-const globalStars =
-  document.getElementById("globalStars");
+const sidebar =
+  document.getElementById("sidebar");
 
-const wishSky =
-  document.getElementById("wishSky");
+const menuButton =
+  document.getElementById("menuButton");
 
-const starEmptyMessage =
-  document.getElementById("starEmptyMessage");
+const openWishButton =
+  document.getElementById("openWishButton");
 
-const projectModal =
-  document.getElementById("projectModal");
+const wishModal =
+  document.getElementById("wishModal");
 
-const projectModalContent =
-  document.getElementById("projectModalContent");
-
-const projectModalClose =
-  document.getElementById("projectModalClose");
+const closeWishButton =
+  document.getElementById("closeWishButton");
 
 const letterModal =
   document.getElementById("letterModal");
 
-const letterClose =
-  document.getElementById("letterClose");
+const closeLetterButton =
+  document.getElementById("closeLetterButton");
+
+const wishForm =
+  document.getElementById("wishForm");
+
+const wishStars =
+  document.getElementById("wishStars");
+
+const emptySky =
+  document.getElementById("emptySky");
+
+const musicButton =
+  document.getElementById("musicButton");
+
+const music =
+  document.getElementById("backgroundMusic");
+
+const colorInput =
+  document.getElementById("colorInput");
+
+const colorChoices =
+  document.querySelectorAll(".color-choice");
 
 const letterName =
   document.getElementById("letterName");
@@ -75,750 +81,979 @@ const letterName =
 const letterMessage =
   document.getElementById("letterMessage");
 
-
-/* =========================================================
-   BACKGROUND STARS
-   Chỉ dành cho nền baby blue.
-   MỤC DONATE KHÔNG DÙNG CÁC SAO NÀY.
-========================================================= */
-
-function createGlobalStars() {
-
-  const amount =
-    window.innerWidth < 600
-      ? 35
-      : 75;
-
-  for (let i = 0; i < amount; i++) {
-
-    const star =
-      document.createElement("span");
-
-    star.className = "bg-star";
-
-    star.textContent =
-      Math.random() > .5
-        ? "✦"
-        : "·";
-
-    star.style.left =
-      `${Math.random() * 100}%`;
-
-    star.style.top =
-      `${Math.random() * 100}%`;
-
-    star.style.fontSize =
-      `${Math.random() * 8 + 5}px`;
-
-    star.style.setProperty(
-      "--duration",
-      `${Math.random() * 2 + 1.5}s`
-    );
-
-    star.style.setProperty(
-      "--float",
-      `${Math.random() * 5 + 3}s`
-    );
-
-    star.style.animationDelay =
-      `${Math.random() * 4}s`;
-
-    globalStars.appendChild(star);
-  }
-}
-
-createGlobalStars();
+const letterStar =
+  document.getElementById("letterStar");
 
 
-/* =========================================================
-   ENTER WEBSITE
-========================================================= */
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
-enterButton.addEventListener("click", async () => {
+navItems.forEach(item => {
 
-  introScreen.style.opacity = "0";
+  item.addEventListener("click", () => {
 
-  introScreen.style.transition =
-    "opacity .8s ease";
+    const target =
+      item.dataset.section;
 
-  setTimeout(() => {
+    navItems.forEach(nav => {
+      nav.classList.remove("active");
+    });
 
-    introScreen.style.display = "none";
+    item.classList.add("active");
 
-    mainWebsite.classList.remove("hidden");
+
+    sections.forEach(section => {
+      section.classList.remove("active");
+    });
+
+
+    const targetSection =
+      document.getElementById(target);
+
+    if (targetSection) {
+      targetSection.classList.add("active");
+    }
+
+
+    if (window.innerWidth <= 1000) {
+      sidebar.classList.remove("open");
+    }
+
 
     window.scrollTo({
       top: 0,
-      behavior: "instant"
+      behavior: "smooth"
     });
 
-  }, 800);
+  });
+
+});
 
 
-  /* Try to start music */
+/* =====================================================
+   MOBILE MENU
+===================================================== */
 
-  try {
+menuButton.addEventListener("click", () => {
 
-    await bgMusic.play();
+  sidebar.classList.toggle("open");
 
-    musicButton.textContent =
-      "♫ MUSIC ON";
+});
 
-  } catch (error) {
 
-    musicButton.textContent =
-      "♫ MUSIC OFF";
+/* =====================================================
+   OPEN WISH MODAL
+===================================================== */
+
+openWishButton.addEventListener("click", () => {
+
+  openModal(wishModal);
+
+});
+
+
+/* =====================================================
+   CLOSE WISH MODAL
+===================================================== */
+
+closeWishButton.addEventListener("click", () => {
+
+  closeModal(wishModal);
+
+});
+
+
+/* =====================================================
+   CLOSE LETTER MODAL
+===================================================== */
+
+closeLetterButton.addEventListener("click", () => {
+
+  closeModal(letterModal);
+
+});
+
+
+/* =====================================================
+   BACKDROP CLOSE
+===================================================== */
+
+document.querySelectorAll(".modal-backdrop")
+  .forEach(backdrop => {
+
+    backdrop.addEventListener("click", () => {
+
+      const modal =
+        backdrop.parentElement;
+
+      closeModal(modal);
+
+    });
+
+  });
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key === "Escape") {
+
+    closeModal(wishModal);
+
+    closeModal(letterModal);
 
   }
 
 });
 
 
-/* =========================================================
-   MUSIC BUTTON
-========================================================= */
+/* =====================================================
+   MODAL FUNCTIONS
+===================================================== */
+
+function openModal(modal) {
+
+  if (!modal) return;
+
+  modal.classList.add("open");
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.style.overflow = "hidden";
+
+}
+
+
+function closeModal(modal) {
+
+  if (!modal) return;
+
+  modal.classList.remove("open");
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  if (
+    !wishModal.classList.contains("open") &&
+    !letterModal.classList.contains("open")
+  ) {
+
+    document.body.style.overflow = "";
+
+  }
+
+}
+
+
+/* =====================================================
+   STAR COLOR SELECT
+===================================================== */
+
+colorChoices.forEach(choice => {
+
+  choice.addEventListener("click", () => {
+
+    colorChoices.forEach(item => {
+      item.classList.remove("selected");
+    });
+
+
+    choice.classList.add("selected");
+
+
+    selectedColor =
+      choice.dataset.color;
+
+
+    colorInput.value =
+      selectedColor;
+
+  });
+
+});
+
+
+/* =====================================================
+   MUSIC
+===================================================== */
 
 musicButton.addEventListener("click", async () => {
 
-  if (bgMusic.paused) {
+  if (!musicOn) {
 
     try {
 
-      await bgMusic.play();
+      await music.play();
+
+      musicOn = true;
 
       musicButton.textContent =
         "♫ MUSIC ON";
 
     } catch (error) {
 
-      console.log("Music cannot autoplay.");
+      alert(
+        "Trình duyệt đang chặn nhạc tự động. Hãy bấm lại nút Music nhé."
+      );
+
     }
 
   } else {
 
-    bgMusic.pause();
+    music.pause();
+
+    musicOn = false;
 
     musicButton.textContent =
-      "♫ MUSIC OFF";
+      "♪ MUSIC OFF";
+
   }
 
 });
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+/* =====================================================
+   FORM SUBMIT
+===================================================== */
 
-navCards.forEach(card => {
+wishForm.addEventListener("submit", async event => {
 
-  card.addEventListener("click", () => {
+  event.preventDefault();
 
-    const target =
-      card.dataset.section;
 
-    navCards.forEach(item => {
-      item.classList.remove("active");
-    });
+  const nameInput =
+    document.getElementById("nameInput");
 
-    card.classList.add("active");
+  const messageInput =
+    document.getElementById("messageInput");
 
+  const name =
+    nameInput.value.trim();
 
-    sections.forEach(section => {
-      section.classList.remove("active-section");
-    });
+  const message =
+    messageInput.value.trim();
 
 
-    const targetSection =
-      document.getElementById(
-        `section-${target}`
-      );
+  if (!name || !message) {
 
-    if (targetSection) {
-
-      targetSection.classList.add(
-        "active-section"
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
-
-  });
-
-});
-
-
-/* =========================================================
-   ACCORDION
-========================================================= */
-
-document
-  .querySelectorAll(".accordion-header")
-  .forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      const accordion =
-        button.parentElement;
-
-      accordion.classList.toggle("open");
-
-      const symbol =
-        button.querySelector("span:last-child");
-
-      if (
-        accordion.classList.contains("open")
-      ) {
-
-        symbol.textContent = "−";
-
-      } else {
-
-        symbol.textContent = "＋";
-
-      }
-
-    });
-
-  });
-
-
-/* =========================================================
-   PROJECT DATA
-========================================================= */
-
-const projects = {
-
-  project1: {
-
-    title:
-      "CHEER TO GRADUATION & ROAD TO DEBUT",
-
-    text:
-`💕 Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu 💕
-
-📨 Dear Phúc Nguyên:
-
-“Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.”
-
-✨ SHOW THE WORLD WHO YOU ARE ✨
-
-🦦 By: Otter’s Corner
-
-💫 Date: 18/01/2026
-
-📍 Location: Vietnam
-
-Otter’s Corner xin được gửi lời cảm ơn tới @le.tresor_pn và @nayngieee_ khi đã cho phép team được sử dụng hình ảnh cho chiếc ads xinh iu này.
-
-Cảm ơn designer iu quý của team @dazii2611 đã vất vả cho deadline gấp rút chúc mừng Phúc Nguyên tốt nghiệp hành trình này.
-
-Các tình iu có bắt gặp chiếc ads nhỏ xinh này thì nhớ tag Otter’s Corner và gửi lời chúc tới Phúc Nguyên nhaaaa.`,
-
-    media: `
-      <video
-        src="PJ1.mp4"
-        controls
-        playsinline
-        style="width:100%;border-radius:20px;"
-      ></video>
-    `
-
-  },
-
-
-  project2: {
-
-    title:
-      "PHƯỚN HER CONCERT FOR UPRIZE PN",
-
-    text:
-`Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂
-
-Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện - mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`,
-
-    media: `
-      <div class="modal-images">
-        <img src="PJ2.1.png" alt="PJ2.1">
-        <img src="PJ2.2.png" alt="PJ2.2">
-      </div>
-    `
-
-  },
-
-
-  project3: {
-
-    title:
-      "PHOTO FRAME x TEDxTPC2026",
-
-    text:
-`🎹 Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.
-
-🎹 Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.
-
-🎹 Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee.`,
-
-    media: `
-      <div style="margin-bottom:20px;">
-        <video
-          src="PJ3.mp4"
-          controls
-          playsinline
-          style="width:100%;border-radius:20px;"
-        ></video>
-      </div>
-
-      <div class="modal-images">
-        <img src="PJ3.1.png" alt="PJ3.1">
-        <img src="PJ3.2.png" alt="PJ3.2">
-      </div>
-    `
-
-  },
-
-
-  project4: {
-
-    title:
-      "PROJECT SẮP TỚI...",
-
-    text:
-`Một project mới dành cho Phúc Nguyên đang được Otter’s Corner chuẩn bị.
-
-Hẹn gặp mọi người ở chặng đường tiếp theo ✦`,
-
-    media: `
-      <div
-        style="
-          min-height:220px;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          font-size:70px;
-          color:#78afe0;
-        "
-      >
-        ✦
-      </div>
-    `
-
-  }
-
-};
-
-
-/* =========================================================
-   PROJECT MODAL
-========================================================= */
-
-document
-  .querySelectorAll(".project-open")
-  .forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      const id =
-        button.dataset.project;
-
-      const project =
-        projects[id];
-
-      if (!project) return;
-
-
-      projectModalContent.innerHTML = `
-
-        <div class="modal-content-title">
-          ${project.title}
-        </div>
-
-        <div class="modal-content-text">
-          ${project.text}
-        </div>
-
-        ${project.media}
-
-      `;
-
-      projectModal.classList.add("show");
-
-      document.body.style.overflow =
-        "hidden";
-
-    });
-
-  });
-
-
-function closeProjectModal() {
-
-  projectModal.classList.remove("show");
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-projectModalClose.addEventListener(
-  "click",
-  closeProjectModal
-);
-
-
-projectModal
-  .querySelector(".modal-backdrop")
-  .addEventListener(
-    "click",
-    closeProjectModal
-  );
-
-
-/* =========================================================
-   FINANCE
-========================================================= */
-
-const projectSelect =
-  document.getElementById("projectSelect");
-
-const totalIncome =
-  document.getElementById("totalIncome");
-
-const totalExpense =
-  document.getElementById("totalExpense");
-
-const remainingMoney =
-  document.getElementById("remainingMoney");
-
-const financeTableBody =
-  document.getElementById("financeTableBody");
-
-
-function updateFinance(project) {
-
-  /*
-    3 project hiện tại sử dụng quỹ nội bộ.
-    Project tương lai chưa có giao dịch.
-  */
-
-  totalIncome.textContent = "0đ";
-  totalExpense.textContent = "0đ";
-  remainingMoney.textContent = "0đ";
-
-  financeTableBody.innerHTML = `
-    <tr>
-      <td colspan="7">
-        Chưa có giao dịch công khai cho project này.
-      </td>
-    </tr>
-  `;
-
-}
-
-
-projectSelect.addEventListener(
-  "change",
-  () => {
-    updateFinance(
-      projectSelect.value
+    alert(
+      "Bạn hãy nhập tên và lời chúc nhé ✦"
     );
-  }
-);
-
-updateFinance("project1");
-
-
-/* =========================================================
-   GOOGLE SHEET
-========================================================= */
-
-let wishes = [];
-
-
-/*
-   Chỉ lấy:
-
-   - Họ và tên
-   - Lời chúc
-
-   Code.gs phía server sẽ KHÔNG trả:
-   email
-   số điện thoại
-   link mạng xã hội
-   số tiền
-   bill
-*/
-
-
-async function loadWishes() {
-
-  if (
-    !GOOGLE_SCRIPT_URL ||
-    GOOGLE_SCRIPT_URL.includes(
-      "PASTE_YOUR"
-    )
-  ) {
-
-    console.log(
-      "Google Apps Script URL chưa được thêm."
-    );
-
-    starEmptyMessage.style.display =
-      "block";
 
     return;
 
   }
+
+
+  const wish = {
+
+    id:
+      Date.now(),
+
+    name:
+      name,
+
+    message:
+      message,
+
+    color:
+      selectedColor,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  const submitButton =
+    wishForm.querySelector(".submit-wish");
+
+
+  submitButton.disabled = true;
+
+  submitButton.innerHTML =
+    "ĐANG THẮP SÁNG ✦";
 
 
   try {
 
-    const response =
-      await fetch(
-        GOOGLE_SCRIPT_URL,
-        {
-          method: "GET",
-          cache: "no-store"
-        }
-      );
+    /*
+      Lưu vào Google Sheets.
+      Dùng form GET để tránh vấn đề CORS
+      trên GitHub Pages.
+    */
+
+    await sendWishToGoogle(wish);
 
 
-    if (!response.ok) {
-      throw new Error(
-        "Không thể kết nối Google Sheet."
-      );
-    }
+    /*
+      Thêm ngay vào giao diện.
+      Không cần chờ reload.
+    */
+
+    wishes.push(wish);
+
+    createWishStar(wish);
 
 
-    const data =
-      await response.json();
+    /*
+      Đóng form.
+    */
+
+    closeModal(wishModal);
 
 
-    if (
-      !Array.isArray(data)
-    ) {
+    /*
+      Reset form.
+    */
 
-      throw new Error(
-        "Dữ liệu không hợp lệ."
-      );
-
-    }
+    wishForm.reset();
 
 
-    wishes = data.filter(item => {
+    selectedColor =
+      "yellow";
 
-      return (
-        item &&
-        item.name &&
-        item.message
-      );
+    colorInput.value =
+      "yellow";
+
+
+    colorChoices.forEach(choice => {
+
+      choice.classList.remove("selected");
+
+      if (
+        choice.dataset.color ===
+        "yellow"
+      ) {
+        choice.classList.add("selected");
+      }
 
     });
 
 
-    renderWishStars();
+    alert(
+      "Lời chúc của bạn đã trở thành một vì sao ✦"
+    );
+
 
   } catch (error) {
 
-    console.error(
-      "Lỗi tải lời chúc:",
-      error
+    console.error(error);
+
+    /*
+      Vẫn cho phép hiện sao local
+      nếu Google đang lỗi.
+    */
+
+    wishes.push(wish);
+
+    createWishStar(wish);
+
+    closeModal(wishModal);
+
+    wishForm.reset();
+
+
+    alert(
+      "Vì sao đã được thắp sáng trên trang. Nếu Google Sheets chưa nhận được dữ liệu, hãy kiểm tra lại Apps Script."
     );
 
-    starEmptyMessage.textContent =
-      "Chưa thể tải các vì sao lúc này ✦";
+  } finally {
+
+    submitButton.disabled = false;
+
+    submitButton.innerHTML =
+      "<span>✦</span> THẮP SÁNG VÌ SAO";
 
   }
+
+});
+
+
+/* =====================================================
+   SEND TO GOOGLE APPS SCRIPT
+===================================================== */
+
+function sendWishToGoogle(wish) {
+
+  return new Promise((resolve, reject) => {
+
+    if (
+      !APPS_SCRIPT_URL ||
+      APPS_SCRIPT_URL.includes(
+        "PASTE_YOUR_APPS_SCRIPT"
+      )
+    ) {
+
+      console.warn(
+        "Chưa cấu hình Apps Script URL."
+      );
+
+      resolve();
+
+      return;
+
+    }
+
+
+    const callbackName =
+      "wishCallback_" +
+      Date.now();
+
+
+    const script =
+      document.createElement("script");
+
+
+    const timeout =
+      setTimeout(() => {
+
+        cleanup();
+
+        /*
+          Không reject ngay.
+          Sao vẫn có thể hiện trên website.
+        */
+
+        resolve();
+
+      }, 10000);
+
+
+    window[callbackName] =
+      function(response) {
+
+        clearTimeout(timeout);
+
+        cleanup();
+
+        if (
+          response &&
+          response.success
+        ) {
+
+          resolve();
+
+        } else {
+
+          resolve();
+
+        }
+
+      };
+
+
+    function cleanup() {
+
+      delete window[callbackName];
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+
+    const params =
+      new URLSearchParams({
+
+        action:
+          "addWish",
+
+        name:
+          wish.name,
+
+        message:
+          wish.message,
+
+        color:
+          wish.color,
+
+        callback:
+          callbackName
+
+      });
+
+
+    script.src =
+      APPS_SCRIPT_URL +
+      "?" +
+      params.toString();
+
+
+    script.onerror = () => {
+
+      clearTimeout(timeout);
+
+      cleanup();
+
+      /*
+        Không chặn website nếu Apps Script lỗi.
+      */
+
+      resolve();
+
+    };
+
+
+    document.body.appendChild(script);
+
+  });
 
 }
 
 
-/* =========================================================
-   STAR COLORS
-========================================================= */
+/* =====================================================
+   LOAD OLD WISHES
+===================================================== */
 
-const starColors = [
-  "gold",
-  "white",
-  "blue",
-  "pink"
-];
+function loadWishes() {
 
-
-/* =========================================================
-   RENDER WISH STARS
-========================================================= */
-
-function renderWishStars() {
-
-  wishSky.innerHTML = "";
-
-  if (wishes.length === 0) {
-
-    starEmptyMessage.style.display =
-      "block";
+  if (
+    !APPS_SCRIPT_URL ||
+    APPS_SCRIPT_URL.includes(
+      "PASTE_YOUR_APPS_SCRIPT"
+    )
+  ) {
 
     return;
 
   }
 
 
-  starEmptyMessage.style.display =
-    "none";
+  const callbackName =
+    "loadWishes_" +
+    Date.now();
 
 
-  wishes.forEach(
-    (wish, index) => {
-
-      const star =
-        document.createElement("button");
-
-      star.className =
-        `wish-star ${
-          starColors[
-            index % starColors.length
-          ]
-        }`;
-
-      /*
-        Random nhưng giới hạn vị trí
-        để không bị đè header quá nhiều.
-      */
-
-      const left =
-        7 +
-        Math.random() * 86;
-
-      const top =
-        30 +
-        Math.random() * 58;
+  const script =
+    document.createElement("script");
 
 
-      star.style.left =
-        `${left}%`;
+  window[callbackName] =
+    function(response) {
 
-      star.style.top =
-        `${top}%`;
+      if (
+        response &&
+        response.success &&
+        Array.isArray(response.wishes)
+      ) {
 
+        wishes =
+          response.wishes;
 
-      star.setAttribute(
-        "aria-label",
-        "Mở lời chúc"
-      );
+        renderAllStars();
 
-
-      star.addEventListener(
-        "click",
-        () => {
-
-          openLetter(
-            wish.name,
-            wish.message
-          );
-
-        }
-      );
+      }
 
 
-      wishSky.appendChild(star);
+      cleanup();
 
+    };
+
+
+  function cleanup() {
+
+    delete window[callbackName];
+
+    if (script.parentNode) {
+      script.parentNode.removeChild(script);
     }
-  );
-
-}
-
-
-/* =========================================================
-   OPEN LETTER
-========================================================= */
-
-function openLetter(
-  name,
-  message
-) {
-
-  letterName.textContent =
-    `Gửi từ ${name}`;
-
-  letterMessage.textContent =
-    message;
-
-  letterModal.classList.add(
-    "show"
-  );
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-/* =========================================================
-   CLOSE LETTER
-========================================================= */
-
-function closeLetter() {
-
-  letterModal.classList.remove(
-    "show"
-  );
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-letterClose.addEventListener(
-  "click",
-  closeLetter
-);
-
-
-letterModal
-  .querySelector(".letter-backdrop")
-  .addEventListener(
-    "click",
-    closeLetter
-  );
-
-
-/* =========================================================
-   ESC KEY
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    closeProjectModal();
-    closeLetter();
 
   }
-);
 
 
-/* =========================================================
-   LOAD WISHES
-========================================================= */
+  const params =
+    new URLSearchParams({
 
-loadWishes();
+      action:
+        "getWishes",
+
+      callback:
+        callbackName
+
+    });
 
 
-/*
-   Tự động cập nhật lời chúc mỗi 60 giây.
-   Người mới gửi form không cần refresh website.
-*/
+  script.src =
+    APPS_SCRIPT_URL +
+    "?" +
+    params.toString();
 
-setInterval(
-  loadWishes,
-  60000
+
+  script.onerror =
+    cleanup;
+
+
+  document.body.appendChild(script);
+
+}
+
+
+/* =====================================================
+   RENDER ALL STARS
+===================================================== */
+
+function renderAllStars() {
+
+  wishStars.innerHTML = "";
+
+
+  if (!wishes.length) {
+
+    emptySky.classList.remove("hidden");
+
+    return;
+
+  }
+
+
+  emptySky.classList.add("hidden");
+
+
+  wishes.forEach((wish, index) => {
+
+    createWishStar(
+      wish,
+      index,
+      false
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   CREATE ONE WISH STAR
+===================================================== */
+
+function createWishStar(
+  wish,
+  index = wishes.length,
+  animate = true
+) {
+
+  emptySky.classList.add("hidden");
+
+
+  const star =
+    document.createElement("button");
+
+
+  /*
+    ★ = NGÔI SAO 5 CÁNH
+    Khác hẳn ✦ trang trí.
+  */
+
+  star.className =
+    `wish-star ${getSafeColor(wish.color)}`;
+
+
+  star.type =
+    "button";
+
+
+  star.textContent =
+    "★";
+
+
+  /*
+    Vị trí được tạo ổn định
+    dựa trên id/index.
+  */
+
+  const position =
+    getStarPosition(
+      index,
+      wish.id
+    );
+
+
+  star.style.left =
+    position.x + "%";
+
+
+  star.style.top =
+    position.y + "%";
+
+
+  const size =
+    22 +
+    ((Number(wish.id) || index * 17) % 16);
+
+
+  star.style.setProperty(
+    "--star-size",
+    size + "px"
+  );
+
+
+  star.style.setProperty(
+    "--appear-delay",
+    animate ? "0s" : "0s"
+  );
+
+
+  star.title =
+    "Mở lời chúc của " +
+    wish.name;
+
+
+  /*
+    Click sao
+  */
+
+  star.addEventListener(
+    "click",
+    () => {
+
+      openLetter(wish);
+
+    }
+  );
+
+
+  wishStars.appendChild(star);
+
+}
+
+
+/* =====================================================
+   STAR POSITION
+===================================================== */
+
+function getStarPosition(
+  index,
+  seed
+) {
+
+  /*
+    Không để sao nằm chính giữa header.
+    Cũng không để đè lên nút gửi.
+  */
+
+  const zones = [
+
+    {
+      x: 12,
+      y: 38
+    },
+
+    {
+      x: 25,
+      y: 52
+    },
+
+    {
+      x: 42,
+      y: 40
+    },
+
+    {
+      x: 59,
+      y: 50
+    },
+
+    {
+      x: 75,
+      y: 39
+    },
+
+    {
+      x: 88,
+      y: 54
+    },
+
+    {
+      x: 18,
+      y: 72
+    },
+
+    {
+      x: 34,
+      y: 80
+    },
+
+    {
+      x: 52,
+      y: 72
+    },
+
+    {
+      x: 70,
+      y: 80
+    },
+
+    {
+      x: 86,
+      y: 73
+    }
+
+  ];
+
+
+  const zone =
+    zones[
+      index % zones.length
+    ];
+
+
+  /*
+    Một chút biến thiên.
+  */
+
+  const number =
+    Number(seed) || index;
+
+
+  const variationX =
+    ((number * 17) % 11) - 5;
+
+
+  const variationY =
+    ((number * 23) % 11) - 5;
+
+
+  return {
+
+    x:
+      Math.max(
+        6,
+        Math.min(
+          94,
+          zone.x + variationX
+        )
+      ),
+
+    y:
+      Math.max(
+        32,
+        Math.min(
+          90,
+          zone.y + variationY
+        )
+      )
+
+  };
+
+}
+
+
+/* =====================================================
+   SAFE COLOR
+===================================================== */
+
+function getSafeColor(color) {
+
+  const allowed = [
+    "yellow",
+    "white",
+    "blue",
+    "pink"
+  ];
+
+
+  if (
+    allowed.includes(color)
+  ) {
+
+    return color;
+
+  }
+
+
+  return "yellow";
+
+}
+
+
+/* =====================================================
+   OPEN LETTER
+===================================================== */
+
+function openLetter(wish) {
+
+  letterName.textContent =
+    wish.name || "Một người bạn";
+
+
+  letterMessage.textContent =
+    wish.message || "";
+
+
+  const color =
+    getSafeColor(wish.color);
+
+
+  const colorMap = {
+
+    yellow:
+      "#ffe18d",
+
+    white:
+      "#ffffff",
+
+    blue:
+      "#b9ddff",
+
+    pink:
+      "#ffc9df"
+
+  };
+
+
+  const glowMap = {
+
+    yellow:
+      "rgba(255,225,141,.75)",
+
+    white:
+      "rgba(255,255,255,.75)",
+
+    blue:
+      "rgba(185,221,255,.75)",
+
+    pink:
+      "rgba(255,201,223,.75)"
+
+  };
+
+
+  letterStar.style.color =
+    colorMap[color];
+
+
+  letterStar.style.filter =
+    `drop-shadow(
+      0 0 18px
+      ${glowMap[color]}
+    )`;
+
+
+  openModal(letterModal);
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadWishes();
+
+  }
 );
