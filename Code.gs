@@ -1,95 +1,255 @@
-/************************************************************
- * OTTER'S CORNER × PHÚC NGUYÊN
- * GOOGLE APPS SCRIPT
+/**************************************************************
+ * OTTER'S CORNER — PHÚC NGUYÊN
+ * GOOGLE APPS SCRIPT API
  *
- * Chức năng:
- * 1. Đọc lời chúc từ Google Sheet
- * 2. Chỉ public HỌ TÊN + LỜI CHÚC
- * 3. Không public email / số tiền / thông tin riêng tư
- * 4. Frontend GitHub gọi API ?action=wishes
- ************************************************************/
+ * API:
+ * /exec?action=wishes
+ *
+ * Website chỉ nhận:
+ * - họ và tên
+ * - lời chúc
+ *
+ * Không trả về:
+ * - email
+ * - timestamp
+ * - số tiền donate
+ * - thông tin riêng tư khác
+ **************************************************************/
 
 
-/* =========================================================
-   CẤU HÌNH
-========================================================= */
+/* ============================================================
+   CONFIG
+============================================================ */
 
-
-/*
- * ID Google Sheet của bạn
- */
 const SPREADSHEET_ID =
   "1z0Cvoltb0STKUVKDeYnIQfkzhRyT7CsSreyg_638dt4";
 
 
-/*
- * GID của sheet câu trả lời
- */
 const SHEET_GID =
   1010577208;
 
 
 /*
- * Tên câu hỏi lời chúc.
+ * Tên câu hỏi lời chúc trong Google Form.
  *
- * Script sẽ tìm header có chữ
- * "lời chúc" / "chúc" / tương tự.
+ * Script sẽ tìm gần đúng theo từ khóa,
+ * nên không cần phải giống 100%.
  */
-const WISH_HEADER_KEYWORDS = [
-  "hãy gửi một lời chúc",
+const WISH_KEYWORDS = [
   "lời chúc",
-  "lời nhắn",
-  "wish"
+  "chúc tốt lành",
+  "thắp sáng một vì sao"
 ];
 
 
 /*
- * Các tên cột có thể chứa tên người gửi.
+ * Tên người.
  */
-const NAME_HEADER_KEYWORDS = [
+const NAME_KEYWORDS = [
   "họ và tên",
   "họ tên",
-  "tên",
-  "name"
+  "tên"
 ];
 
 
-/* =========================================================
+/* ============================================================
    WEB APP
-========================================================= */
+============================================================ */
 
 function doGet(e) {
 
-  const action =
-    e &&
-    e.parameter &&
-    e.parameter.action
-      ? e.parameter.action
-      : "wishes";
+  try {
+
+    const action =
+      e &&
+      e.parameter &&
+      e.parameter.action
+        ? String(e.parameter.action)
+        : "wishes";
 
 
-  if (action === "wishes") {
+    if (action === "wishes") {
+
+      return jsonResponse(
+        getPublicWishes()
+      );
+
+    }
+
 
     return jsonResponse({
+
+      success: false,
+
+      error:
+        "Action không hợp lệ."
+
+    });
+
+
+  } catch (error) {
+
+    return jsonResponse({
+
+      success: false,
+
+      error:
+        error.message || String(error)
+
+    });
+
+  }
+
+}
+
+
+/* ============================================================
+   GET PUBLIC WISHES
+============================================================ */
+
+function getPublicWishes() {
+
+  const sheet =
+    getResponseSheet();
+
+
+  if (!sheet) {
+
+    throw new Error(
+      "Không tìm thấy sheet câu trả lời Google Form."
+    );
+
+  }
+
+
+  const values =
+    sheet
+      .getDataRange()
+      .getDisplayValues();
+
+
+  if (
+    !values ||
+    values.length < 2
+  ) {
+
+    return {
+
       success: true,
-      wishes: getPublicWishes()
+
+      wishes: []
+
+    };
+
+  }
+
+
+  const headers =
+    values[0].map(
+      value =>
+        normalizeText(value)
+    );
+
+
+  const nameIndex =
+    findColumnIndex(
+      headers,
+      NAME_KEYWORDS
+    );
+
+
+  const wishIndex =
+    findColumnIndex(
+      headers,
+      WISH_KEYWORDS
+    );
+
+
+  /*
+   * Nếu không tìm được cột lời chúc,
+   * trả về lỗi rõ ràng.
+   */
+
+  if (wishIndex === -1) {
+
+    throw new Error(
+      "Không tìm thấy cột chứa lời chúc trong Sheet."
+    );
+
+  }
+
+
+  const wishes = [];
+
+
+  for (
+    let row = 1;
+    row < values.length;
+    row++
+  ) {
+
+    const current =
+      values[row];
+
+
+    const wish =
+      String(
+        current[wishIndex] || ""
+      ).trim();
+
+
+    if (!wish) {
+      continue;
+    }
+
+
+    let name = "";
+
+
+    if (nameIndex !== -1) {
+
+      name =
+        String(
+          current[nameIndex] || ""
+        ).trim();
+
+    }
+
+
+    /*
+     * Không trả timestamp.
+     * Không trả email.
+     * Không trả tiền.
+     * Không trả các câu trả lời khác.
+     */
+
+    wishes.push({
+
+      name:
+        name || "Một người bạn",
+
+      wish:
+        wish
+
     });
 
   }
 
 
-  return jsonResponse({
+  return {
+
     success: true,
-    message:
-      "Otter's Corner × Phúc Nguyên API is running."
-  });
+
+    wishes: wishes
+
+  };
 
 }
 
 
-/* =========================================================
-   LẤY SHEET
-========================================================= */
+/* ============================================================
+   FIND RESPONSE SHEET BY GID
+============================================================ */
 
 function getResponseSheet() {
 
@@ -103,9 +263,6 @@ function getResponseSheet() {
     spreadsheet.getSheets();
 
 
-  /*
-   * Ưu tiên tìm đúng GID.
-   */
   for (
     let i = 0;
     i < sheets.length;
@@ -125,43 +282,40 @@ function getResponseSheet() {
 
 
   /*
-   * Nếu không tìm thấy GID,
-   * dùng sheet đầu tiên.
+   * Nếu GID không còn đúng,
+   * lấy sheet đầu tiên để tránh API chết hoàn toàn.
    */
-  return sheets[0];
+
+  if (sheets.length > 0) {
+
+    return sheets[0];
+
+  }
+
+
+  return null;
 
 }
 
 
-/* =========================================================
-   TÌM CỘT
-========================================================= */
-
-function normalizeText(text) {
-
-  return String(text || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-
-}
-
+/* ============================================================
+   FIND COLUMN
+============================================================ */
 
 function findColumnIndex(
   headers,
   keywords
 ) {
 
-  const normalizedHeaders =
-    headers.map(normalizeText);
-
-
   for (
     let i = 0;
-    i < normalizedHeaders.length;
+    i < headers.length;
     i++
   ) {
+
+    const header =
+      headers[i];
+
 
     for (
       let j = 0;
@@ -176,8 +330,7 @@ function findColumnIndex(
 
 
       if (
-        normalizedHeaders[i]
-          .includes(keyword)
+        header.includes(keyword)
       ) {
 
         return i;
@@ -194,226 +347,42 @@ function findColumnIndex(
 }
 
 
-/* =========================================================
-   ĐỌC LỜI CHÚC
-========================================================= */
+/* ============================================================
+   NORMALIZE VIETNAMESE TEXT
+============================================================ */
 
-function getPublicWishes() {
-
-  try {
-
-    const sheet =
-      getResponseSheet();
-
-
-    if (!sheet) {
-      return [];
-    }
-
-
-    const lastRow =
-      sheet.getLastRow();
-
-    const lastColumn =
-      sheet.getLastColumn();
-
-
-    /*
-     * Chưa có dữ liệu
-     */
-    if (
-      lastRow < 2 ||
-      lastColumn < 1
-    ) {
-
-      return [];
-
-    }
-
-
-    const values =
-      sheet
-        .getRange(
-          1,
-          1,
-          lastRow,
-          lastColumn
-        )
-        .getDisplayValues();
-
-
-    const headers =
-      values[0];
-
-
-    const nameColumn =
-      findColumnIndex(
-        headers,
-        NAME_HEADER_KEYWORDS
-      );
-
-
-    const wishColumn =
-      findColumnIndex(
-        headers,
-        WISH_HEADER_KEYWORDS
-      );
-
-
-    /*
-     * Nếu không tìm thấy cột lời chúc,
-     * không trả dữ liệu riêng tư.
-     */
-    if (wishColumn === -1) {
-
-      return [];
-
-    }
-
-
-    const result = [];
-
-
-    /*
-     * Đọc từ dòng 2.
-     */
-    for (
-      let row = 1;
-      row < values.length;
-      row++
-    ) {
-
-      const wish =
-        String(
-          values[row][wishColumn] || ""
-        ).trim();
-
-
-      /*
-       * Không có lời chúc -> bỏ qua.
-       */
-      if (!wish) {
-        continue;
-      }
-
-
-      let name =
-        "Một người thương mến";
-
-
-      if (
-        nameColumn !== -1
-      ) {
-
-        const sheetName =
-          String(
-            values[row][nameColumn] || ""
-          ).trim();
-
-
-        if (sheetName) {
-          name = sheetName;
-        }
-
-      }
-
-
-      /*
-       * CHỈ trả về:
-       * - name
-       * - wish
-       *
-       * Không trả:
-       * - email
-       * - timestamp
-       * - số tiền
-       * - câu trả lời khác
-       * - thông tin riêng tư
-       */
-      result.push({
-
-        id:
-          row,
-
-        name:
-          cleanPublicText(name),
-
-        wish:
-          cleanPublicText(wish)
-
-      });
-
-    }
-
-
-    return result;
-
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
-    return [];
-
-  }
-
-}
-
-
-/* =========================================================
-   LÀM SẠCH TEXT
-========================================================= */
-
-function cleanPublicText(text) {
+function normalizeText(text) {
 
   return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
     .replace(
-      /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
+      /[\u0300-\u036f]/g,
       ""
     )
     .replace(
-      /<[^>]*>/g,
-      ""
+      /đ/g,
+      "d"
     )
     .trim();
 
 }
 
 
-/* =========================================================
+/* ============================================================
    JSON RESPONSE
-========================================================= */
+============================================================ */
 
 function jsonResponse(data) {
 
   return ContentService
+
     .createTextOutput(
       JSON.stringify(data)
     )
+
     .setMimeType(
       ContentService.MimeType.JSON
     );
-
-}
-
-
-/* =========================================================
-   TEST
-========================================================= */
-
-function testWishes() {
-
-  const wishes =
-    getPublicWishes();
-
-
-  console.log(
-    JSON.stringify(
-      wishes,
-      null,
-      2
-    )
-  );
 
 }
