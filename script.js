@@ -1,608 +1,419 @@
-/* =========================================================
-   OTTER'S CORNER — PHÚC NGUYÊN
-   SCRIPT.JS
-========================================================= */
+/* ==================================================
+   OTTER'S CORNER - JUST FOR PHUC NGUYEN
+   JAVASCRIPT
+================================================== */
 
 
-/* =========================================================
-   1. CONFIG
-========================================================= */
+/* ==================================================
+   ELEMENTS
+================================================== */
 
-const CONFIG = {
+const opening =
+    document.getElementById("opening");
 
-    // Google Sheet public data
-    GOOGLE_SHEET_ID:
-        "1_f4yFSaR9QrMNIUk8iA0Maw4C2Z2-S25vRwS6qaQaiw",
+const enterButton =
+    document.getElementById("enterButton");
 
-    // Nếu Google Sheet của bạn dùng gid khác,
-    // thay số này bằng gid của sheet chứa câu trả lời.
-    GOOGLE_SHEET_GID:
-        "0",
+const mainPage =
+    document.getElementById("mainPage");
 
-    // Google Form
-    GOOGLE_FORM_URL:
-        "https://forms.gle/D47nMUWBiiyie2gSA",
+const bgMusic =
+    document.getElementById("bgMusic");
 
-    // Music
-    MUSIC_FILE:
-        "1 music.mp3",
+const musicButton =
+    document.getElementById("musicButton");
 
-    // Landing image
-    LANDING_IMAGE:
-        "1.png",
+const headerMusicButton =
+    document.getElementById("headerMusicButton");
 
-    // Profile image
-    PROFILE_IMAGE:
-        "ANH CD.png",
+const musicText =
+    document.getElementById("musicText");
 
-    // Auto refresh wishes
-    WISH_REFRESH:
-        30000
-};
+const menuToggle =
+    document.getElementById("menuToggle");
+
+const sideMenu =
+    document.getElementById("sideMenu");
 
 
-/* =========================================================
-   2. GLOBAL STATE
-========================================================= */
 
-const state = {
+/* ==================================================
+   OPEN WEBSITE
+================================================== */
 
-    currentSection:
-        "profile",
+enterButton.addEventListener(
+    "click",
+    function () {
 
-    musicPlaying:
-        false,
+        opening.classList.add("hide");
 
-    wishes:
-        [],
+        mainPage.style.display = "block";
 
-    financeData:
-        [],
+        window.scrollTo({
+            top: 0,
+            behavior: "instant"
+        });
 
-    selectedFinanceProject:
-        "all",
+        setTimeout(() => {
 
-    currentProject:
-        null
-};
+            playMusic();
 
-
-/* =========================================================
-   3. DOM HELPERS
-========================================================= */
-
-const $ = selector =>
-    document.querySelector(selector);
-
-const $$ = selector =>
-    document.querySelectorAll(selector);
-
-
-/* =========================================================
-   4. INITIALIZATION
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeStars();
-
-        initializeNavigation();
-
-        initializeMusic();
-
-        initializeAccordions();
-
-        initializeProjectCards();
-
-        initializeModals();
-
-        initializeMobileMenu();
-
-        initializeCursorGlow();
-
-        initializeLanding();
-
-        initializeDonate();
-
-        initializeFinance();
-
-        loadWishes();
+        }, 500);
 
     }
 );
 
 
-/* =========================================================
-   5. BACKGROUND STARS
-========================================================= */
 
-function initializeStars() {
+/* ==================================================
+   MUSIC
+================================================== */
 
-    const container =
-        $(".star-background");
+let musicPlaying = false;
 
-    if (!container) return;
 
-    const amount =
-        window.innerWidth < 600
-            ? 65
-            : 120;
+function playMusic() {
 
-    for (
-        let i = 0;
-        i < amount;
-        i++
-    ) {
+    bgMusic.volume = 0.35;
 
-        const star =
-            document.createElement("span");
+    const promise =
+        bgMusic.play();
 
-        star.className =
-            "background-star";
+    if (promise !== undefined) {
 
-        star.style.left =
-            `${Math.random() * 100}%`;
+        promise
+            .then(() => {
 
-        star.style.top =
-            `${Math.random() * 100}%`;
+                musicPlaying = true;
 
-        star.style.setProperty(
-            "--duration",
-            `${1.5 + Math.random() * 3}s`
-        );
+                updateMusicButtons();
 
-        star.style.setProperty(
-            "--delay",
-            `${Math.random() * 4}s`
-        );
+            })
+            .catch(() => {
 
-        container.appendChild(star);
+                musicPlaying = false;
+
+                updateMusicButtons();
+
+            });
+
     }
+
 }
 
 
-/* =========================================================
-   6. LANDING PAGE
-========================================================= */
+function toggleMusic() {
 
-function initializeLanding() {
+    if (musicPlaying) {
 
-    const landing =
-        $("#landingPage");
+        bgMusic.pause();
 
-    const main =
-        $("#mainSite");
+        musicPlaying = false;
 
-    const enterButton =
-        $("#enterButton");
+    }
 
-    if (!landing || !main) return;
+    else {
 
-    if (enterButton) {
+        bgMusic.volume = 0.35;
 
-        enterButton.addEventListener(
+        bgMusic.play()
+            .then(() => {
+
+                musicPlaying = true;
+
+            })
+            .catch(() => {
+
+                console.log(
+                    "Trình duyệt đang chặn autoplay."
+                );
+
+            });
+
+    }
+
+
+    updateMusicButtons();
+
+}
+
+
+function updateMusicButtons() {
+
+    const text =
+        musicPlaying
+            ? "♫ MUSIC ON"
+            : "♫ MUSIC OFF";
+
+
+    if (musicText) {
+
+        musicText.textContent =
+            musicPlaying
+                ? "MUSIC ON"
+                : "MUSIC OFF";
+
+    }
+
+
+    if (headerMusicButton) {
+
+        headerMusicButton.textContent =
+            text;
+
+    }
+
+}
+
+
+musicButton.addEventListener(
+    "click",
+    toggleMusic
+);
+
+
+headerMusicButton.addEventListener(
+    "click",
+    toggleMusic
+);
+
+
+
+/* ==================================================
+   MENU
+================================================== */
+
+const menuItems =
+    document.querySelectorAll(
+        ".menu-item"
+    );
+
+const sections =
+    document.querySelectorAll(
+        ".page-section"
+    );
+
+
+menuItems.forEach(
+    item => {
+
+        item.addEventListener(
             "click",
             () => {
 
-                landing.classList.add("hidden");
+                const target =
+                    item.dataset.section;
 
-                main.classList.remove("hidden");
+
+                menuItems.forEach(
+                    button => {
+
+                        button.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                item.classList.add(
+                    "active"
+                );
+
+
+                sections.forEach(
+                    section => {
+
+                        section.classList.remove(
+                            "active-section"
+                        );
+
+                    }
+                );
+
+
+                const targetSection =
+                    document.getElementById(
+                        target
+                    );
+
+
+                if (targetSection) {
+
+                    targetSection.classList.add(
+                        "active-section"
+                    );
+
+                }
+
 
                 window.scrollTo({
                     top: 0,
                     behavior: "smooth"
                 });
 
-                tryStartMusic();
-            }
-        );
 
-    }
-}
-
-
-/* =========================================================
-   7. NAVIGATION
-========================================================= */
-
-function initializeNavigation() {
-
-    const buttons =
-        $$(".nav-card, .mobile-nav");
-
-    buttons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const target =
-                    button.dataset.section;
-
-                if (!target) return;
-
-                openSection(target);
-
-                closeMobileMenu();
-
-            }
-        );
-
-    });
-}
-
-
-function openSection(sectionName) {
-
-    state.currentSection =
-        sectionName;
-
-    const sections =
-        $$(".content-section");
-
-    sections.forEach(section => {
-
-        section.classList.toggle(
-            "active-section",
-            section.dataset.section ===
-            sectionName
-        );
-
-    });
-
-
-    const navButtons =
-        $$(".nav-card");
-
-    navButtons.forEach(button => {
-
-        button.classList.toggle(
-            "active",
-            button.dataset.section ===
-            sectionName
-        );
-
-    });
-
-
-    const mobileButtons =
-        $$(".mobile-nav");
-
-    mobileButtons.forEach(button => {
-
-        button.classList.toggle(
-            "active",
-            button.dataset.section ===
-            sectionName
-        );
-
-    });
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-
-    if (sectionName === "donate") {
-
-        setTimeout(
-            createPublicStars,
-            100
-        );
-
-    }
-}
-
-
-/* =========================================================
-   8. MOBILE MENU
-========================================================= */
-
-function initializeMobileMenu() {
-
-    const menuButton =
-        $("#menuButton");
-
-    const menu =
-        $("#mobileMenu");
-
-    if (!menuButton || !menu) return;
-
-    menuButton.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            menu.classList.toggle("show");
-
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        event => {
-
-            if (
-                !menu.contains(event.target) &&
-                !menuButton.contains(event.target)
-            ) {
-
-                closeMobileMenu();
-
-            }
-
-        }
-    );
-}
-
-
-function closeMobileMenu() {
-
-    const menu =
-        $("#mobileMenu");
-
-    if (menu) {
-
-        menu.classList.remove("show");
-
-    }
-}
-
-
-/* =========================================================
-   9. MUSIC PLAYER
-========================================================= */
-
-let audioPlayer = null;
-
-
-function initializeMusic() {
-
-    audioPlayer =
-        document.createElement("audio");
-
-    audioPlayer.src =
-        CONFIG.MUSIC_FILE;
-
-    audioPlayer.loop =
-        true;
-
-    audioPlayer.preload =
-        "auto";
-
-    audioPlayer.volume =
-        0.45;
-
-    document.body.appendChild(
-        audioPlayer
-    );
-
-
-    const musicButton =
-        $("#musicButton");
-
-    if (!musicButton) return;
-
-    musicButton.addEventListener(
-        "click",
-        toggleMusic
-    );
-
-
-    updateMusicButton();
-}
-
-
-function toggleMusic() {
-
-    if (!audioPlayer) return;
-
-    if (
-        audioPlayer.paused
-    ) {
-
-        audioPlayer
-            .play()
-            .then(() => {
-
-                state.musicPlaying =
-                    true;
-
-                updateMusicButton();
-
-            })
-            .catch(() => {
-
-                console.log(
-                    "Music cần được người dùng cho phép phát."
-                );
-
-            });
-
-    } else {
-
-        audioPlayer.pause();
-
-        state.musicPlaying =
-            false;
-
-        updateMusicButton();
-
-    }
-}
-
-
-function tryStartMusic() {
-
-    if (!audioPlayer) return;
-
-    audioPlayer
-        .play()
-        .then(() => {
-
-            state.musicPlaying =
-                true;
-
-            updateMusicButton();
-
-        })
-        .catch(() => {
-
-            // Trình duyệt có thể chặn autoplay.
-            // Người dùng chỉ cần bấm nút MUSIC.
-        });
-}
-
-
-function updateMusicButton() {
-
-    const button =
-        $("#musicButton");
-
-    if (!button) return;
-
-    if (state.musicPlaying) {
-
-        button.innerHTML =
-            "♫ MUSIC ON";
-
-    } else {
-
-        button.innerHTML =
-            "♫ MUSIC OFF";
-
-    }
-}
-
-
-/* =========================================================
-   10. ACCORDION
-========================================================= */
-
-function initializeAccordions() {
-
-    const accordions =
-        $$(".accordion-card");
-
-    accordions.forEach(card => {
-
-        const button =
-            card.querySelector(
-                ".accordion-header"
-            );
-
-        if (!button) return;
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                card.classList.toggle(
-                    "open"
+                sideMenu.classList.remove(
+                    "mobile-open"
                 );
 
             }
         );
 
-    });
-}
+    }
+);
 
 
-/* =========================================================
-   11. PROJECT CARDS
-========================================================= */
 
-function initializeProjectCards() {
+/* ==================================================
+   MOBILE MENU
+================================================== */
 
-    const buttons =
-        $$(".project-detail-button");
+menuToggle.addEventListener(
+    "click",
+    () => {
 
-    buttons.forEach(button => {
+        sideMenu.classList.toggle(
+            "mobile-open"
+        );
 
-        button.addEventListener(
+    }
+);
+
+
+
+/* ==================================================
+   ACCORDION
+================================================== */
+
+const accordionHeaders =
+    document.querySelectorAll(
+        ".accordion-header"
+    );
+
+
+accordionHeaders.forEach(
+    header => {
+
+        header.addEventListener(
             "click",
             () => {
 
-                const projectId =
-                    button.dataset.project;
+                const targetId =
+                    header.dataset.target;
 
-                openProjectModal(
-                    projectId
+                const content =
+                    document.getElementById(
+                        targetId
+                    );
+
+
+                const isOpen =
+                    header.classList.contains(
+                        "open"
+                    );
+
+
+                accordionHeaders.forEach(
+                    otherHeader => {
+
+                        otherHeader.classList.remove(
+                            "open"
+                        );
+
+                    }
                 );
+
+
+                document
+                    .querySelectorAll(
+                        ".accordion-content"
+                    )
+                    .forEach(
+                        otherContent => {
+
+                            otherContent.style.maxHeight =
+                                null;
+
+                        }
+                    );
+
+
+                if (!isOpen) {
+
+                    header.classList.add(
+                        "open"
+                    );
+
+                    content.style.maxHeight =
+                        content.scrollHeight +
+                        "px";
+
+                }
 
             }
         );
 
-    });
-}
+    }
+);
 
 
-/* =========================================================
-   12. PROJECT DATA
-========================================================= */
 
-const PROJECTS = {
+/* ==================================================
+   PROJECT DATA
+================================================== */
 
-    pj1: {
+const projects = {
 
-        label:
-            "PROJECT 01",
+
+    project1: {
 
         title:
             "CHEER TO GRADUATION & ROAD TO DEBUT",
 
-        subtitle:
-            "Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu",
+        label:
+            "PROJECT 01 · 18/01/2026",
 
-        video:
-            "PJ1.mp4",
+        text:
 
-        description: `Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu.`,
+`💕 Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu 💕
 
-        quote:
-            `Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.`,
+📨 Dear Phúc Nguyên:
 
-        footer:
-            `SHOW THE WORLD WHO YOU ARE ✨`,
+“Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.”
 
-        meta: [
-            "By: Otter’s Corner",
-            "Date: 18/01/2026",
-            "Location: Vietnam"
-        ],
+✨ SHOW THE WORLD WHO YOU ARE ✨
+
+🦦 By: Otter’s Corner
+
+💫 Date: 18/01/2026
+
+📍 Location: Vietnam
+
+Otter’s Corner xin được gửi lời cảm ơn tới @le.tresor_pn và @nayngieee_ khi đã cho phép team được sử dụng hình ảnh cho chiếc ads xinh iu này.
+
+Cảm ơn designer iu quý của team @dazii2611 đã vất vả cho deadline gấp rút chúc mừng Phúc Nguyên tốt nghiệp hành trình này.
+
+Các tình iu có bắt gặp chiếc ads nhỏ xinh này thì nhớ tag Otter’s Corner và gửi lời chúc tới Phúc Nguyên nhaaaa.`,
 
         images: []
 
     },
 
 
-    pj2: {
-
-        label:
-            "PROJECT 02",
+    project2: {
 
         title:
             "PHƯỚN HER CONCERT FOR UPRIZE PN",
 
-        subtitle:
-            "Chặng “Phúc Khai” — HER Concert",
+        label:
+            "PROJECT 02 · HER CONCERT",
 
-        description: `Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂`,
+        text:
 
-        quote:
-            `Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện — mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`,
+`Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂
 
-        meta: [
-            "By: Otter’s Corner",
-            "Project: Phúc Khai",
-            "10 phướn"
-        ],
+Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện - mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`,
 
         images: [
             "PJ2.1.png",
@@ -612,269 +423,90 @@ const PROJECTS = {
     },
 
 
-    pj3: {
-
-        label:
-            "PROJECT 03",
+    project3: {
 
         title:
             "PHOTO FRAME x TEDxTPC2026",
 
-        subtitle:
-            "Maestro — Chặng Khởi",
+        label:
+            "PROJECT 03 · TEDxTPC2026",
 
-        description: `Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.`,
+        text:
 
-        quote:
-            `Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.`,
+`🎹 Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.
 
-        footer:
-            `Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee 🎹`,
+🎹 Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.
 
-        meta: [
-            "By: Otter’s Corner",
-            "Event: TEDxTPC2026",
-            "Theme: Maestro"
-        ],
+🎹 Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee.`,
 
         images: [
             "PJ3.1.png",
             "PJ3.2.png"
         ]
 
-    },
-
-
-    future: {
-
-        label:
-            "PROJECT 04",
-
-        title:
-            "PROJECT SẮP TỚI…",
-
-        subtitle:
-            "A new chapter is coming",
-
-        description:
-            `Một project mới đang được Otter’s Corner chuẩn bị dành cho Phúc Nguyên.`,
-
-        quote:
-            `Hẹn gặp nhau ở một dấu mốc thật đẹp tiếp theo nhé ✨`,
-
-        meta: [
-            "Coming soon",
-            "Otter’s Corner"
-        ],
-
-        images: []
-
     }
 
 };
 
 
-/* =========================================================
-   13. PROJECT MODAL
-========================================================= */
 
-function initializeModals() {
+/* ==================================================
+   PROJECT MODAL
+================================================== */
 
-    const closeProject =
-        $("#closeProjectModal");
+const projectModal =
+    document.getElementById(
+        "projectModal"
+    );
 
-    const projectOverlay =
-        $("#projectModalOverlay");
+const modalContent =
+    document.getElementById(
+        "modalContent"
+    );
 
-    if (closeProject) {
+const modalClose =
+    document.getElementById(
+        "modalClose"
+    );
 
-        closeProject.addEventListener(
+
+const detailButtons =
+    document.querySelectorAll(
+        ".detail-button"
+    );
+
+
+detailButtons.forEach(
+    button => {
+
+        button.addEventListener(
             "click",
-            closeProjectModal
-        );
+            () => {
 
-    }
+                const projectId =
+                    button.dataset.project;
 
-    if (projectOverlay) {
-
-        projectOverlay.addEventListener(
-            "click",
-            closeProjectModal
-        );
-
-    }
-
-
-    const closeWish =
-        $("#closeWishModal");
-
-    const wishOverlay =
-        $("#wishOverlay");
-
-    if (closeWish) {
-
-        closeWish.addEventListener(
-            "click",
-            closeWishModal
-        );
-
-    }
-
-    if (wishOverlay) {
-
-        wishOverlay.addEventListener(
-            "click",
-            closeWishModal
-        );
-
-    }
-
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key === "Escape"
-            ) {
-
-                closeProjectModal();
-
-                closeWishModal();
+                openProject(
+                    projectId
+                );
 
             }
+        );
 
-        }
-    );
-}
+    }
+);
 
 
-function openProjectModal(
-    projectId
-) {
+function openProject(id) {
 
     const project =
-        PROJECTS[projectId];
+        projects[id];
+
 
     if (!project) return;
 
-    state.currentProject =
-        projectId;
 
-    const modal =
-        $("#projectModal");
-
-    const label =
-        $("#projectModalLabel");
-
-    const title =
-        $("#projectModalTitle");
-
-    const subtitle =
-        $("#projectModalSubtitle");
-
-    const body =
-        $("#projectModalBody");
-
-    if (
-        !modal ||
-        !label ||
-        !title ||
-        !subtitle ||
-        !body
-    ) return;
-
-
-    label.textContent =
-        project.label;
-
-    title.textContent =
-        project.title;
-
-    subtitle.textContent =
-        project.subtitle;
-
-
-    let html = "";
-
-
-    if (project.video) {
-
-        html += `
-            <video
-                class="project-modal-video"
-                src="${project.video}"
-                controls
-                playsinline
-                preload="metadata">
-            </video>
-        `;
-
-    }
-
-
-    if (project.description) {
-
-        html += `
-            <p>
-                ${escapeHTML(
-                    project.description
-                )}
-            </p>
-        `;
-
-    }
-
-
-    if (project.quote) {
-
-        html += `
-            <blockquote>
-                ${escapeHTML(
-                    project.quote
-                )}
-            </blockquote>
-        `;
-
-    }
-
-
-    if (project.footer) {
-
-        html += `
-            <p>
-                <strong>
-                    ${escapeHTML(
-                        project.footer
-                    )}
-                </strong>
-            </p>
-        `;
-
-    }
-
-
-    if (
-        project.meta &&
-        project.meta.length
-    ) {
-
-        html += `
-            <div class="project-meta">
-                ${project.meta
-                    .map(
-                        item => `
-                            <p>
-                                ${escapeHTML(item)}
-                            </p>
-                        `
-                    )
-                    .join("")
-                }
-            </div>
-        `;
-
-    }
+    let gallery = "";
 
 
     if (
@@ -882,758 +514,386 @@ function openProjectModal(
         project.images.length
     ) {
 
-        html += `
-            <div class="project-modal-gallery">
-                ${
-                    project.images
-                        .map(
-                            image => `
-                                <img
-                                    src="${image}"
-                                    alt="${escapeHTML(
-                                        project.title
-                                    )}">
-                            `
-                        )
-                        .join("")
-                }
-            </div>
-        `;
+        gallery =
+            `<div class="modal-gallery">`;
+
+        project.images.forEach(
+            image => {
+
+                gallery += `
+                    <img
+                        src="${image}"
+                        alt="${project.title}">
+                `;
+
+            }
+        );
+
+        gallery +=
+            `</div>`;
 
     }
 
 
-    body.innerHTML =
-        html;
+    modalContent.innerHTML = `
+
+        <div class="modal-label">
+            ${project.label}
+        </div>
+
+        <h2 class="modal-title">
+            ${project.title}
+        </h2>
+
+        <div class="modal-text">
+            ${project.text}
+        </div>
+
+        ${gallery}
+
+    `;
 
 
-    modal.classList.remove(
-        "hidden"
+    projectModal.classList.add(
+        "show"
     );
+
 
     document.body.style.overflow =
         "hidden";
+
 }
 
 
-function closeProjectModal() {
+function closeProject() {
 
-    const modal =
-        $("#projectModal");
-
-    if (!modal) return;
-
-    modal.classList.add(
-        "hidden"
+    projectModal.classList.remove(
+        "show"
     );
 
     document.body.style.overflow =
         "";
+
 }
 
 
-/* =========================================================
-   14. FINANCE
-========================================================= */
+modalClose.addEventListener(
+    "click",
+    closeProject
+);
 
-function initializeFinance() {
 
-    const selector =
-        $("#financeProjectSelector");
-
-    if (!selector) return;
-
-    selector.addEventListener(
-        "change",
-        () => {
-
-            state.selectedFinanceProject =
-                selector.value;
-
-            renderFinance();
-
-        }
+projectModal
+    .querySelector(".modal-overlay")
+    .addEventListener(
+        "click",
+        closeProject
     );
 
 
-    /*
-       3 project đầu tiên sử dụng
-       quỹ nội bộ => 0đ.
-    */
 
-    state.financeData = [
+/* ==================================================
+   FINANCE DATA
+================================================== */
 
-        {
-            project:
-                "CHEER TO GRADUATION & ROAD TO DEBUT",
-
-            date:
-                "18/01/2026",
-
-            type:
-                "Nội bộ",
-
-            category:
-                "Project",
-
-            quantity:
-                0,
-
-            unitPrice:
-                0,
-
-            total:
-                0,
-
-            deposit:
-                0,
-
-            evidence:
-                ""
-        },
-
-        {
-            project:
-                "PHƯỚN HER CONCERT FOR UPRIZE PN",
-
-            date:
-                "—",
-
-            type:
-                "Nội bộ",
-
-            category:
-                "Project",
-
-            quantity:
-                0,
-
-            unitPrice:
-                0,
-
-            total:
-                0,
-
-            deposit:
-                0,
-
-            evidence:
-                ""
-        },
-
-        {
-            project:
-                "PHOTO FRAME x TEDxTPC2026",
-
-            date:
-                "—",
-
-            type:
-                "Nội bộ",
-
-            category:
-                "Project",
-
-            quantity:
-                0,
-
-            unitPrice:
-                0,
-
-            total:
-                0,
-
-            deposit:
-                0,
-
-            evidence:
-                ""
-        }
-
-    ];
+const financeData = {
 
 
-    renderFinance();
+    project1: {
+
+        income: 0,
+
+        expense: 0,
+
+        rows: []
+
+    },
+
+
+    project2: {
+
+        income: 0,
+
+        expense: 0,
+
+        rows: []
+
+    },
+
+
+    project3: {
+
+        income: 0,
+
+        expense: 0,
+
+        rows: []
+
+    }
+
+};
+
+
+
+/* ==================================================
+   FORMAT MONEY
+================================================== */
+
+function formatMoney(
+    number
+) {
+
+    return new Intl.NumberFormat(
+        "vi-VN"
+    ).format(number) + "đ";
 
 }
+
+
+
+/* ==================================================
+   RENDER FINANCE
+================================================== */
+
+const projectSelector =
+    document.getElementById(
+        "projectSelector"
+    );
+
+
+projectSelector.addEventListener(
+    "change",
+    renderFinance
+);
 
 
 function renderFinance() {
 
-    const selector =
-        $("#financeProjectSelector");
-
-    const totalIncome =
-        $("#totalIncome");
-
-    const totalExpense =
-        $("#totalExpense");
-
-    const totalRemain =
-        $("#totalRemain");
-
-    const tableBody =
-        $("#financeTableBody");
-
-    if (
-        !selector ||
-        !totalIncome ||
-        !totalExpense ||
-        !totalRemain ||
-        !tableBody
-    ) return;
+    const projectId =
+        projectSelector.value;
 
 
-    const selected =
-        state.selectedFinanceProject;
+    const data =
+        financeData[projectId];
 
 
-    let rows =
-        state.financeData;
+    document.getElementById(
+        "totalIncome"
+    ).textContent =
+        formatMoney(data.income);
 
 
-    if (
-        selected !== "all"
-    ) {
-
-        rows =
-            rows.filter(
-                row =>
-                    row.project ===
-                    selected
-            );
-
-    }
+    document.getElementById(
+        "totalExpense"
+    ).textContent =
+        formatMoney(data.expense);
 
 
-    const income =
-        0;
+    const remaining =
+        data.income -
+        data.expense;
 
 
-    const expense =
-        rows.reduce(
-            (
-                sum,
-                row
-            ) =>
-                sum +
-                Number(
-                    row.total || 0
-                ),
-            0
+    document.getElementById(
+        "totalRemaining"
+    ).textContent =
+        formatMoney(remaining);
+
+
+    const table =
+        document.getElementById(
+            "financeTable"
         );
 
 
-    const remain =
-        income - expense;
+    table.innerHTML = "";
 
 
-    totalIncome.textContent =
-        formatMoney(income);
+    if (
+        !data.rows.length
+    ) {
 
-    totalExpense.textContent =
-        formatMoney(expense);
+        table.innerHTML = `
 
-    totalRemain.textContent =
-        formatMoney(remain);
-
-
-    if (!rows.length) {
-
-        tableBody.innerHTML = `
             <tr>
-                <td
-                    colspan="10"
-                    class="finance-empty">
-                    Chưa có dữ liệu.
+
+                <td colspan="7"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                        opacity:.55;
+                    ">
+
+                    Chưa có giao dịch phát sinh
+
                 </td>
+
             </tr>
+
         `;
 
         return;
+
     }
 
 
-    tableBody.innerHTML =
-        rows
-            .map(
-                row => `
-                    <tr>
+    data.rows.forEach(
+        row => {
 
-                        <td>
-                            ${escapeHTML(
-                                row.date
-                            )}
-                        </td>
+            table.innerHTML += `
 
-                        <td>
-                            ${escapeHTML(
-                                row.type
-                            )}
-                        </td>
+                <tr>
 
-                        <td>
-                            ${escapeHTML(
-                                row.category
-                            )}
-                        </td>
+                    <td>
+                        ${row.date}
+                    </td>
 
-                        <td>
-                            ${formatNumber(
-                                row.quantity
-                            )}
-                        </td>
+                    <td>
+                        ${row.type}
+                    </td>
 
-                        <td>
-                            ${formatMoney(
-                                row.unitPrice
-                            )}
-                        </td>
+                    <td>
+                        ${row.quantity}
+                    </td>
 
-                        <td>
-                            ${formatMoney(
-                                row.total
-                            )}
-                        </td>
+                    <td>
+                        ${formatMoney(row.price)}
+                    </td>
 
-                        <td>
-                            ${formatMoney(
-                                row.deposit
-                            )}
-                        </td>
+                    <td>
+                        ${formatMoney(row.total)}
+                    </td>
 
-                        <td>
-                            ${escapeHTML(
-                                row.project
-                            )}
-                        </td>
+                    <td>
+                        ${formatMoney(row.deposit)}
+                    </td>
 
-                        <td>
-                            ${
-                                row.evidence
-                                    ? `
-                                        <a
-                                            href="${safeURL(
-                                                row.evidence
-                                            )}"
-                                            target="_blank"
-                                            rel="noopener noreferrer">
-                                            Drive
-                                        </a>
-                                    `
-                                    : "—"
-                            }
-                        </td>
+                    <td>
 
-                    </tr>
-                `
-            )
-            .join("");
-}
+                        <a
+                            class="drive-link"
+                            href="${row.proof}"
+                            target="_blank"
+                            rel="noopener">
 
+                            Drive ↗
 
-function formatMoney(
-    value
-) {
+                        </a>
 
-    return new Intl.NumberFormat(
-        "vi-VN"
-    ).format(
-        Number(value || 0)
-    ) + "đ";
+                    </td>
 
-}
+                </tr>
 
+            `;
 
-function formatNumber(
-    value
-) {
-
-    return new Intl.NumberFormat(
-        "vi-VN"
-    ).format(
-        Number(value || 0)
+        }
     );
 
 }
 
 
-/* =========================================================
-   15. GOOGLE SHEET
-========================================================= */
+renderFinance();
+
+
+
+/* ==================================================
+   DONATE STARS
+================================================== */
+
 
 /*
-   QUAN TRỌNG:
+   HIỆN TẠI:
 
-   Website chỉ đọc 2 cột public:
+   Dữ liệu demo để bạn nhìn thấy
+   hệ thống hoạt động.
 
-   1. Họ và tên
-   2. Lời chúc
-
-   Các câu hỏi donate khác sẽ KHÔNG được đưa lên
-   bầu trời và KHÔNG được render vào DOM.
-
-   Nếu sheet của bạn có hàng tiêu đề:
-
-   Họ và tên
-   Hãy gửi một lời chúc tốt lành...
-
-   thì code bên dưới sẽ tự tìm tên cột.
+   SAU NÀY:
+   Chỉ cần thay mảng này bằng
+   dữ liệu lấy từ Google Sheet.
 */
 
 
-async function loadWishes() {
+const wishes = [
 
-    try {
+    {
+        name: "Một người bạn",
 
-        const url =
-            `https://docs.google.com/spreadsheets/d/${CONFIG.GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json&gid=${CONFIG.GOOGLE_SHEET_GID}`;
+        message:
+            "Chúc Phúc Nguyên luôn mạnh mẽ, tự tin và tỏa sáng trên hành trình phía trước ✦"
 
-        const response =
-            await fetch(url);
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Không thể đọc Google Sheet."
-            );
-
-        }
-
-        const text =
-            await response.text();
+    },
 
 
-        const json =
-            parseGoogleSheetResponse(
-                text
-            );
+    {
+        name: "Otter",
+
+        message:
+            "Mong mọi ước mơ của Phúc Nguyên đều từng bước trở thành hiện thực. Hãy luôn là chính mình nhé!"
+
+    },
 
 
-        if (
-            !json ||
-            !json.table ||
-            !json.table.rows
-        ) {
+    {
+        name: "PN Supporter",
 
-            throw new Error(
-                "Google Sheet không có dữ liệu."
-            );
+        message:
+            "Chúc Nguyên thật nhiều niềm vui, thật nhiều sân khấu và thật nhiều khoảnh khắc đáng nhớ."
 
-        }
+    },
 
 
-        const headers =
-            json.table.cols.map(
-                column =>
-                    normalizeText(
-                        column.label ||
-                        column.id ||
-                        ""
-                    )
-            );
+    {
+        name: "A little star",
 
-
-        const nameIndex =
-            findColumn(
-                headers,
-                [
-                    "ho va ten",
-                    "họ và tên",
-                    "ten",
-                    "tên"
-                ]
-            );
-
-
-        const wishIndex =
-            findColumn(
-                headers,
-                [
-                    "hay gui mot loi chuc tot lanh den phuc nguyen de thap sang mot vi sao tren bau troi ban nhe",
-                    "hãy gửi một lời chúc tốt lành đến phúc nguyên để thắp sáng một vì sao trên bầu trời bạn nhé",
-                    "loi chuc",
-                    "lời chúc"
-                ]
-            );
-
-
-        if (
-            nameIndex === -1 ||
-            wishIndex === -1
-        ) {
-
-            console.warn(
-                "Không tìm thấy cột Họ và tên hoặc Lời chúc.",
-                headers
-            );
-
-            return;
-
-        }
-
-
-        const wishes =
-            json.table.rows
-                .map(
-                    row => {
-
-                        const cells =
-                            row.c || [];
-
-                        const name =
-                            getCellValue(
-                                cells[nameIndex]
-                            );
-
-                        const wish =
-                            getCellValue(
-                                cells[wishIndex]
-                            );
-
-
-                        if (
-                            !name ||
-                            !wish
-                        ) {
-
-                            return null;
-
-                        }
-
-
-                        return {
-
-                            name:
-                                String(name)
-                                    .trim(),
-
-                            wish:
-                                String(wish)
-                                    .trim(),
-
-                            color:
-                                randomStarColor(),
-
-                            size:
-                                14 +
-                                Math.random() *
-                                10,
-
-                            left:
-                                4 +
-                                Math.random() *
-                                92,
-
-                            top:
-                                8 +
-                                Math.random() *
-                                82,
-
-                            delay:
-                                Math.random() *
-                                3,
-
-                            duration:
-                                2 +
-                                Math.random() *
-                                3
-
-                        };
-
-                    }
-                )
-                .filter(Boolean);
-
-
-        state.wishes =
-            wishes;
-
-
-        createPublicStars();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Lỗi tải lời chúc:",
-            error
-        );
+        message:
+            "Dù hành trình phía trước có dài đến đâu, mong Nguyên luôn nhớ rằng có những người vẫn âm thầm dõi theo và ủng hộ."
 
     }
 
-}
+];
 
 
-/* =========================================================
-   16. GOOGLE SHEET PARSER
-========================================================= */
-
-function parseGoogleSheetResponse(
-    text
-) {
-
-    const start =
-        text.indexOf(
-            "{"
-        );
-
-    const end =
-        text.lastIndexOf(
-            "}"
-        );
-
-
-    if (
-        start === -1 ||
-        end === -1
-    ) {
-
-        throw new Error(
-            "Google Sheet trả về dữ liệu không hợp lệ."
-        );
-
-    }
-
-
-    return JSON.parse(
-        text.substring(
-            start,
-            end + 1
-        )
+const donateStars =
+    document.getElementById(
+        "donateStars"
     );
-}
 
 
-function getCellValue(
-    cell
-) {
-
-    if (!cell) return "";
-
-    if (
-        cell.v !== undefined &&
-        cell.v !== null
-    ) {
-
-        return cell.v;
-
-    }
-
-    if (cell.f) {
-
-        return cell.f;
-
-    }
-
-    return "";
-}
+const letterModal =
+    document.getElementById(
+        "letterModal"
+    );
 
 
-/* =========================================================
-   17. FIND GOOGLE SHEET COLUMN
-========================================================= */
-
-function findColumn(
-    headers,
-    possibleNames
-) {
-
-    const normalizedNames =
-        possibleNames.map(
-            normalizeText
-        );
+const letterName =
+    document.getElementById(
+        "letterName"
+    );
 
 
-    for (
-        let i = 0;
-        i < headers.length;
-        i++
-    ) {
-
-        const current =
-            normalizeText(
-                headers[i]
-            );
+const letterText =
+    document.getElementById(
+        "letterText"
+    );
 
 
-        if (
-            normalizedNames.includes(
-                current
-            )
-        ) {
-
-            return i;
-
-        }
+const letterClose =
+    document.getElementById(
+        "letterClose"
+    );
 
 
-        for (
-            const possible
-            of normalizedNames
-        ) {
 
-            if (
-                current.includes(
-                    possible
-                ) ||
-                possible.includes(
-                    current
-                )
-            ) {
+/* ==================================================
+   CREATE STARS
+================================================== */
 
-                return i;
+function createDonateStars() {
 
-            }
-
-        }
-
-    }
+    donateStars.innerHTML = "";
 
 
-    return -1;
-}
-
-
-function normalizeText(
-    text
-) {
-
-    return String(text || "")
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-        .toLowerCase()
-        .replace(
-            /[^a-z0-9\s]/g,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            " "
-        )
-        .trim();
-}
-
-
-/* =========================================================
-   18. PUBLIC STARS
-========================================================= */
-
-function createPublicStars() {
-
-    const container =
-        $("#publicStars");
-
-    if (!container) return;
-
-
-    container.innerHTML = "";
-
-
-    state.wishes.forEach(
+    wishes.forEach(
         (wish, index) => {
 
             const star =
@@ -1641,51 +901,85 @@ function createPublicStars() {
                     "button"
                 );
 
-            star.type =
-                "button";
 
             star.className =
-                "public-star";
+                "donate-star";
+
+
+            star.innerHTML =
+                "✦";
+
+
+            const colors = [
+                "#ffffff",
+                "#9fd3ff",
+                "#ffe7a6",
+                "#c6b5ff",
+                "#a9f3ff"
+            ];
+
+
+            star.style.color =
+                colors[
+                    index %
+                    colors.length
+                ];
+
+
+            /*
+               Tạo vị trí ngẫu nhiên
+               nhưng tránh phần chính giữa
+               để không che nội dung.
+            */
+
+            let left =
+                5 +
+                Math.random() * 90;
+
+
+            let top =
+                8 +
+                Math.random() * 84;
+
+
+            /*
+               Nếu sao rơi vào khu vực
+               chính giữa thì đẩy ra.
+            */
+
+            if (
+                left > 30 &&
+                left < 70 &&
+                top > 25 &&
+                top < 75
+            ) {
+
+                left =
+                    left < 50
+                        ? 15
+                        : 80;
+
+            }
 
 
             star.style.left =
-                `${wish.left}%`;
+                left + "%";
+
 
             star.style.top =
-                `${wish.top}%`;
-
-            star.style.setProperty(
-                "--star-color",
-                wish.color
-            );
-
-            star.style.setProperty(
-                "--star-size",
-                `${wish.size}px`
-            );
-
-            star.style.setProperty(
-                "--star-delay",
-                `${wish.delay}s`
-            );
-
-            star.style.setProperty(
-                "--star-duration",
-                `${wish.duration}s`
-            );
+                top + "%";
 
 
-            star.setAttribute(
-                "aria-label",
-                "Mở lời chúc"
-            );
+            star.style.animationDelay =
+                (Math.random() * 2)
+                + "s";
 
 
             star.addEventListener(
                 "click",
                 () => {
 
-                    openWishModal(
+                    openWish(
                         wish
                     );
 
@@ -1693,7 +987,7 @@ function createPublicStars() {
             );
 
 
-            container.appendChild(
+            donateStars.appendChild(
                 star
             );
 
@@ -1703,331 +997,105 @@ function createPublicStars() {
 }
 
 
-/* =========================================================
-   19. STAR COLORS
-========================================================= */
-
-function randomStarColor() {
-
-    const colors = [
-
-        "#9bdcff",
-        "#a9c9ff",
-        "#d6b8ff",
-        "#ffd3ec",
-        "#b9f0e3",
-        "#ffe6a7",
-        "#c9e7ff",
-        "#f5c8ff"
-
-    ];
+createDonateStars();
 
 
-    return colors[
-        Math.floor(
-            Math.random() *
-            colors.length
-        )
-    ];
-}
 
+/* ==================================================
+   OPEN LETTER
+================================================== */
 
-/* =========================================================
-   20. WISH MODAL
-========================================================= */
-
-function openWishModal(
+function openWish(
     wish
 ) {
 
-    const modal =
-        $("#wishModal");
-
-    const name =
-        $("#wishName");
-
-    const message =
-        $("#wishMessage");
-
-
-    if (
-        !modal ||
-        !name ||
-        !message
-    ) return;
-
-
-    name.textContent =
+    letterName.textContent =
         wish.name;
 
-    message.textContent =
-        wish.wish;
+
+    letterText.textContent =
+        wish.message;
 
 
-    modal.classList.remove(
-        "hidden"
+    letterModal.classList.add(
+        "show"
     );
+
 
     document.body.style.overflow =
         "hidden";
+
 }
 
 
-function closeWishModal() {
+function closeWish() {
 
-    const modal =
-        $("#wishModal");
-
-    if (!modal) return;
-
-    modal.classList.add(
-        "hidden"
+    letterModal.classList.remove(
+        "show"
     );
+
 
     document.body.style.overflow =
         "";
+
 }
 
 
-/* =========================================================
-   21. CURSOR LIGHT
-========================================================= */
-
-function initializeCursorGlow() {
-
-    const glow =
-        $(".cursor-glow");
-
-    if (!glow) return;
+letterClose.addEventListener(
+    "click",
+    closeWish
+);
 
 
-    if (
-        window.matchMedia(
-            "(pointer: coarse)"
-        ).matches
-    ) {
-
-        glow.style.display =
-            "none";
-
-        return;
-
-    }
-
-
-    let targetX = 0;
-    let targetY = 0;
-
-    let currentX = 0;
-    let currentY = 0;
-
-
-    document.addEventListener(
-        "mousemove",
-        event => {
-
-            targetX =
-                event.clientX;
-
-            targetY =
-                event.clientY;
-
-        }
+letterModal
+    .querySelector(".letter-overlay")
+    .addEventListener(
+        "click",
+        closeWish
     );
 
 
-    function animate() {
 
-        currentX +=
-            (
-                targetX -
-                currentX
-            ) * .08;
-
-        currentY +=
-            (
-                targetY -
-                currentY
-            ) * .08;
-
-
-        glow.style.left =
-            `${currentX}px`;
-
-        glow.style.top =
-            `${currentY}px`;
-
-
-        requestAnimationFrame(
-            animate
-        );
-
-    }
-
-
-    animate();
-}
-
-
-/* =========================================================
-   22. ESCAPE HTML
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-}
-
-
-/* =========================================================
-   23. SAFE URL
-========================================================= */
-
-function safeURL(
-    url
-) {
-
-    try {
-
-        const parsed =
-            new URL(
-                url,
-                window.location.href
-            );
-
-
-        if (
-            parsed.protocol ===
-                "https:" ||
-            parsed.protocol ===
-                "http:"
-        ) {
-
-            return parsed.href;
-
-        }
-
-    }
-    catch (error) {
-
-        return "#";
-
-    }
-
-
-    return "#";
-}
-
-
-/* =========================================================
-   24. AUTO REFRESH WISHES
-========================================================= */
-
-setInterval(
-    () => {
-
-        /*
-           Chỉ refresh khi người dùng đang ở
-           phần Donate để không làm website
-           hoạt động thừa.
-        */
-
-        if (
-            state.currentSection ===
-            "donate"
-        ) {
-
-            loadWishes();
-
-        }
-
-    },
-    CONFIG.WISH_REFRESH
-);
-
-
-/* =========================================================
-   25. HANDLE IMAGE ERRORS
-========================================================= */
+/* ==================================================
+   ESC TO CLOSE MODALS
+================================================== */
 
 document.addEventListener(
-    "error",
+    "keydown",
     event => {
 
-        const element =
-            event.target;
-
         if (
-            element.tagName ===
-            "IMG"
+            event.key === "Escape"
         ) {
 
-            element.classList.add(
-                "image-error"
-            );
+            closeProject();
 
-        }
+            closeWish();
 
-    },
-    true
-);
-
-
-/* =========================================================
-   26. PAGE VISIBILITY
-========================================================= */
-
-document.addEventListener(
-    "visibilitychange",
-    () => {
-
-        if (
-            document.hidden &&
-            audioPlayer &&
-            !audioPlayer.paused
-        ) {
-
-            // Không pause nhạc khi chuyển tab.
-            // Trình duyệt tự quản lý.
         }
 
     }
 );
 
 
-/* =========================================================
-   27. CONSOLE
-========================================================= */
 
-console.log(
-    "%c✦ OTTER'S CORNER ✦",
-    "color:#65a9dc;font-size:18px;font-weight:bold;"
-);
+/* ==================================================
+   PREVENT VIDEO FROM BREAKING
+================================================== */
 
-console.log(
-    "Just for Phuc Nguyen ♡"
-);
+document
+    .querySelectorAll(
+        ".project-media video"
+    )
+    .forEach(
+        video => {
+
+            video.muted = true;
+
+            video.play()
+                .catch(
+                    () => {}
+                );
+
+        }
+    );
