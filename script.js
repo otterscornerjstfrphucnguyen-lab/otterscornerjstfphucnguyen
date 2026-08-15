@@ -1,6 +1,6 @@
 /* =========================================================
-   PHÚC NGUYÊN — OTTER'S CORNER
-   Main JavaScript
+   OTTER'S CORNER
+   PHÚC NGUYÊN WEBSITE
 ========================================================= */
 
 
@@ -10,43 +10,75 @@
 
 const CONFIG = {
 
+    /*
+     * Google Form
+     */
     formUrl:
         "https://forms.gle/D47nMUWBiiyie2gSA",
 
     /*
-     * Sau khi deploy Google Apps Script,
-     * dán URL Web App vào đây.
+     * Google Sheet
      *
-     * Ví dụ:
-     * apiUrl: "https://script.google.com/macros/s/XXXX/exec"
+     * Chỉ query:
+     * C = Họ và tên
+     * H = Lời chúc
+     *
+     * Không lấy email / điện thoại /
+     * tiền donate / link chuyển khoản.
      */
+    sheetId:
+        "1_f4yFSaR9QrMNIUk8iA0Maw4C2Z2-S25vRwS6qaQaiw",
 
-    apiUrl: "",
+    sheetGid:
+        "1010577208",
 
-    musicFile:
-        "1 music.mp3"
+    /*
+     * Nếu Google Sheet không public,
+     * website sẽ dùng các lời chúc demo bên dưới.
+     */
+    demoWishes: [
+        {
+            name: "Một người bạn",
+            wish:
+                "Chúc Phúc Nguyên luôn mạnh mẽ, tự tin và tỏa sáng trên hành trình phía trước."
+        },
 
+        {
+            name: "Một vì sao",
+            wish:
+                "Mong mọi ước mơ của Nguyên đều từng bước trở thành hiện thực."
+        },
+
+        {
+            name: "Otter",
+            wish:
+                "Hãy luôn là chính mình và tiếp tục viết nên những chương thật đẹp nhé!"
+        }
+    ]
 };
 
 
 /* =========================================================
-   ELEMENTS
+   DOM
 ========================================================= */
 
 const introScreen =
     document.getElementById("introScreen");
 
+const enterButton =
+    document.getElementById("enterButton");
+
 const mainWebsite =
     document.getElementById("mainWebsite");
 
-const enterButton =
-    document.getElementById("enterButton");
+const bgMusic =
+    document.getElementById("bgMusic");
 
 const musicButton =
     document.getElementById("musicButton");
 
-const bgMusic =
-    document.getElementById("bgMusic");
+const musicText =
+    document.getElementById("musicText");
 
 const menuButton =
     document.getElementById("menuButton");
@@ -60,288 +92,138 @@ const navCards =
 const pageSections =
     document.querySelectorAll(".page-section");
 
-const projectGrid =
-    document.getElementById("projectGrid");
-
-const projectModal =
-    document.getElementById("projectModal");
-
-const closeProjectModal =
-    document.getElementById("closeProjectModal");
-
-const projectModalMedia =
-    document.getElementById("projectModalMedia");
-
-const projectModalNumber =
-    document.getElementById("projectModalNumber");
-
-const projectModalTitle =
-    document.getElementById("projectModalTitle");
-
-const projectModalDescription =
-    document.getElementById("projectModalDescription");
-
-const projectSelect =
-    document.getElementById("projectSelect");
-
-const financeTable =
-    document.getElementById("financeTable");
-
-const totalIncome =
-    document.getElementById("totalIncome");
-
-const totalExpense =
-    document.getElementById("totalExpense");
-
-const totalRemain =
-    document.getElementById("totalRemain");
-
-const wishStars =
-    document.getElementById("wishStars");
-
-const letterModal =
-    document.getElementById("letterModal");
-
-const closeLetter =
-    document.getElementById("closeLetter");
-
-const letterName =
-    document.getElementById("letterName");
-
-const letterWish =
-    document.getElementById("letterWish");
-
 
 /* =========================================================
-   PROJECT DATA
+   RANDOM HELPER
 ========================================================= */
 
-const projects = [
-
-    {
-        id: "pj1",
-
-        number: "01",
-
-        title:
-            "CHEER TO GRADUATION & ROAD TO DEBUT",
-
-        subtitle:
-            "Project nhỏ xinh đầu tiên của Otter’s Corner",
-
-        cover:
-            "PJ1.mp4",
-
-        type:
-            "video",
-
-        description:
-`💕 Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu 💕
-
-📨 Dear Phúc Nguyên:
-
-“Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.”
-
-✨ SHOW THE WORLD WHO YOU ARE ✨
-
-🦦 By: Otter’s Corner
-
-💫 Date: 18/01/2026
-
-📍 Location: Vietnam
-
-Otter’s Corner xin được gửi lời cảm ơn tới @le.tresor_pn và @nayngieee_ khi đã cho phép team được sử dụng hình ảnh cho chiếc ads xinh iu này.
-
-Cảm ơn designer iu quý của team @dazii2611 đã vất vả cho deadline gấp rút chúc mừng Phúc Nguyên tốt nghiệp hành trình này.
-
-Các tình iu có bắt gặp chiếc ads nhỏ xinh này thì nhớ tag Otter’s Corner và gửi lời chúc tới Phúc Nguyên nhaaaa.`
-
-    },
-
-
-    {
-        id: "pj2",
-
-        number: "02",
-
-        title:
-            "PHƯỚN HER CONCERT FOR UPRIZE PN",
-
-        subtitle:
-            "Phúc Khởi Hưng Nguyên — chặng Phúc Khai",
-
-        cover:
-            "PJ2.png",
-
-        type:
-            "image",
-
-        gallery: [
-            "PJ2.1.png",
-            "PJ2.2.png"
-        ],
-
-        description:
-`Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂
-
-Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện — mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`
-
-    },
-
-
-    {
-        id: "pj3",
-
-        number: "03",
-
-        title:
-            "PHOTO FRAME x TEDxTPC2026",
-
-        subtitle:
-            "Maestro — The beginning of Khởi",
-
-        cover:
-            "PJ3.mp4",
-
-        type:
-            "video",
-
-        gallery: [
-            "PJ3.1.png",
-            "PJ3.2.png"
-        ],
-
-        description:
-`🎹 Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.
-
-🎹 Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.
-
-🎹 Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee.`
-
-    },
-
-
-    {
-        id: "pj4",
-
-        number: "04",
-
-        title:
-            "PROJECT SẮP TỚI…",
-
-        subtitle:
-            "Something beautiful is coming",
-
-        cover:
-            null,
-
-        type:
-            "future",
-
-        description:
-`Một project mới đang được Otter’s Corner chuẩn bị.
-
-Hẹn gặp bạn trong một dấu mốc tiếp theo của hành trình Phúc Nguyên ✦
-
-COMING SOON...`
-
-    }
-
-];
-
-
-/* =========================================================
-   FINANCE DATA
-========================================================= */
-
-const financeData = {
-
-    pj1: {
-        income: 0,
-        expense: 0,
-        rows: []
-    },
-
-    pj2: {
-        income: 0,
-        expense: 0,
-        rows: []
-    },
-
-    pj3: {
-        income: 0,
-        expense: 0,
-        rows: []
-    },
-
-    pj4: {
-        income: 0,
-        expense: 0,
-        rows: []
-    }
-
-};
-
-
-/* =========================================================
-   GENERATE GLOBAL STARS
-========================================================= */
-
-function createBackgroundStars() {
-
-    const containers = [
-        document.getElementById("globalStars"),
-        document.getElementById("introStars")
-    ];
-
-    containers.forEach(container => {
-
-        if (!container) return;
-
-        const amount = 65;
-
-        for (let i = 0; i < amount; i++) {
-
-            const star =
-                document.createElement("div");
-
-            star.className = "star";
-
-            star.style.left =
-                `${Math.random() * 100}%`;
-
-            star.style.top =
-                `${Math.random() * 100}%`;
-
-            star.style.animationDelay =
-                `${Math.random() * 4}s`;
-
-            star.style.animationDuration =
-                `${1.5 + Math.random() * 3}s`;
-
-            const size =
-                Math.random() > .7
-                    ? 5
-                    : 3;
-
-            star.style.width =
-                `${size}px`;
-
-            star.style.height =
-                `${size}px`;
-
-            container.appendChild(star);
-
-        }
-
-    });
-
+function random(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 
 /* =========================================================
-   INTRO
+   CREATE BACKGROUND STARS
 ========================================================= */
+
+function createBackgroundStars(
+    container,
+    amount = 80,
+    crossAmount = 25
+) {
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    for (let i = 0; i < amount; i++) {
+
+        const star =
+            document.createElement("span");
+
+        star.className = "star-dot";
+
+        star.style.left =
+            `${random(0, 100)}%`;
+
+        star.style.top =
+            `${random(0, 100)}%`;
+
+        const size =
+            random(1.5, 4.5);
+
+        star.style.width =
+            `${size}px`;
+
+        star.style.height =
+            `${size}px`;
+
+        star.style.setProperty(
+            "--duration",
+            `${random(1.8, 5)}s`
+        );
+
+        star.style.animationDelay =
+            `${random(-5, 0)}s`;
+
+        container.appendChild(star);
+    }
+
+
+    for (let i = 0; i < crossAmount; i++) {
+
+        const star =
+            document.createElement("span");
+
+        star.className = "star-cross";
+
+        star.textContent =
+            Math.random() > .35
+                ? "✦"
+                : "✧";
+
+        star.style.left =
+            `${random(0, 100)}%`;
+
+        star.style.top =
+            `${random(0, 100)}%`;
+
+        star.style.setProperty(
+            "--size",
+            `${random(9, 24)}px`
+        );
+
+        star.style.setProperty(
+            "--duration",
+            `${random(2.5, 6)}s`
+        );
+
+        star.style.animationDelay =
+            `${random(-5, 0)}s`;
+
+        container.appendChild(star);
+    }
+}
+
+
+/* =========================================================
+   INTRO STARS
+========================================================= */
+
+createBackgroundStars(
+    document.getElementById("introStars"),
+    100,
+    35
+);
+
+
+/* =========================================================
+   GLOBAL WEBSITE STARS
+========================================================= */
+
+createBackgroundStars(
+    document.getElementById("globalStars"),
+    80,
+    30
+);
+
+
+/* =========================================================
+   NIGHT SKY STARS
+========================================================= */
+
+createBackgroundStars(
+    document.getElementById("nightStars"),
+    145,
+    45
+);
+
+
+/* =========================================================
+   ENTER WEBSITE
+========================================================= */
+
+let musicStarted = false;
 
 enterButton.addEventListener(
     "click",
@@ -351,20 +233,21 @@ enterButton.addEventListener(
 
         setTimeout(() => {
 
-            introScreen.style.display =
-                "none";
-
-            mainWebsite.classList.remove(
-                "hidden"
-            );
+            mainWebsite.classList.remove("hidden");
 
             window.scrollTo({
                 top: 0,
-                behavior: "instant"
+                behavior: "smooth"
             });
 
-        }, 900);
+        }, 300);
 
+
+        /*
+         * Browser thường chặn autoplay.
+         * Vì người dùng vừa click nên đây là
+         * thời điểm phù hợp để phát nhạc.
+         */
 
         try {
 
@@ -372,23 +255,24 @@ enterButton.addEventListener(
 
             await bgMusic.play();
 
-            musicButton.textContent =
-                "♫ MUSIC ON";
+            musicStarted = true;
+
+            musicText.textContent =
+                "MUSIC ON";
 
         } catch (error) {
 
-            console.log(
-                "Music requires user interaction."
-            );
+            musicStarted = false;
 
+            musicText.textContent =
+                "MUSIC OFF";
         }
-
     }
 );
 
 
 /* =========================================================
-   MUSIC
+   MUSIC BUTTON
 ========================================================= */
 
 musicButton.addEventListener(
@@ -399,26 +283,32 @@ musicButton.addEventListener(
 
             try {
 
+                bgMusic.volume = 0.35;
+
                 await bgMusic.play();
 
-                musicButton.textContent =
-                    "♫ MUSIC ON";
+                musicStarted = true;
+
+                musicText.textContent =
+                    "MUSIC ON";
 
             } catch (error) {
 
-                console.log(error);
-
+                console.log(
+                    "Không thể phát nhạc:",
+                    error
+                );
             }
 
         } else {
 
             bgMusic.pause();
 
-            musicButton.textContent =
-                "♫ MUSIC OFF";
+            musicStarted = false;
 
+            musicText.textContent =
+                "MUSIC OFF";
         }
-
     }
 );
 
@@ -427,42 +317,38 @@ musicButton.addEventListener(
    SECTION NAVIGATION
 ========================================================= */
 
-function openSection(sectionName) {
-
-    navCards.forEach(card => {
-
-        card.classList.toggle(
-            "active",
-            card.dataset.section === sectionName
-        );
-
-    });
-
+function openSection(sectionId) {
 
     pageSections.forEach(section => {
 
         section.classList.remove(
             "active-section"
         );
-
     });
 
 
     const target =
-        document.getElementById(
-            `section-${sectionName}`
-        );
+        document.getElementById(sectionId);
 
     if (target) {
 
         target.classList.add(
             "active-section"
         );
-
     }
 
 
-    mobileMenu.classList.remove("show");
+    navCards.forEach(card => {
+
+        card.classList.toggle(
+            "active",
+            card.dataset.section === sectionId
+        );
+    });
+
+
+    mobileMenu.classList.remove("open");
+
 
     window.scrollTo({
         top: 0,
@@ -470,12 +356,19 @@ function openSection(sectionName) {
     });
 
 
-    if (sectionName === "stars") {
+    /*
+     * Nếu mở mục 04,
+     * tạo lại sao nếu cần.
+     */
 
-        loadWishStars();
+    if (sectionId === "stars") {
 
+        setTimeout(() => {
+
+            createNightSkyDecorations();
+
+        }, 100);
     }
-
 }
 
 
@@ -491,12 +384,11 @@ navCards.forEach(card => {
 
         }
     );
-
 });
 
 
 /* =========================================================
-   MOBILE MENU
+   MOBILE / MENU
 ========================================================= */
 
 menuButton.addEventListener(
@@ -504,9 +396,8 @@ menuButton.addEventListener(
     () => {
 
         mobileMenu.classList.toggle(
-            "show"
+            "open"
         );
-
     }
 );
 
@@ -535,39 +426,18 @@ mobileMenu
 
 document
     .querySelectorAll(".accordion-header")
-    .forEach(header => {
+    .forEach(button => {
 
-        header.addEventListener(
+        button.addEventListener(
             "click",
             () => {
 
                 const card =
-                    header.closest(
+                    button.closest(
                         ".accordion-card"
                     );
 
-                card.classList.toggle(
-                    "open"
-                );
-
-                const plus =
-                    header.querySelector(
-                        "span:last-child"
-                    );
-
-                if (
-                    card.classList.contains(
-                        "open"
-                    )
-                ) {
-
-                    plus.textContent = "−";
-
-                } else {
-
-                    plus.textContent = "+";
-
-                }
+                card.classList.toggle("open");
 
             }
         );
@@ -576,259 +446,243 @@ document
 
 
 /* =========================================================
-   PROJECT RENDER
+   PROJECT DATA
 ========================================================= */
 
-function renderProjects() {
+const projectData = {
 
-    projectGrid.innerHTML = "";
+    project1: {
 
-    projects.forEach(project => {
+        title:
+            "CHEER TO GRADUATION & ROAD TO DEBUT",
 
-        const card =
-            document.createElement("article");
+        description:
+`💕 Project nhỏ xinh đầu tiên của Otter’s Corner tới Phúc Nguyên yêu dấu 💕
 
-        card.className =
-            "project-card";
+📨 Dear Phúc Nguyên:
 
-        let mediaHTML = "";
+“Khi cánh cửa này khép lại cũng là lúc một cánh cửa mới mở ra, chặng đường tại SIA vừa qua Nguyên đã trải qua bằng tất cả nhiệt huyết và chân thành, giờ là lúc bước ra thế giới rộng lớn kia để tiếp tục hành trình theo đuổi đam mê.”
 
+✨ SHOW THE WORLD WHO YOU ARE ✨
 
-        if (project.type === "video") {
+🦦 By: Otter’s Corner
 
-            mediaHTML = `
-                <video
-                    src="${project.cover}"
-                    muted
-                    loop
-                    playsinline
-                    preload="metadata"
-                ></video>
-            `;
+💫 Date: 18/01/2026
 
-        }
+📍 Location: Vietnam
 
-        else if (project.type === "image") {
+Otter’s Corner xin được gửi lời cảm ơn tới @le.tresor_pn và @nayngieee_ khi đã cho phép team được sử dụng hình ảnh cho chiếc ads xinh iu này.
 
-            mediaHTML = `
-                <img
-                    src="${project.cover}"
-                    alt="${project.title}"
-                    loading="lazy"
-                >
-            `;
+Cảm ơn designer iu quý của team @dazii2611 đã vất vả cho deadline gấp rút chúc mừng Phúc Nguyên tốt nghiệp hành trình này.
 
-        }
+Các tình iu có bắt gặp chiếc ads nhỏ xinh này thì nhớ tag Otter’s Corner và gửi lời chúc tới Phúc Nguyên nhaaaa.`,
 
-        else {
-
-            mediaHTML = `
-                <div class="project-placeholder">
-                    <span>✦</span>
-                    <p>
-                        PROJECT SẮP TỚI
-                        <br>
-                        COMING SOON
-                    </p>
-                </div>
-            `;
-
-        }
-
-
-        card.innerHTML = `
-
-            <div class="project-number">
-                ${project.number}
-            </div>
-
-            <h3 class="project-title">
-                ${project.title}
-            </h3>
-
-            <p class="project-subtitle">
-                ${project.subtitle}
-            </p>
-
-            <div class="project-media">
-                ${mediaHTML}
-            </div>
-
-        `;
-
-
-        card.addEventListener(
-            "click",
-            () => {
-
-                openProject(project);
-
+        media: [
+            {
+                type: "video",
+                src: "PJ1.mp4"
             }
-        );
+        ]
+
+    },
 
 
-        projectGrid.appendChild(card);
+    project2: {
 
-    });
+        title:
+            "PHƯỚN HER CONCERT FOR UPRIZE PN",
+
+        description:
+`Mở đầu cho hành trình Phúc Khởi Hưng Nguyên với chặng “Phúc Khai”, Otter’s Corner gửi đến HER Concert cụm 10 phướn như một dấu mốc khởi đầu, thay cho lời chúc tốt đẹp và lời hứa đồng hành dài lâu 🫂
+
+Mỗi phướn đều mang theo niềm tin, sự tự hào và ước nguyện - mong Phúc Nguyên luôn tự tin, mạnh mẽ trên mọi chặng đường, không ngừng bứt phá và ngày càng vươn xa 🪽`,
+
+        media: [
+            {
+                type: "image",
+                src: "PJ2.1.png"
+            },
+            {
+                type: "image",
+                src: "PJ2.2.png"
+            }
+        ]
+
+    },
 
 
-    /*
-     * Video cover:
-     * Khi hover desktop thì play,
-     * rời chuột thì pause.
-     */
+    project3: {
 
-    projectGrid
-        .querySelectorAll("video")
-        .forEach(video => {
+        title:
+            "PHOTO FRAME x TEDxTPC2026",
 
-            const card =
-                video.closest(".project-card");
+        description:
+`🎹 Mở đầu chặng Khởi, Otter’s Corner mang đến project đầu tiên: frame check-in tại sự kiện TEDxTPC2026.
 
-            card.addEventListener(
-                "mouseenter",
-                () => {
+🎹 Lấy cảm hứng từ chủ đề Maestro, chúng mình tái hiện một “nhà hát” nơi vị nhạc trưởng tài ba UPRIZE PN dẫn dắt những giai điệu đầy cảm hứng.
 
-                    video.play().catch(
-                        () => {}
-                    );
+🎹 Đừng quên ghé qua frame check-in và lưu lại những khoảnh khắc thật xinh nhéee.`,
 
-                }
-            );
+        media: [
+            {
+                type: "image",
+                src: "PJ3.1.png"
+            },
+            {
+                type: "image",
+                src: "PJ3.2.png"
+            }
+        ]
 
-            card.addEventListener(
-                "mouseleave",
-                () => {
+    },
 
-                    video.pause();
 
-                }
-            );
+    project4: {
 
-        });
+        title:
+            "PROJECT SẮP TỚI...",
 
-}
+        description:
+`Một project mới đang được Otter’s Corner chuẩn bị.
+
+Hẹn gặp mọi người ở một dấu mốc tiếp theo cùng Phúc Nguyên ✦
+
+COMING SOON.`,
+
+        media: []
+
+    }
+
+};
 
 
 /* =========================================================
    PROJECT MODAL
 ========================================================= */
 
-function openProject(project) {
+const projectModal =
+    document.getElementById("projectModal");
 
-    projectModal.classList.add(
-        "show"
+const projectModalBody =
+    document.getElementById("projectModalBody");
+
+const closeProjectModal =
+    document.getElementById(
+        "closeProjectModal"
     );
 
-    projectModalNumber.textContent =
-        project.number;
 
-    projectModalTitle.textContent =
-        project.title;
+function openProject(projectId) {
 
-    projectModalDescription.textContent =
-        project.description;
+    const project =
+        projectData[projectId];
 
-
-    projectModalMedia.innerHTML = "";
+    if (!project) return;
 
 
-    if (project.type === "video") {
-
-        const video =
-            document.createElement("video");
-
-        video.src =
-            project.cover;
-
-        video.controls = true;
-
-        video.autoplay = true;
-
-        video.playsInline = true;
-
-        projectModalMedia.appendChild(
-            video
-        );
-
-    }
-
-    else if (project.type === "image") {
-
-        const image =
-            document.createElement("img");
-
-        image.src =
-            project.cover;
-
-        image.alt =
-            project.title;
-
-        projectModalMedia.appendChild(
-            image
-        );
+    let mediaHTML = "";
 
 
-        if (project.gallery) {
+    if (
+        project.media &&
+        project.media.length
+    ) {
 
-            project.gallery.forEach(
-                imagePath => {
+        mediaHTML =
+            `<div class="modal-media-grid">`;
 
-                    const image =
-                        document.createElement(
-                            "img"
-                        );
+        project.media.forEach(media => {
 
-                    image.src =
-                        imagePath;
+            if (media.type === "video") {
 
-                    image.alt =
-                        project.title;
+                mediaHTML += `
+                    <video
+                        src="${media.src}"
+                        controls
+                        playsinline
+                        preload="metadata"
+                    ></video>
+                `;
 
-                    image.style.marginTop =
-                        "12px";
+            } else {
 
-                    projectModalMedia.appendChild(
-                        image
-                    );
+                mediaHTML += `
+                    <img
+                        src="${media.src}"
+                        alt="${project.title}"
+                        loading="lazy"
+                    >
+                `;
+            }
 
-                }
-            );
+        });
 
-        }
+        mediaHTML += `</div>`;
 
-    }
+    } else {
 
-    else {
-
-        projectModalMedia.innerHTML = `
-            <div
-                class="project-placeholder"
-                style="height:300px;"
-            >
+        mediaHTML = `
+            <div class="update-placeholder">
                 <span>✦</span>
                 <p>
-                    SOMETHING BEAUTIFUL
-                    <br>
-                    IS COMING
+                    Nội dung project sẽ được
+                    cập nhật trong thời gian tới.
                 </p>
             </div>
         `;
-
     }
 
-}
+
+    projectModalBody.innerHTML = `
+
+        <span class="heading-mini">
+            PROJECT BY OTTER'S CORNER
+        </span>
+
+        <h2 class="modal-project-title">
+            ${project.title}
+        </h2>
+
+        <p class="modal-project-text">
+            ${project.description}
+        </p>
+
+        ${mediaHTML}
+
+    `;
 
 
-function closeProject() {
+    projectModal.classList.add("open");
 
-    projectModal.classList.remove(
-        "show"
+    projectModal.setAttribute(
+        "aria-hidden",
+        "false"
     );
-
-    projectModalMedia.innerHTML = "";
-
 }
+
+
+document
+    .querySelectorAll(".project-card")
+    .forEach(card => {
+
+        card.addEventListener(
+            "click",
+            event => {
+
+                /*
+                 * Nếu click vào nút
+                 * hoặc bất kỳ vị trí card,
+                 * đều mở project.
+                 */
+
+                openProject(
+                    card.dataset.project
+                );
+
+            }
+        );
+
+    });
 
 
 closeProjectModal.addEventListener(
@@ -845,17 +699,99 @@ document
     );
 
 
+function closeProject() {
+
+    projectModal.classList.remove(
+        "open"
+    );
+
+    projectModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+}
+
+
 /* =========================================================
-   FINANCE
+   FINANCE DATA
 ========================================================= */
 
-function formatMoney(value) {
+const financeData = {
 
-    return new Intl.NumberFormat(
-        "vi-VN"
-    ).format(value) + "đ";
+    project1: {
+        income: 0,
+        expense: 0,
+        remaining: 0,
+        rows: []
+    },
 
+    project2: {
+        income: 0,
+        expense: 0,
+        remaining: 0,
+        rows: []
+    },
+
+    project3: {
+        income: 0,
+        expense: 0,
+        remaining: 0,
+        rows: []
+    },
+
+    project4: {
+        income: 0,
+        expense: 0,
+        remaining: 0,
+        rows: []
+    }
+
+};
+
+
+/* =========================================================
+   FORMAT MONEY
+========================================================= */
+
+function formatMoney(number) {
+
+    return (
+        new Intl.NumberFormat(
+            "vi-VN"
+        ).format(number)
+        + "đ"
+    );
 }
+
+
+/* =========================================================
+   RENDER FINANCE
+========================================================= */
+
+const financeProject =
+    document.getElementById(
+        "financeProject"
+    );
+
+const totalIncome =
+    document.getElementById(
+        "totalIncome"
+    );
+
+const totalExpense =
+    document.getElementById(
+        "totalExpense"
+    );
+
+const totalRemaining =
+    document.getElementById(
+        "totalRemaining"
+    );
+
+const financeTableBody =
+    document.getElementById(
+        "financeTableBody"
+    );
 
 
 function renderFinance(projectId) {
@@ -872,36 +808,23 @@ function renderFinance(projectId) {
     totalExpense.textContent =
         formatMoney(data.expense);
 
-    totalRemain.textContent =
-        formatMoney(
-            data.income -
-            data.expense
-        );
+    totalRemaining.textContent =
+        formatMoney(data.remaining);
 
 
-    financeTable.innerHTML = "";
+    financeTableBody.innerHTML = "";
 
 
     if (!data.rows.length) {
 
-        financeTable.innerHTML = `
+        financeTableBody.innerHTML = `
 
             <tr>
 
-                <td colspan="7"
-                    style="
-                        text-align:center;
-                        padding:35px;
-                        color:#7c9ab4;
-                    "
-                >
-
+                <td colspan="7">
                     Chưa có giao dịch.
-                    <br>
-                    <strong>
-                        Project sử dụng quỹ nội bộ — 0đ
-                    </strong>
-
+                    Project sử dụng quỹ nội bộ
+                    hoặc chưa cập nhật dữ liệu.
                 </td>
 
             </tr>
@@ -909,7 +832,6 @@ function renderFinance(projectId) {
         `;
 
         return;
-
     }
 
 
@@ -934,314 +856,165 @@ function renderFinance(projectId) {
 
             <td>
                 ${
-                    row.proof
-                    ?
-                    `<a
-                        href="${row.proof}"
-                        target="_blank"
-                        class="proof-link"
-                    >
-                        ↗ Xem
-                    </a>`
-                    :
-                    "—"
+                    row.evidence
+                        ? `
+                            <a
+                                class="evidence-link"
+                                href="${row.evidence}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                ↗
+                            </a>
+                        `
+                        : "—"
                 }
             </td>
 
         `;
 
-        financeTable.appendChild(tr);
+        financeTableBody.appendChild(tr);
 
     });
-
 }
 
 
-projectSelect.addEventListener(
+financeProject.addEventListener(
     "change",
     () => {
 
         renderFinance(
-            projectSelect.value
+            financeProject.value
         );
 
     }
 );
 
 
+renderFinance("project1");
+
+
 /* =========================================================
-   WISH / STAR SYSTEM
+   NIGHT SKY DECORATION
 ========================================================= */
 
+function createNightSkyDecorations() {
 
-/*
- * Màu sao:
- * vàng
- * trắng
- * baby blue
- * hồng pastel
- */
+    const nightStars =
+        document.getElementById(
+            "nightStars"
+        );
 
-const starColors = [
-    "#FFD978",
-    "#FFFFFF",
-    "#A9D8FF",
-    "#FFB9D8"
+    if (!nightStars) return;
+
+    /*
+     * Không xóa wish stars.
+     * Chỉ reset sao nền.
+     */
+
+    createBackgroundStars(
+        nightStars,
+        145,
+        45
+    );
+}
+
+
+createNightSkyDecorations();
+
+
+/* =========================================================
+   WISH STAR COLORS
+========================================================= */
+
+const wishColors = [
+
+    "#ffe7a3",  // vàng
+
+    "#ffffff",  // trắng
+
+    "#a9ddff",  // baby blue
+
+    "#ffc5dc"   // hồng pastel
+
 ];
 
 
-/*
- * Tạo vị trí sao.
- *
- * Không đặt quá gần khu vực tiêu đề
- * để phần giữa vẫn dễ nhìn.
- */
+/* =========================================================
+   GOOGLE SHEET QUERY
+========================================================= */
 
-function getStarPosition(index) {
+function buildGoogleSheetURL() {
 
-    const zones = [
+    /*
+     * C = Họ và tên
+     * H = Lời chúc
+     *
+     * Chỉ lấy hai cột này.
+     */
 
-        {
-            minX: 7,
-            maxX: 30,
-            minY: 15,
-            maxY: 85
-        },
+    const query =
+        encodeURIComponent(
+            "select C,H where C is not null and H is not null"
+        );
 
-        {
-            minX: 70,
-            maxX: 94,
-            minY: 15,
-            maxY: 85
-        },
-
-        {
-            minX: 20,
-            maxX: 80,
-            minY: 72,
-            maxY: 90
-        }
-
-    ];
-
-    const zone =
-        zones[
-            index % zones.length
-        ];
-
-    return {
-
-        x:
-            zone.minX +
-            Math.random() *
-            (zone.maxX - zone.minX),
-
-        y:
-            zone.minY +
-            Math.random() *
-            (zone.maxY - zone.minY)
-
-    };
-
+    return (
+        "https://docs.google.com/spreadsheets/d/" +
+        CONFIG.sheetId +
+        "/gviz/tq?tqx=out:json" +
+        "&gid=" +
+        CONFIG.sheetGid +
+        "&tq=" +
+        query
+    );
 }
 
 
 /* =========================================================
-   CREATE STAR
+   PARSE GOOGLE GVIZ
 ========================================================= */
 
-function createWishStar(
-    wish,
-    index
-) {
+function parseGVizResponse(text) {
 
-    const star =
-        document.createElement("div");
+    const start =
+        text.indexOf("(");
 
-    star.className =
-        "wish-star";
+    const end =
+        text.lastIndexOf(")");
 
-
-    const position =
-        getStarPosition(index);
-
-
-    const color =
-        starColors[
-            index %
-            starColors.length
-        ];
+    if (
+        start === -1 ||
+        end === -1
+    ) {
+        throw new Error(
+            "Google Sheet response không hợp lệ."
+        );
+    }
 
 
-    const size =
-        20 +
-        Math.random() * 16;
+    const jsonText =
+        text.substring(
+            start + 1,
+            end
+        );
 
 
-    star.style.left =
-        `${position.x}%`;
-
-    star.style.top =
-        `${position.y}%`;
-
-    star.style.setProperty(
-        "--star-color",
-        color
-    );
-
-    star.style.setProperty(
-        "--size",
-        `${size}px`
-    );
-
-    star.style.setProperty(
-        "--duration",
-        `${2 + Math.random() * 3}s`
-    );
-
-    star.style.animationDelay =
-        `${Math.random() * 3}s`;
-
-
-    star.dataset.name =
-        wish.name;
-
-    star.dataset.wish =
-        wish.wish;
-
-
-    star.addEventListener(
-        "click",
-        () => {
-
-            openLetter(
-                wish.name,
-                wish.wish
-            );
-
-        }
-    );
-
-
-    wishStars.appendChild(
-        star
-    );
-
+    return JSON.parse(jsonText);
 }
-
-
-/* =========================================================
-   OPEN LETTER
-========================================================= */
-
-function openLetter(
-    name,
-    wish
-) {
-
-    letterName.textContent =
-        name || "Một người bạn";
-
-    letterWish.textContent =
-        wish || "Một lời chúc thật đẹp ✦";
-
-    letterModal.classList.add(
-        "show"
-    );
-
-}
-
-
-function closeLetterModal() {
-
-    letterModal.classList.remove(
-        "show"
-    );
-
-}
-
-
-closeLetter.addEventListener(
-    "click",
-    closeLetterModal
-);
-
-
-document
-    .querySelector(".letter-overlay")
-    .addEventListener(
-        "click",
-        closeLetterModal
-    );
 
 
 /* =========================================================
    LOAD WISHES
 ========================================================= */
 
-async function loadWishStars() {
-
-    /*
-     * Xóa sao cũ
-     */
-
-    wishStars.innerHTML = "";
-
-
-    /*
-     * Nếu chưa cấu hình API,
-     * tạo một số sao demo.
-     */
-
-    if (!CONFIG.apiUrl) {
-
-        const demoWishes = [
-
-            {
-                name: "Một người bạn",
-                wish:
-                    "Mong Phúc Nguyên luôn giữ được nụ cười thật đẹp, luôn tự tin và tỏa sáng trên hành trình phía trước ✦"
-            },
-
-            {
-                name: "Một chiếc otter",
-                wish:
-                    "Chúc Nguyên thật nhiều sức khỏe, thật nhiều niềm vui và luôn được yêu thương trên mọi sân khấu."
-            },
-
-            {
-                name: "PN supporter",
-                wish:
-                    "Hãy luôn tin vào chính mình. Những điều tốt đẹp nhất vẫn còn đang ở phía trước."
-            }
-
-        ];
-
-
-        demoWishes.forEach(
-            (wish, index) => {
-
-                createWishStar(
-                    wish,
-                    index
-                );
-
-            }
-        );
-
-
-        return;
-
-    }
-
+async function loadWishes() {
 
     try {
 
         const response =
             await fetch(
-                CONFIG.apiUrl,
+                buildGoogleSheetURL(),
                 {
-                    method: "GET",
                     cache: "no-store"
                 }
             );
@@ -1249,159 +1022,332 @@ async function loadWishStars() {
 
         if (!response.ok) {
             throw new Error(
-                "API request failed"
+                "Không thể tải Google Sheet."
             );
         }
+
+
+        const text =
+            await response.text();
 
 
         const data =
-            await response.json();
+            parseGVizResponse(text);
 
 
-        /*
-         * API phải trả:
-         *
-         * [
-         *   {
-         *      name: "...",
-         *      wish: "..."
-         *   }
-         * ]
-         */
+        const rows =
+            data.table.rows || [];
 
 
-        if (
-            !Array.isArray(data)
-        ) {
+        const wishes =
+            rows
+                .map(row => {
 
-            throw new Error(
-                "Invalid API data"
+                    const name =
+                        row.c?.[0]?.v;
+
+                    const wish =
+                        row.c?.[1]?.v;
+
+                    return {
+                        name:
+                            name
+                                ? String(name).trim()
+                                : "",
+
+                        wish:
+                            wish
+                                ? String(wish).trim()
+                                : ""
+                    };
+
+                })
+                .filter(item =>
+                    item.name &&
+                    item.wish
+                );
+
+
+        if (!wishes.length) {
+
+            renderWishStars(
+                CONFIG.demoWishes
             );
 
+            return;
         }
 
 
-        data.forEach(
-            (wish, index) => {
-
-                if (
-                    wish.name &&
-                    wish.wish
-                ) {
-
-                    createWishStar(
-                        {
-                            name:
-                                String(
-                                    wish.name
-                                ),
-                            wish:
-                                String(
-                                    wish.wish
-                                )
-                        },
-                        index
-                    );
-
-                }
-
-            }
-        );
+        renderWishStars(wishes);
 
 
     } catch (error) {
 
-        console.error(
-            "Không thể tải lời chúc:",
+        console.warn(
+            "Google Sheet chưa thể tải:",
             error
         );
 
 
-        const errorStar = {
+        /*
+         * Không để website bị trắng
+         * nếu Sheet lỗi.
+         */
 
-            name: "Otter's Corner",
-
-            wish:
-                "Bầu trời đang chờ những lời chúc mới. Hãy gửi một lời chúc để thắp sáng thêm một vì sao nhé ✦"
-
-        };
-
-
-        createWishStar(
-            errorStar,
-            0
+        renderWishStars(
+            CONFIG.demoWishes
         );
-
     }
-
 }
 
 
 /* =========================================================
-   RANDOM DECORATIVE STARS
-   FOR NIGHT SKY
+   STAR POSITION
 ========================================================= */
 
-function createNightDecorations() {
+function getStarPosition(index, total) {
 
-    const sky =
+    /*
+     * Giữ vùng trung tâm tương đối thoáng
+     * để title / button không bị che.
+     */
+
+    const safeZones = [
+
+        {
+            left: random(5, 25),
+            top: random(20, 78)
+        },
+
+        {
+            left: random(72, 94),
+            top: random(20, 78)
+        },
+
+        {
+            left: random(25, 75),
+            top: random(68, 88)
+        },
+
+        {
+            left: random(5, 94),
+            top: random(10, 22)
+        }
+
+    ];
+
+
+    const zone =
+        safeZones[
+            index % safeZones.length
+        ];
+
+
+    return zone;
+}
+
+
+/* =========================================================
+   RENDER WISH STARS
+========================================================= */
+
+function renderWishStars(wishes) {
+
+    const container =
         document.getElementById(
-            "nightSky"
+            "wishStars"
         );
 
-    if (!sky) return;
+    if (!container) return;
 
 
-    for (
-        let i = 0;
-        i < 80;
-        i++
-    ) {
+    container.innerHTML = "";
 
-        const dot =
-            document.createElement("div");
 
-        dot.style.position =
-            "absolute";
+    wishes.forEach(
+        (wish, index) => {
 
-        dot.style.left =
-            `${Math.random() * 100}%`;
+            const star =
+                document.createElement(
+                    "button"
+                );
 
-        dot.style.top =
-            `${Math.random() * 100}%`;
 
-        dot.style.width =
-            `${1 + Math.random() * 3}px`;
+            star.className =
+                "wish-star";
 
-        dot.style.height =
-            dot.style.width;
 
-        dot.style.borderRadius =
-            "50%";
+            const color =
+                wishColors[
+                    index %
+                    wishColors.length
+                ];
 
-        dot.style.background =
-            "#ffffff";
 
-        dot.style.opacity =
-            `${.2 + Math.random() * .55}`;
+            const position =
+                getStarPosition(
+                    index,
+                    wishes.length
+                );
 
-        dot.style.boxShadow =
-            "0 0 8px rgba(255,255,255,.8)";
 
-        dot.style.animation =
-            `twinkle ${2 + Math.random() * 4}s infinite`;
+            star.style.left =
+                `${position.left}%`;
 
-        dot.style.animationDelay =
-            `${Math.random() * 4}s`;
+            star.style.top =
+                `${position.top}%`;
 
-        dot.style.pointerEvents =
-            "none";
 
-        sky.appendChild(dot);
+            star.style.setProperty(
+                "--star-color",
+                color
+            );
 
-    }
 
+            star.style.setProperty(
+                "--wish-duration",
+                `${random(2.5, 5)}s`
+            );
+
+
+            /*
+             * Dữ liệu được giữ trong
+             * dataset của riêng ngôi sao.
+             */
+
+            star.dataset.name =
+                wish.name;
+
+            star.dataset.wish =
+                wish.wish;
+
+
+            star.innerHTML = `
+
+                <span class="wish-star-core">
+                    ✦
+                </span>
+
+            `;
+
+
+            /*
+             * Không hiện tên bên dưới
+             * để bầu trời không bị rối.
+             *
+             * Tên chỉ xuất hiện trong thư.
+             */
+
+
+            star.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    openLetter(
+                        wish.name,
+                        wish.wish
+                    );
+
+                }
+            );
+
+
+            container.appendChild(star);
+
+        }
+    );
 }
+
+
+/* =========================================================
+   LETTER MODAL
+========================================================= */
+
+const letterModal =
+    document.getElementById(
+        "letterModal"
+    );
+
+const letterName =
+    document.getElementById(
+        "letterName"
+    );
+
+const letterWish =
+    document.getElementById(
+        "letterWish"
+    );
+
+const closeLetterButton =
+    document.getElementById(
+        "closeLetter"
+    );
+
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+function openLetter(
+    name,
+    wish
+) {
+
+    letterName.innerHTML =
+        escapeHTML(name);
+
+    letterWish.innerHTML =
+        escapeHTML(wish);
+
+
+    letterModal.classList.add(
+        "open"
+    );
+
+    letterModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+}
+
+
+function closeLetter() {
+
+    letterModal.classList.remove(
+        "open"
+    );
+
+    letterModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+}
+
+
+closeLetterButton.addEventListener(
+    "click",
+    closeLetter
+);
+
+
+document
+    .querySelector(".letter-backdrop")
+    .addEventListener(
+        "click",
+        closeLetter
+    );
 
 
 /* =========================================================
@@ -1412,39 +1358,125 @@ document.addEventListener(
     "keydown",
     event => {
 
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeProject();
-
-            closeLetterModal();
-
-            mobileMenu.classList.remove(
-                "show"
-            );
-
+        if (event.key !== "Escape") {
+            return;
         }
+
+
+        closeProject();
+
+        closeLetter();
+
+        mobileMenu.classList.remove(
+            "open"
+        );
 
     }
 );
 
 
 /* =========================================================
-   INITIALIZE
+   VIDEO AUTOPLAY ON HOVER
 ========================================================= */
 
-function init() {
+document
+    .querySelectorAll(
+        ".video-cover video"
+    )
+    .forEach(video => {
 
-    createBackgroundStars();
-
-    createNightDecorations();
-
-    renderProjects();
-
-    renderFinance("pj1");
-
-}
+        const card =
+            video.closest(
+                ".project-card"
+            );
 
 
-init();
+        card.addEventListener(
+            "mouseenter",
+            () => {
+
+                video.play().catch(
+                    () => {}
+                );
+
+            }
+        );
+
+
+        card.addEventListener(
+            "mouseleave",
+            () => {
+
+                video.pause();
+
+                video.currentTime = 0;
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   PROJECT CARD BUTTON
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".view-project"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                const card =
+                    button.closest(
+                        ".project-card"
+                    );
+
+                if (!card) return;
+
+                openProject(
+                    card.dataset.project
+                );
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   LOAD WISHES
+========================================================= */
+
+loadWishes();
+
+
+/* =========================================================
+   CLOSE MOBILE MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            mobileMenu.classList.contains(
+                "open"
+            ) &&
+            !mobileMenu.contains(event.target) &&
+            !menuButton.contains(event.target)
+        ) {
+
+            mobileMenu.classList.remove(
+                "open"
+            );
+        }
+
+    }
+);
