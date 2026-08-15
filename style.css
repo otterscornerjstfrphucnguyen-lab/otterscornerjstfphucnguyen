@@ -1,2621 +1,1268 @@
 /* =========================================================
    PHÚC NGUYÊN — OTTER'S CORNER
-   PREMIUM BLUE ARCHIVE
+   MAIN JAVASCRIPT
 ========================================================= */
-
-
-:root {
-
-    --baby-blue: #c9eaff;
-
-    --baby-blue-2: #eaf7ff;
-
-    --blue: #79b9e8;
-
-    --dark-blue: #17344d;
-
-    --deep-blue: #0d2235;
-
-    --white: #ffffff;
-
-    --glass: rgba(255,255,255,0.42);
-
-    --glass-border: rgba(255,255,255,0.72);
-
-    --shadow:
-        0 25px 70px rgba(48,101,137,0.13);
-
-}
-
-
-* {
-
-    margin: 0;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-}
-
-
-html {
-
-    scroll-behavior: smooth;
-
-}
-
-
-body {
-
-    width: 100%;
-
-    min-height: 100vh;
-
-    font-family:
-        "Montserrat",
-        Arial,
-        sans-serif;
-
-    color: var(--dark-blue);
-
-    background:
-        linear-gradient(
-            135deg,
-            #c9eaff,
-            #e7f6ff,
-            #c2e5fb
-        );
-
-    overflow-x: hidden;
-
-}
 
 
 /* =========================================================
-   GLOBAL STARS
+   GLOBAL ELEMENTS
 ========================================================= */
 
-.global-stars {
+const opening =
+    document.getElementById("opening");
 
-    position: fixed;
+const website =
+    document.getElementById("website");
 
-    inset: 0;
+const enterButton =
+    document.getElementById("enterButton");
 
-    pointer-events: none;
+const backgroundMusic =
+    document.getElementById("backgroundMusic");
 
-    z-index: 0;
+const musicButton =
+    document.getElementById("musicButton");
 
-    overflow: hidden;
-
-}
-
-
-.star {
-
-    position: absolute;
-
-    color: white;
-
-    font-size: var(--size);
-
-    left: var(--left);
-
-    top: var(--top);
-
-    opacity: var(--opacity);
-
-    text-shadow:
-        0 0 5px white,
-        0 0 12px white,
-        0 0 25px rgba(255,255,255,.9);
-
-    animation:
-        starTwinkle
-        var(--duration)
-        ease-in-out
-        infinite;
-
-    animation-delay: var(--delay);
-
-}
-
-
-@keyframes starTwinkle {
-
-    0% {
-
-        opacity: .15;
-
-        transform:
-            scale(.65)
-            rotate(0deg);
-
-    }
-
-    50% {
-
-        opacity: 1;
-
-        transform:
-            scale(1.25)
-            rotate(25deg);
-
-    }
-
-    100% {
-
-        opacity: .2;
-
-        transform:
-            scale(.7)
-            rotate(0deg);
-
-    }
-
-}
+const musicSmall =
+    document.getElementById("musicSmall");
 
 
 /* =========================================================
-   OPENING
+   CREATE GLOBAL STARS
 ========================================================= */
 
-.opening {
+const globalStars =
+    document.getElementById("globalStars");
 
-    position: fixed;
 
-    inset: 0;
+function createStars() {
 
-    z-index: 9999;
+    const amount =
+        window.innerWidth < 600
+            ? 70
+            : 130;
 
-    display: flex;
 
-    align-items: center;
+    for (
+        let i = 0;
+        i < amount;
+        i++
+    ) {
 
-    justify-content: center;
+        const star =
+            document.createElement("span");
 
-    background:
-        linear-gradient(
-            135deg,
-            #c4e7ff,
-            #dff3ff,
-            #bcdff7
+
+        star.className =
+            "star";
+
+
+        star.textContent =
+            Math.random() > .5
+                ? "✦"
+                : "✧";
+
+
+        star.style.setProperty(
+            "--left",
+            Math.random() * 100 + "%"
         );
 
-    transition:
 
-        opacity .9s ease,
-
-        visibility .9s ease;
-
-}
-
-
-.opening.hide {
-
-    opacity: 0;
-
-    visibility: hidden;
-
-}
-
-
-.opening-content {
-
-    position: relative;
-
-    z-index: 3;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    text-align: center;
-
-}
-
-
-.opening-mini {
-
-    font-size: 9px;
-
-    letter-spacing: 5px;
-
-    opacity: .65;
-
-}
-
-
-.opening-line {
-
-    width: 60px;
-
-    height: 1px;
-
-    background:
-        rgba(23,52,77,.35);
-
-    margin: 15px 0 25px;
-
-}
-
-
-.enter-button {
-
-    width: 330px;
-
-    height: 330px;
-
-    border: none;
-
-    background: transparent;
-
-    cursor: pointer;
-
-    position: relative;
-
-}
-
-
-.enter-button::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 20px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.4);
-
-    filter: blur(30px);
-
-    animation: glowPulse 2.5s infinite;
-
-}
-
-
-@keyframes glowPulse {
-
-    0%,
-    100% {
-
-        transform: scale(.9);
-
-        opacity: .5;
-
-    }
-
-    50% {
-
-        transform: scale(1.1);
-
-        opacity: .9;
-
-    }
-
-}
-
-
-.enter-button img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: contain;
-
-    position: relative;
-
-    z-index: 2;
-
-    filter:
-        drop-shadow(
-            0 20px 35px
-            rgba(25,60,85,.2)
+        star.style.setProperty(
+            "--top",
+            Math.random() * 100 + "%"
         );
 
-    animation:
-        floating 3s ease-in-out infinite;
 
-    transition:
-        transform .4s ease;
-
-}
-
-
-.enter-button:hover img {
-
-    transform: scale(1.06);
-
-}
-
-
-@keyframes floating {
-
-    0%,
-    100% {
-
-        transform:
-            translateY(0);
-
-    }
-
-    50% {
-
-        transform:
-            translateY(-12px);
-
-    }
-
-}
-
-
-.opening-welcome {
-
-    margin-top: 5px;
-
-    font-size: 10px;
-
-    letter-spacing: 7px;
-
-    opacity: .55;
-
-}
-
-
-.opening h1 {
-
-    margin-top: 8px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: clamp(
-        38px,
-        6vw,
-        65px
-    );
-
-    font-weight: 600;
-
-    letter-spacing: 9px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #15334c,
-            #568db8,
-            #15334c
+        star.style.setProperty(
+            "--size",
+            (Math.random() * 10 + 5) + "px"
         );
 
-    -webkit-background-clip: text;
 
-    -webkit-text-fill-color: transparent;
-
-}
-
-
-.opening-subtitle {
-
-    font-size: 10px;
-
-    letter-spacing: 4px;
-
-    opacity: .55;
-
-    margin-top: 5px;
-
-}
+        star.style.setProperty(
+            "--opacity",
+            Math.random() * .6 + .2
+        );
 
 
-.click-enter {
-
-    margin-top: 25px;
-
-    font-size: 9px;
-
-    letter-spacing: 4px;
-
-    animation:
-        clickPulse 2s infinite;
-
-}
+        star.style.setProperty(
+            "--duration",
+            (Math.random() * 3 + 1.5) + "s"
+        );
 
 
-.click-enter span {
+        star.style.setProperty(
+            "--delay",
+            (Math.random() * 5) + "s"
+        );
 
-    margin-left: 5px;
 
-}
-
-
-@keyframes clickPulse {
-
-    0%,
-    100% {
-
-        opacity: .3;
-
-    }
-
-    50% {
-
-        opacity: 1;
+        globalStars.appendChild(star);
 
     }
 
 }
+
+
+createStars();
+
+
+
+/* =========================================================
+   ENTER WEBSITE
+========================================================= */
+
+enterButton.addEventListener(
+    "click",
+    function () {
+
+
+        opening.classList.add(
+            "hide"
+        );
+
+
+        setTimeout(
+            function () {
+
+                website.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "auto";
+
+            },
+            500
+        );
+
+
+        /*
+           Trình duyệt thường chặn autoplay.
+           Click ENTER là một user interaction
+           nên ta thử bật nhạc tại đây.
+        */
+
+        backgroundMusic.volume =
+            0.35;
+
+
+        backgroundMusic
+            .play()
+            .then(
+                function () {
+
+                    updateMusicButtons(true);
+
+                }
+            )
+            .catch(
+                function () {
+
+                    updateMusicButtons(false);
+
+                }
+            );
+
+    }
+);
+
 
 
 /* =========================================================
    MUSIC
 ========================================================= */
 
-.music-button {
-
-    position: fixed;
-
-    bottom: 25px;
-
-    right: 25px;
-
-    z-index: 9000;
-
-    border: 1px solid
-        rgba(255,255,255,.8);
-
-    background:
-        rgba(255,255,255,.45);
-
-    backdrop-filter:
-        blur(15px);
-
-    color: var(--dark-blue);
-
-    padding: 10px 15px;
-
-    border-radius: 30px;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    cursor: pointer;
-
-}
+let musicPlaying =
+    false;
 
 
-.music-small {
+function updateMusicButtons(
+    playing
+) {
 
-    border: none;
-
-    background: transparent;
-
-    color: var(--dark-blue);
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    cursor: pointer;
-
-}
+    musicPlaying =
+        playing;
 
 
-/* =========================================================
-   WEBSITE
-========================================================= */
+    if (playing) {
 
-.website {
+        musicButton.textContent =
+            "♫ MUSIC ON";
 
-    position: relative;
+        musicSmall.textContent =
+            "♫ MUSIC ON";
 
-    z-index: 2;
+    } else {
 
-    min-height: 100vh;
+        musicButton.textContent =
+            "♫ MUSIC OFF";
 
-    display: none;
-
-}
-
-
-.website.show {
-
-    display: block;
-
-    animation:
-        websiteIn 1s ease;
-
-}
-
-
-@keyframes websiteIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(20px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
+        musicSmall.textContent =
+            "♫ MUSIC OFF";
 
     }
 
 }
 
 
-/* =========================================================
-   TOP BAR
-========================================================= */
+async function toggleMusic() {
 
-.topbar {
+    if (
+        backgroundMusic.paused
+    ) {
 
-    position: sticky;
+        try {
 
-    top: 0;
+            await backgroundMusic.play();
 
-    z-index: 1000;
+            updateMusicButtons(true);
 
-    height: 80px;
+        }
 
-    padding:
-        0 5vw;
+        catch (error) {
 
-    display: flex;
+            console.log(
+                "Không thể phát nhạc:",
+                error
+            );
 
-    align-items: center;
+        }
 
-    justify-content: space-between;
+    } else {
 
-    background:
-        rgba(201,234,255,.65);
+        backgroundMusic.pause();
 
-    backdrop-filter:
-        blur(20px);
+        updateMusicButtons(false);
 
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.55);
+    }
 
 }
 
 
-.brand {
-
-    display: flex;
-
-    flex-direction: column;
-
-}
+musicButton.addEventListener(
+    "click",
+    toggleMusic
+);
 
 
-.brand-main {
+musicSmall.addEventListener(
+    "click",
+    toggleMusic
+);
 
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 25px;
-
-    letter-spacing: 4px;
-
-    font-weight: 600;
-
-}
-
-
-.brand-small {
-
-    font-size: 7px;
-
-    letter-spacing: 3px;
-
-    opacity: .55;
-
-}
-
-
-.topbar-right {
-
-    display: flex;
-
-    gap: 20px;
-
-    align-items: center;
-
-}
-
-
-.mobile-menu {
-
-    display: none;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 22px;
-
-    color: var(--dark-blue);
-
-}
 
 
 /* =========================================================
-   LAYOUT
+   NAVIGATION
 ========================================================= */
 
-.site-layout {
-
-    width: min(
-        1400px,
-        92%
+const navCards =
+    document.querySelectorAll(
+        ".nav-card"
     );
 
-    margin: auto;
 
-    display: grid;
-
-    grid-template-columns:
-        260px 1fr;
-
-    gap: 50px;
-
-    padding:
-        55px 0 100px;
-
-}
+const pageSections =
+    document.querySelectorAll(
+        ".page-section"
+    );
 
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
+navCards.forEach(
+    function (card) {
 
-.sidebar {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-    position: sticky;
-
-    top: 120px;
-
-    height: fit-content;
-
-}
+        card.addEventListener(
+            "click",
+            function () {
 
 
-.nav-card {
-
-    min-height: 90px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.65);
-
-    border-radius: 18px;
-
-    background:
-        rgba(255,255,255,.38);
-
-    backdrop-filter:
-        blur(18px);
-
-    color: var(--dark-blue);
-
-    padding: 18px;
-
-    display: grid;
-
-    grid-template-columns:
-        35px 1fr 20px;
-
-    align-items: center;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    transition:
-        .35s ease;
-
-    box-shadow:
-        0 10px 35px
-        rgba(55,105,140,.06);
-
-}
+                const target =
+                    card.dataset.section;
 
 
-.nav-card:hover {
+                navCards.forEach(
+                    function (item) {
 
-    transform:
-        translateX(6px);
+                        item.classList.remove(
+                            "active"
+                        );
 
-    background:
-        rgba(255,255,255,.58);
-
-}
+                    }
+                );
 
 
-.nav-card.active {
+                card.classList.add(
+                    "active"
+                );
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.75),
-            rgba(184,222,248,.55)
+
+                pageSections.forEach(
+                    function (section) {
+
+                        section.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                const targetSection =
+                    document.getElementById(
+                        target
+                    );
+
+
+                if (targetSection) {
+
+                    targetSection.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+                /*
+                   Đóng menu mobile
+                */
+
+                sidebar.classList.remove(
+                    "open"
+                );
+
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
         );
 
-    box-shadow:
-        0 15px 40px
-        rgba(48,101,137,.14);
+    }
+);
 
-}
-
-
-.nav-number {
-
-    font-size: 9px;
-
-    opacity: .45;
-
-}
-
-
-.nav-text {
-
-    font-size: 9px;
-
-    letter-spacing: 1.5px;
-
-    line-height: 1.7;
-
-    font-weight: 600;
-
-}
-
-
-.nav-star {
-
-    font-size: 13px;
-
-    animation:
-        starTwinkle 2s infinite;
-
-}
 
 
 /* =========================================================
-   CONTENT
+   MOBILE MENU
 ========================================================= */
 
-.content {
-
-    min-width: 0;
-
-}
-
-
-.page-section {
-
-    display: none;
-
-    animation:
-        sectionIn .6s ease;
-
-}
+const menuToggle =
+    document.getElementById(
+        "menuToggle"
+    );
 
 
-.page-section.active {
-
-    display: block;
-
-}
-
-
-@keyframes sectionIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(15px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
+const sidebar =
+    document.getElementById(
+        "sidebar"
+    );
 
 
-.section-heading {
+menuToggle.addEventListener(
+    "click",
+    function () {
 
-    margin-bottom: 35px;
-
-}
-
-
-.eyebrow {
-
-    font-size: 8px;
-
-    letter-spacing: 4px;
-
-    opacity: .55;
-
-}
-
-
-.section-heading h2 {
-
-    margin-top: 8px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size:
-        clamp(
-            40px,
-            5vw,
-            65px
+        sidebar.classList.toggle(
+            "open"
         );
 
-    font-weight: 500;
+    }
+);
 
-    line-height: 1;
-
-}
-
-
-.section-heading h2 em {
-
-    font-style: italic;
-
-    font-weight: 400;
-
-}
-
-
-.section-heading h2 span {
-
-    font-size: 20px;
-
-    vertical-align: top;
-
-}
-
-
-.section-heading p {
-
-    margin-top: 12px;
-
-    font-size: 11px;
-
-    letter-spacing: .5px;
-
-    opacity: .6;
-
-}
-
-
-/* =========================================================
-   GLASS CARD
-========================================================= */
-
-.glass-card {
-
-    background:
-        rgba(255,255,255,.43);
-
-    border:
-        1px solid
-        rgba(255,255,255,.7);
-
-    backdrop-filter:
-        blur(20px);
-
-    border-radius: 25px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-card {
-
-    padding: 30px;
-
-    display: grid;
-
-    grid-template-columns:
-        270px 1fr;
-
-    gap: 40px;
-
-}
-
-
-.profile-photo {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-}
-
-
-.photo-frame {
-
-    width: 100%;
-
-    aspect-ratio: 4/5;
-
-    overflow: hidden;
-
-    border-radius: 20px;
-
-    border:
-        5px solid
-        rgba(255,255,255,.55);
-
-}
-
-
-.photo-frame img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    transition:
-        transform .6s ease;
-
-}
-
-
-.photo-frame:hover img {
-
-    transform:
-        scale(1.05);
-
-}
-
-
-.photo-caption {
-
-    margin-top: 12px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    letter-spacing: 4px;
-
-    font-size: 13px;
-
-}
-
-
-.profile-info {
-
-    padding: 15px 0;
-
-}
-
-
-.card-label {
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    opacity: .55;
-
-}
-
-
-.profile-info h3 {
-
-    margin-top: 15px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 42px;
-
-    line-height: .9;
-
-    font-weight: 500;
-
-}
-
-
-.info-list {
-
-    margin-top: 30px;
-
-}
-
-
-.info-item {
-
-    display: grid;
-
-    grid-template-columns:
-        110px 1fr;
-
-    padding: 14px 0;
-
-    border-bottom:
-        1px solid
-        rgba(23,52,77,.12);
-
-}
-
-
-.info-item span {
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    opacity: .45;
-
-}
-
-
-.info-item strong {
-
-    font-size: 11px;
-
-    font-weight: 500;
-
-}
 
 
 /* =========================================================
    ACCORDION
 ========================================================= */
 
-.accordion {
+const accordionHeaders =
+    document.querySelectorAll(
+        ".accordion-header"
+    );
 
-    margin-top: 18px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.65);
+accordionHeaders.forEach(
+    function (header) {
 
-    border-radius: 18px;
+        header.addEventListener(
+            "click",
+            function () {
 
-    overflow: hidden;
+                const accordion =
+                    header.parentElement;
 
-    background:
-        rgba(255,255,255,.25);
 
-    backdrop-filter:
-        blur(15px);
+                accordion.classList.toggle(
+                    "open"
+                );
 
-}
+            }
+        );
 
+    }
+);
 
-.accordion-header {
-
-    width: 100%;
-
-    border: none;
-
-    background: transparent;
-
-    padding: 22px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    color: var(--dark-blue);
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-}
-
-
-.accordion-header b {
-
-    font-size: 20px;
-
-    font-weight: 300;
-
-    transition:
-        transform .3s ease;
-
-}
-
-
-.accordion.open
-.accordion-header b {
-
-    transform:
-        rotate(45deg);
-
-}
-
-
-.accordion-body {
-
-    max-height: 0;
-
-    overflow: hidden;
-
-    transition:
-        max-height .5s ease;
-
-}
-
-
-.accordion.open
-.accordion-body {
-
-    max-height: 700px;
-
-}
-
-
-.journey-empty {
-
-    padding: 40px;
-
-    text-align: center;
-
-}
-
-
-.journey-icon {
-
-    font-size: 35px;
-
-    animation:
-        starTwinkle 2s infinite;
-
-}
-
-
-.journey-empty h3 {
-
-    margin-top: 15px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 35px;
-
-}
-
-
-.journey-empty p {
-
-    max-width: 500px;
-
-    margin: 15px auto;
-
-    font-size: 11px;
-
-    line-height: 1.8;
-
-    opacity: .65;
-
-}
-
-
-.journey-empty span {
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    opacity: .45;
-
-}
-
-
-.photo-placeholder {
-
-    height: 250px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-}
-
-
-.photo-placeholder div {
-
-    font-size: 45px;
-
-    opacity: .3;
-
-}
-
-
-.photo-placeholder p {
-
-    font-size: 10px;
-
-    opacity: .5;
-
-}
 
 
 /* =========================================================
-   PROJECT GRID
+   PROJECT DATA
 ========================================================= */
 
-.project-grid {
+const projects = {
+
+
+    pj1: {
 
-    display: grid;
+        title:
+            "CHEER TO GRADUATION & ROAD TO DEBUT",
+
+        date:
+            "18 / 01 / 2026",
+
+        location:
+            "Vietnam",
+
+        body: `
+
+            <p>
+                💕 Project nhỏ xinh đầu tiên
+                của Otter’s Corner tới
+                Phúc Nguyên yêu dấu 💕
+            </p>
+
+            <p>
+                📨 Dear Phúc Nguyên:
+                “Khi cánh cửa này khép lại
+                cũng là lúc một cánh cửa mới
+                mở ra, chặng đường tại SIA
+                vừa qua Nguyên đã trải qua
+                bằng tất cả nhiệt huyết và
+                chân thành, giờ là lúc bước ra
+                thế giới rộng lớn kia để tiếp tục
+                hành trình theo đuổi đam mê.”
+            </p>
 
-    grid-template-columns:
-        repeat(2,1fr);
+            <p>
+                ✨ SHOW THE WORLD WHO YOU ARE ✨
+            </p>
 
-    gap: 25px;
+            <p>
+                🦦 By: Otter’s Corner
+            </p>
 
-}
+            <p>
+                💫 Date: 18/01/2026
+            </p>
 
+            <p>
+                📍 Location: Vietnam
+            </p>
+
+            <p>
+                Otter’s Corner xin được gửi lời
+                cảm ơn tới @le.tresor_pn và
+                @nayngieee_ khi đã cho phép team
+                được sử dụng hình ảnh cho chiếc
+                ads xinh iu này.
+            </p>
+
+            <p>
+                Cảm ơn designer iu quý của team
+                @dazii2611 đã vất vả cho deadline
+                gấp rút chúc mừng Phúc Nguyên
+                tốt nghiệp hành trình này.
+            </p>
 
-.project-card {
+            <p>
+                Các tình iu có bắt gặp chiếc ads
+                nhỏ xinh này thì nhớ tag
+                Otter’s Corner và gửi lời chúc
+                tới Phúc Nguyên nhaaaa.
+            </p>
 
-    border-radius: 22px;
+        `,
 
-    overflow: hidden;
+        images: []
 
-    background:
-        rgba(255,255,255,.4);
+    },
 
-    border:
-        1px solid
-        rgba(255,255,255,.7);
 
-    backdrop-filter:
-        blur(18px);
+    pj2: {
 
-    cursor: pointer;
+        title:
+            "PHƯỚN HER CONCERT FOR UPRIZE PN",
 
-    transition:
-        transform .4s ease,
-        box-shadow .4s ease;
+        date:
+            "2026",
 
-}
+        location:
+            "Vietnam",
 
+        body: `
 
-.project-card:hover {
+            <p>
+                Mở đầu cho hành trình
+                Phúc Khởi Hưng Nguyên
+                với chặng “Phúc Khai”,
+                Otter’s Corner gửi đến
+                HER Concert cụm 10 phướn
+                như một dấu mốc khởi đầu,
+                thay cho lời chúc tốt đẹp
+                và lời hứa đồng hành dài lâu 🫂
+            </p>
 
-    transform:
-        translateY(-8px);
+            <p>
+                Mỗi phướn đều mang theo
+                niềm tin, sự tự hào và
+                ước nguyện - mong Phúc Nguyên
+                luôn tự tin, mạnh mẽ trên mọi
+                chặng đường, không ngừng
+                bứt phá và ngày càng vươn xa 🪽
+            </p>
 
-    box-shadow:
-        0 30px 60px
-        rgba(40,92,130,.18);
+        `,
 
-}
+        images: [
+            "PJ2.1.jpg",
+            "PJ2.2.jpg"
+        ]
 
+    },
 
-.project-cover {
 
-    height: 260px;
+    pj3: {
 
-    position: relative;
+        title:
+            "PHOTO FRAME x TEDxTPC2026",
 
-    overflow: hidden;
+        date:
+            "2026",
 
-    background:
-        #a8d8f7;
+        location:
+            "Vietnam",
 
-}
+        body: `
 
+            <p>
+                🎹 Mở đầu chặng Khởi,
+                Otter’s Corner mang đến
+                project đầu tiên:
+                frame check-in tại sự kiện
+                TEDxTPC2026.
+            </p>
 
-.project-cover img,
-.project-cover video {
+            <p>
+                🎹 Lấy cảm hứng từ chủ đề
+                Maestro, chúng mình tái hiện
+                một “nhà hát” nơi vị nhạc trưởng
+                tài ba UPRIZE PN dẫn dắt
+                những giai điệu đầy cảm hứng.
+            </p>
 
-    width: 100%;
+            <p>
+                🎹 Đừng quên ghé qua frame
+                check-in và lưu lại những
+                khoảnh khắc thật xinh nhéee.
+            </p>
 
-    height: 100%;
+        `,
 
-    object-fit: cover;
+        images: [
+            "PJ3.1.jpg",
+            "PJ3.2.jpg"
+        ]
 
-    transition:
-        transform .6s ease;
+    }
 
-}
+};
 
-
-.project-card:hover
-.project-cover img,
-
-.project-card:hover
-.project-cover video {
-
-    transform:
-        scale(1.05);
-
-}
-
-
-.cover-overlay {
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            transparent 40%,
-            rgba(12,32,50,.35)
-        );
-
-}
-
-
-.project-index {
-
-    position: absolute;
-
-    top: 18px;
-
-    left: 18px;
-
-    color: white;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.project-open {
-
-    position: absolute;
-
-    right: 18px;
-
-    bottom: 18px;
-
-    color: white;
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.project-card-content {
-
-    padding: 22px;
-
-}
-
-
-.project-date {
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    opacity: .45;
-
-}
-
-
-.project-card h3 {
-
-    margin-top: 8px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 25px;
-
-    line-height: 1;
-
-    font-weight: 600;
-
-}
-
-
-.project-card p {
-
-    margin-top: 12px;
-
-    font-size: 10px;
-
-    line-height: 1.6;
-
-    opacity: .6;
-
-}
-
-
-.upcoming-cover {
-
-    height: 260px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #c2e8ff,
-            #eaf8ff
-        );
-
-}
-
-
-.upcoming-cover span {
-
-    font-size: 45px;
-
-    animation:
-        starTwinkle 2s infinite;
-
-}
-
-
-.upcoming-cover small {
-
-    margin-top: 10px;
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    opacity: .45;
-
-}
 
 
 /* =========================================================
-   FINANCE
+   PROJECT MODAL
 ========================================================= */
 
-.finance-selector {
-
-    padding: 25px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-
-}
+const projectCards =
+    document.querySelectorAll(
+        ".project-card[data-project]"
+    );
 
 
-.finance-selector label {
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    opacity: .55;
-
-}
+const projectModal =
+    document.getElementById(
+        "projectModal"
+    );
 
 
-.finance-selector select {
-
-    width: 100%;
-
-    border: none;
-
-    outline: none;
-
-    background:
-        rgba(255,255,255,.55);
-
-    border-radius: 12px;
-
-    padding: 15px;
-
-    color: var(--dark-blue);
-
-    font-family:
-        "Montserrat";
-
-}
+const modalContent =
+    document.getElementById(
+        "modalProjectContent"
+    );
 
 
-.finance-summary {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 15px;
-
-    margin-top: 20px;
-
-}
+const closeProject =
+    document.getElementById(
+        "closeProject"
+    );
 
 
-.summary-card {
+projectCards.forEach(
+    function (card) {
 
-    padding: 25px;
+        card.addEventListener(
+            "click",
+            function () {
 
-    border-radius: 18px;
-
-    background:
-        rgba(255,255,255,.38);
-
-    border:
-        1px solid
-        rgba(255,255,255,.7);
-
-}
+                const id =
+                    card.dataset.project;
 
 
-.summary-card span {
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    opacity: .5;
-
-}
+                const project =
+                    projects[id];
 
 
-.summary-card strong {
-
-    display: block;
-
-    margin-top: 10px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 32px;
-
-    font-weight: 600;
-
-}
+                if (!project) return;
 
 
-.summary-card.highlight {
+                let imagesHTML =
+                    "";
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.7),
-            rgba(157,211,246,.6)
+
+                if (
+                    project.images &&
+                    project.images.length
+                ) {
+
+                    imagesHTML = `
+
+                        <div class="modal-images">
+
+                            ${project.images
+                                .map(
+                                    image =>
+                                    `
+                                    <img
+                                        src="${image}"
+                                        alt="${project.title}"
+                                    >
+                                    `
+                                )
+                                .join("")
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                modalContent.innerHTML = `
+
+                    <div class="modal-title">
+
+                        ${project.title}
+
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        ${project.body}
+
+                    </div>
+
+
+                    <div class="modal-meta">
+
+                        <span>
+                            ✦ ${project.date}
+                        </span>
+
+                        <span>
+                            📍 ${project.location}
+                        </span>
+
+                        <span>
+                            🦦 Otter's Corner
+                        </span>
+
+                    </div>
+
+
+                    ${imagesHTML}
+
+                `;
+
+
+                projectModal.classList.add(
+                    "show"
+                );
+
+
+                document.body.style.overflow =
+                    "hidden";
+
+            }
         );
 
-}
+    }
+);
 
 
-.internal-note {
 
-    margin: 20px 0;
+function closeProjectModal() {
 
-    padding: 14px;
+    projectModal.classList.remove(
+        "show"
+    );
 
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.3);
-
-    text-align: center;
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    opacity: .65;
+    document.body.style.overflow =
+        "auto";
 
 }
 
 
-.finance-table-wrapper {
-
-    overflow-x: auto;
-
-    border-radius: 18px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.65);
-
-}
+closeProject.addEventListener(
+    "click",
+    closeProjectModal
+);
 
 
-.finance-table {
+projectModal
+    .querySelector(".modal-backdrop")
+    .addEventListener(
+        "click",
+        closeProjectModal
+    );
 
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 700px;
-
-    background:
-        rgba(255,255,255,.25);
-
-}
-
-
-.finance-table th {
-
-    padding: 15px 10px;
-
-    text-align: left;
-
-    font-size: 8px;
-
-    letter-spacing: 1px;
-
-    background:
-        rgba(255,255,255,.35);
-
-}
-
-
-.finance-table td {
-
-    padding: 15px 10px;
-
-    font-size: 9px;
-
-    border-top:
-        1px solid
-        rgba(23,52,77,.08);
-
-}
-
-
-.empty-finance {
-
-    text-align: center;
-
-    padding: 50px !important;
-
-    opacity: .55;
-
-    line-height: 2;
-
-}
-
-
-.empty-finance span {
-
-    font-size: 8px;
-
-}
-
-
-.finance-types {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin-top: 20px;
-
-}
-
-
-.finance-types span {
-
-    padding: 8px 12px;
-
-    border-radius: 20px;
-
-    background:
-        rgba(255,255,255,.4);
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-}
 
 
 /* =========================================================
-   DONATE / NIGHT SKY
+   ESC KEY
 ========================================================= */
 
-.donate-section {
+document.addEventListener(
+    "keydown",
+    function (event) {
 
-    margin:
-        -55px -30px -100px;
+        if (
+            event.key === "Escape"
+        ) {
 
-    padding-bottom: 0;
+            closeProjectModal();
 
-}
+            closeWishModal();
 
-
-.donate-heading {
-
-    min-height: 360px;
-
-    padding:
-        70px 50px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-}
-
-
-.donate-heading > span {
-
-    font-size: 8px;
-
-    letter-spacing: 4px;
-
-    color: #66798e;
-
-}
-
-
-.donate-heading h2 {
-
-    margin-top: 15px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size:
-        clamp(45px,6vw,75px);
-
-    line-height: .85;
-
-    font-weight: 500;
-
-    color: var(--dark-blue);
-
-}
-
-
-.donate-heading h2 em {
-
-    font-style: italic;
-
-    font-weight: 400;
-
-}
-
-
-.donate-heading p {
-
-    max-width: 600px;
-
-    margin-top: 25px;
-
-    font-size: 11px;
-
-    line-height: 1.8;
-
-    color: #52687d;
-
-}
-
-
-.donate-button {
-
-    margin-top: 25px;
-
-    padding:
-        14px 24px;
-
-    border-radius: 30px;
-
-    text-decoration: none;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            90deg,
-            #234f70,
-            #6da8d3
-        );
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    transition:
-        .3s ease;
-
-}
-
-
-.donate-button:hover {
-
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0 15px 30px
-        rgba(30,75,105,.25);
-
-}
-
-
-.star-sky {
-
-    position: relative;
-
-    min-height: 850px;
-
-    width: 100%;
-
-    overflow: hidden;
-
-    background:
-        radial-gradient(
-            ellipse at 50% 100%,
-            #102b48 0%,
-            #061321 45%,
-            #02070d 100%
-        );
-
-}
-
-
-.star-sky::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        radial-gradient(
-            circle at 50% 30%,
-            rgba(100,160,220,.12),
-            transparent 40%
-        );
-
-}
-
-
-.sky-title {
-
-    position: absolute;
-
-    top: 50px;
-
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    color: rgba(255,255,255,.65);
-
-    font-size: 9px;
-
-    letter-spacing: 6px;
-
-}
-
-
-.wish-star {
-
-    position: absolute;
-
-    left: var(--x);
-
-    top: var(--y);
-
-    border: none;
-
-    background: transparent;
-
-    color: var(--star-color);
-
-    font-size: 28px;
-
-    cursor: pointer;
-
-    text-shadow:
-        0 0 8px var(--star-color),
-        0 0 20px var(--star-color),
-        0 0 40px var(--star-color);
-
-    animation:
-        wishTwinkle
-        2s infinite;
-
-    animation-delay:
-        calc(var(--x) * .02s);
-
-    transition:
-        transform .3s ease;
-
-}
-
-
-.wish-star:hover {
-
-    transform:
-        scale(1.7);
-
-}
-
-
-@keyframes wishTwinkle {
-
-    0%,
-    100% {
-
-        opacity: .35;
-
-        transform:
-            scale(.7);
+        }
 
     }
+);
 
-    50% {
-
-        opacity: 1;
-
-        transform:
-            scale(1.25);
-
-    }
-
-}
-
-
-.sky-instruction {
-
-    position: absolute;
-
-    bottom: 60px;
-
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    text-align: center;
-
-    color:
-        rgba(255,255,255,.35);
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    line-height: 2;
-
-}
 
 
 /* =========================================================
-   MODAL
+   FINANCE DATA
 ========================================================= */
 
-.modal,
-.wish-modal {
 
-    position: fixed;
+/*
+    Khi có dữ liệu thật, bạn chỉ cần
+    sửa phần này.
 
-    inset: 0;
+    type:
+    - Design
+    - Đồ ăn, nước uống
+    - In ấn
+    - Thi công
+    - Thuê
+*/
 
-    z-index: 10000;
 
-    display: none;
+const financeData = {
 
-    align-items: center;
 
-    justify-content: center;
+    pj1: {
 
-    padding: 25px;
+        income: 0,
 
-}
+        expenses: []
 
+    },
 
-.modal.show,
-.wish-modal.show {
 
-    display: flex;
+    pj2: {
 
-}
+        income: 0,
 
+        expenses: []
 
-.modal-backdrop,
-.wish-backdrop {
+    },
 
-    position: absolute;
 
-    inset: 0;
+    pj3: {
 
-    background:
-        rgba(5,20,34,.65);
+        income: 0,
 
-    backdrop-filter:
-        blur(10px);
+        expenses: []
 
-}
+    }
 
+};
 
-.project-modal-content {
-
-    position: relative;
-
-    z-index: 2;
-
-    width:
-        min(900px,95vw);
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    background:
-        #e4f5ff;
-
-    border-radius: 25px;
-
-    padding: 35px;
-
-}
-
-
-.close-modal,
-.letter-close {
-
-    position: absolute;
-
-    top: 15px;
-
-    right: 20px;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 30px;
-
-    cursor: pointer;
-
-    color: var(--dark-blue);
-
-    z-index: 5;
-
-}
-
-
-.modal-title {
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 45px;
-
-    line-height: .9;
-
-    margin-bottom: 20px;
-
-}
-
-
-.modal-body {
-
-    font-size: 12px;
-
-    line-height: 1.9;
-
-}
-
-
-.modal-body p {
-
-    margin-bottom: 15px;
-
-}
-
-
-.modal-images {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap: 15px;
-
-    margin-top: 25px;
-
-}
-
-
-.modal-images img {
-
-    width: 100%;
-
-    border-radius: 15px;
-
-}
-
-
-.modal-meta {
-
-    margin-top: 20px;
-
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-
-}
-
-
-.modal-meta span {
-
-    background:
-        rgba(255,255,255,.6);
-
-    padding: 8px 12px;
-
-    border-radius: 20px;
-
-    font-size: 8px;
-
-}
 
 
 /* =========================================================
-   LETTER
+   FINANCE DISPLAY
 ========================================================= */
 
-.letter {
+const projectSelect =
+    document.getElementById(
+        "projectSelect"
+    );
 
-    position: relative;
 
-    z-index: 3;
+const totalIncome =
+    document.getElementById(
+        "totalIncome"
+    );
 
-    width:
-        min(550px,92vw);
 
-    padding: 45px;
+const totalExpense =
+    document.getElementById(
+        "totalExpense"
+    );
 
-    border-radius: 25px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #f9fcff,
-            #e5f5ff
+const totalRemain =
+    document.getElementById(
+        "totalRemain"
+    );
+
+
+const financeTableBody =
+    document.getElementById(
+        "financeTableBody"
+    );
+
+
+function formatMoney(
+    number
+) {
+
+    return new Intl.NumberFormat(
+        "vi-VN"
+    ).format(number) + "đ";
+
+}
+
+
+function updateFinance() {
+
+
+    const selected =
+        projectSelect.value;
+
+
+    const data =
+        financeData[selected];
+
+
+    if (!data) return;
+
+
+    const expenseTotal =
+        data.expenses.reduce(
+            function (
+                total,
+                item
+            ) {
+
+                return total +
+                    Number(
+                        item.total || 0
+                    );
+
+            },
+            0
         );
 
-    box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.4);
 
-    text-align: center;
-
-    animation:
-        letterOpen .6s ease;
-
-}
+    const income =
+        Number(
+            data.income || 0
+        );
 
 
-@keyframes letterOpen {
+    const remain =
+        income -
+        expenseTotal;
 
-    from {
 
-        opacity: 0;
+    totalIncome.textContent =
+        formatMoney(income);
 
-        transform:
-            scale(.8)
-            rotate(-2deg);
+
+    totalExpense.textContent =
+        formatMoney(expenseTotal);
+
+
+    totalRemain.textContent =
+        formatMoney(remain);
+
+
+    financeTableBody.innerHTML =
+        "";
+
+
+    if (
+        data.expenses.length === 0
+    ) {
+
+        financeTableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="7"
+                    class="empty-finance">
+
+                    Chưa có khoản thu / chi.
+
+                    <br>
+
+                    <span>
+                        Project sử dụng quỹ nội bộ
+                        — hiện tại 0đ.
+                    </span>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
 
     }
 
-    to {
 
-        opacity: 1;
+    data.expenses.forEach(
+        function (item) {
 
-        transform:
-            scale(1)
-            rotate(0);
-
-    }
-
-}
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
 
-.letter-star {
+            row.innerHTML = `
 
-    font-size: 30px;
+                <td>
+                    ${item.date}
+                </td>
 
-    animation:
-        starTwinkle 1.5s infinite;
+                <td>
+                    ${item.type}
+                </td>
 
-}
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    ${formatMoney(
+                        item.price
+                    )}
+                </td>
+
+                <td>
+                    ${formatMoney(
+                        item.total
+                    )}
+                </td>
+
+                <td>
+                    ${item.deposit
+                        ? formatMoney(
+                            item.deposit
+                        )
+                        : "—"
+                    }
+                </td>
+
+                <td>
+
+                    ${
+                        item.proof
+                        ?
+                        `<a
+                            href="${item.proof}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            Xem
+                        </a>`
+                        :
+                        "—"
+                    }
+
+                </td>
+
+            `;
 
 
-.letter-from {
+            financeTableBody.appendChild(
+                row
+            );
 
-    margin-top: 10px;
-
-    font-size: 7px;
-
-    letter-spacing: 3px;
-
-    opacity: .5;
-
-}
-
-
-.letter h3 {
-
-    margin-top: 5px;
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 35px;
-
-}
-
-
-.letter-paper {
-
-    margin-top: 25px;
-
-    padding: 25px;
-
-    min-height: 150px;
-
-    background:
-        rgba(255,255,255,.7);
-
-    border-radius: 15px;
-
-}
-
-
-.letter-message {
-
-    font-family:
-        "Cormorant Garamond",
-        serif;
-
-    font-size: 21px;
-
-    line-height: 1.5;
+        }
+    );
 
 }
 
 
-.letter-footer {
+projectSelect.addEventListener(
+    "change",
+    updateFinance
+);
 
-    margin-top: 25px;
 
-    font-size: 7px;
+updateFinance();
 
-    letter-spacing: 3px;
-
-    opacity: .45;
-
-}
 
 
 /* =========================================================
-   FOOTER
+   WISH STARS
 ========================================================= */
 
-.footer {
+const wishStars =
+    document.querySelectorAll(
+        ".wish-star"
+    );
 
-    position: relative;
 
-    z-index: 10;
+const wishModal =
+    document.getElementById(
+        "wishModal"
+    );
 
-    text-align: center;
 
-    padding: 25px;
+const wishName =
+    document.getElementById(
+        "wishName"
+    );
 
-    font-size: 8px;
 
-    letter-spacing: 2px;
+const wishMessage =
+    document.getElementById(
+        "wishMessage"
+    );
 
-    opacity: .5;
 
-}
+const closeWish =
+    document.getElementById(
+        "closeWish"
+    );
+
+
+wishStars.forEach(
+    function (star) {
+
+        star.addEventListener(
+            "click",
+            function () {
+
+
+                wishName.textContent =
+                    star.dataset.name;
+
+
+                wishMessage.textContent =
+                    star.dataset.message;
+
+
+                wishModal.classList.add(
+                    "show"
+                );
+
+
+                document.body.style.overflow =
+                    "hidden";
+
+            }
+        );
+
+    }
+);
+
 
 
 /* =========================================================
-   RESPONSIVE
+   CLOSE WISH
 ========================================================= */
 
-@media(max-width:900px) {
+function closeWishModal() {
 
+    wishModal.classList.remove(
+        "show"
+    );
 
-    .site-layout {
-
-        grid-template-columns:
-            1fr;
-
-        width: 92%;
-
-    }
-
-
-    .sidebar {
-
-        position: fixed;
-
-        top: 80px;
-
-        left: 0;
-
-        width: 280px;
-
-        height:
-            calc(100vh - 80px);
-
-        padding: 20px;
-
-        background:
-            rgba(215,239,255,.95);
-
-        backdrop-filter:
-            blur(25px);
-
-        z-index: 2000;
-
-        transform:
-            translateX(-100%);
-
-        transition:
-            transform .4s ease;
-
-    }
-
-
-    .sidebar.open {
-
-        transform:
-            translateX(0);
-
-    }
-
-
-    .mobile-menu {
-
-        display: block;
-
-    }
-
+    document.body.style.overflow =
+        "auto";
 
 }
 
 
-@media(max-width:700px) {
+closeWish.addEventListener(
+    "click",
+    closeWishModal
+);
 
 
-    .topbar {
+wishModal
+    .querySelector(".wish-backdrop")
+    .addEventListener(
+        "click",
+        closeWishModal
+    );
 
-        padding:
-            0 20px;
 
+
+/* =========================================================
+   OPTIONAL:
+   ADD WISH STAR FROM FORM DATA
+========================================================= */
+
+
+/*
+    Sau này nếu bạn có dữ liệu:
+
+    {
+        name: "Nguyễn A",
+        message: "Chúc PN luôn tỏa sáng"
     }
 
+    có thể gọi:
 
-    .brand-main {
+    addWishStar(
+        "Nguyễn A",
+        "Chúc PN luôn tỏa sáng"
+    );
 
-        font-size: 20px;
-
-    }
-
-
-    .site-layout {
-
-        padding-top: 35px;
-
-    }
+*/
 
 
-    .profile-card {
-
-        grid-template-columns:
-            1fr;
-
-    }
+function addWishStar(
+    name,
+    message
+) {
 
 
-    .profile-photo {
-
-        max-width: 280px;
-
-        margin: auto;
-
-    }
+    const sky =
+        document.getElementById(
+            "starSky"
+        );
 
 
-    .project-grid {
-
-        grid-template-columns:
-            1fr;
-
-    }
+    const star =
+        document.createElement(
+            "button"
+        );
 
 
-    .finance-summary {
-
-        grid-template-columns:
-            1fr;
-
-    }
+    star.className =
+        "wish-star";
 
 
-    .donate-section {
-
-        margin:
-            -35px -4% -100px;
-
-    }
-
-
-    .donate-heading {
-
-        padding:
-            60px 25px;
-
-    }
+    const colors = [
+        "#9ed8ff",
+        "#ffd8f4",
+        "#c6b8ff",
+        "#fff0a8",
+        "#a9f1d0",
+        "#ffffff"
+    ];
 
 
-    .star-sky {
+    const color =
+        colors[
+            Math.floor(
+                Math.random() *
+                colors.length
+            )
+        ];
 
-        min-height: 750px;
 
-    }
+    star.style.setProperty(
+        "--x",
+        Math.random() * 90 + 5 + "%"
+    );
 
 
-    .modal-images {
+    star.style.setProperty(
+        "--y",
+        Math.random() * 75 + 10 + "%"
+    );
 
-        grid-template-columns:
-            1fr;
 
-    }
+    star.style.setProperty(
+        "--star-color",
+        color
+    );
 
+
+    star.dataset.name =
+        name;
+
+
+    star.dataset.message =
+        message;
+
+
+    star.textContent =
+        "✦";
+
+
+    star.addEventListener(
+        "click",
+        function () {
+
+            wishName.textContent =
+                name;
+
+            wishMessage.textContent =
+                message;
+
+            wishModal.classList.add(
+                "show"
+            );
+
+            document.body.style.overflow =
+                "hidden";
+
+        }
+    );
+
+
+    sky.appendChild(
+        star
+    );
 
 }
 
 
-@media(max-width:500px) {
+
+/* =========================================================
+   PAGE LOAD
+========================================================= */
+
+document.body.style.overflow =
+    "hidden";
 
 
-    .enter-button {
-
-        width: 270px;
-
-        height: 270px;
-
-    }
-
-
-    .opening h1 {
-
-        font-size: 34px;
-
-        letter-spacing: 5px;
-
-    }
-
-
-    .opening-welcome {
-
-        letter-spacing: 5px;
-
-    }
-
-
-    .profile-info h3 {
-
-        font-size: 35px;
-
-    }
-
-
-    .info-item {
-
-        grid-template-columns:
-            1fr;
-
-        gap: 5px;
-
-    }
-
-
-    .project-cover {
-
-        height: 220px;
-
-    }
-
-
-    .letter {
-
-        padding: 30px 20px;
-
-    }
-
-
-}
+updateMusicButtons(false);
