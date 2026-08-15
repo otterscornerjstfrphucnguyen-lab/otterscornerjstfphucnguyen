@@ -8,13 +8,14 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <title>Phúc Nguyên ✦ Otter's Corner</title>
-
     <meta
         name="description"
-        content="Otter's Corner — Just for Phuc Nguyen"
+        content="Otter's Corner - Just for Phuc Nguyen"
     >
 
+    <title>Phúc Nguyên ✦ Otter's Corner</title>
+
+    <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -34,7 +35,6 @@
 
 <div id="globalStars" class="global-stars"></div>
 
-
 <!-- =========================================================
      MUSIC
 ========================================================= -->
@@ -43,50 +43,42 @@
     <source src="1 music.mp3" type="audio/mpeg">
 </audio>
 
-
 <!-- =========================================================
-     INTRO SCREEN
+     INTRO
 ========================================================= -->
 
 <section id="introScreen" class="intro-screen">
 
     <div class="intro-stars" id="introStars"></div>
 
-    <div class="intro-glow"></div>
-
     <div class="intro-content">
 
-        <div class="intro-small">
-            JUST FOR PHÚC NGUYÊN
-        </div>
-
-        <h1>
+        <div class="intro-brand">
             Phúc Nguyên
             <span>✦</span>
-        </h1>
+        </div>
 
         <button
-            class="enter-button"
+            class="intro-avatar-button"
             id="enterButton"
             aria-label="Mở website"
         >
 
-            <div class="image-ring">
-                <img
-                    src="1.png"
-                    alt="Phúc Nguyên"
-                >
-            </div>
+            <div class="avatar-glow"></div>
 
-            <div class="enter-label">
-                CLICK TO ENTER
-            </div>
+            <img
+                src="1.png"
+                alt="Phúc Nguyên"
+                class="intro-avatar"
+            >
 
         </button>
 
-        <div class="intro-hint">
-            ✦ A little universe made with love ✦
+        <div class="intro-enter">
+            CLICK TO ENTER
         </div>
+
+        <div class="intro-small-star">✦</div>
 
     </div>
 
@@ -97,29 +89,28 @@
      MAIN WEBSITE
 ========================================================= -->
 
-<div id="mainWebsite" class="main-website hidden">
+<div id="mainWebsite" class="website hidden">
 
-    <!-- TOP NAV -->
+    <!-- HEADER -->
 
     <header class="topbar">
 
-        <div class="brand">
-            PHÚC NGUYÊN
-            <span>✦</span>
+        <div class="topbar-brand">
+            PHÚC NGUYÊN <span>✦</span>
         </div>
 
-        <div class="top-actions">
+        <div class="topbar-actions">
 
             <button
-                id="musicButton"
                 class="music-button"
+                id="musicButton"
             >
-                ♫ MUSIC ON
+                ♫ <span id="musicText">MUSIC ON</span>
             </button>
 
             <button
+                class="menu-button"
                 id="menuButton"
-                class="hamburger"
                 aria-label="Menu"
             >
                 <span></span>
@@ -132,53 +123,26 @@
     </header>
 
 
-    <!-- MOBILE MENU -->
+    <!-- MAIN LAYOUT -->
 
-    <div
-        id="mobileMenu"
-        class="mobile-menu"
-    >
+    <main class="main-layout">
 
-        <button data-section="info">
-            01 — THÔNG TIN PHÚC NGUYÊN
-        </button>
-
-        <button data-section="projects">
-            02 — PROJECTS
-        </button>
-
-        <button data-section="finance">
-            03 — THU & CHI PROJECT
-        </button>
-
-        <button data-section="stars">
-            04 — GỬI LỜI CHÚC & DONATE
-        </button>
-
-    </div>
-
-
-    <main class="layout">
-
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
+        <!-- SIDEBAR -->
 
         <aside class="sidebar">
 
             <button
                 class="nav-card active"
-                data-section="info"
+                data-section="about"
             >
                 <span class="nav-number">01</span>
 
                 <span class="nav-title">
-                    THÔNG TIN
-                    <br>
+                    THÔNG TIN<br>
                     PHÚC NGUYÊN
                 </span>
 
-                <span class="nav-star">✦</span>
+                <span class="nav-star">✧</span>
             </button>
 
 
@@ -203,8 +167,7 @@
                 <span class="nav-number">03</span>
 
                 <span class="nav-title">
-                    THU & CHI
-                    <br>
+                    THU & CHI<br>
                     PROJECT
                 </span>
 
@@ -219,8 +182,7 @@
                 <span class="nav-number">04</span>
 
                 <span class="nav-title">
-                    GỬI LỜI CHÚC
-                    <br>
+                    GỬI LỜI CHÚC<br>
                     & DONATE
                 </span>
 
@@ -230,206 +192,202 @@
         </aside>
 
 
-        <!-- =================================================
-             CONTENT
-        ================================================== -->
+        <!-- CONTENT -->
 
         <section class="content-area">
 
-
             <!-- =================================================
-                 SECTION 01 — INFORMATION
+                 ABOUT
             ================================================== -->
 
             <section
-                id="section-info"
+                id="about"
                 class="page-section active-section"
             >
 
-                <div class="section-heading">
+                <div class="glass-panel about-panel">
 
-                    <div class="eyebrow">
-                        GET TO KNOW PN ✦
+                    <div class="section-heading">
+
+                        <span class="heading-mini">
+                            GET TO KNOW PN
+                        </span>
+
+                        <h1>
+                            Thông tin Phúc Nguyên
+                            <span>✦</span>
+                        </h1>
+
+                        <p>
+                            Cùng tìm hiểu về Phúc Nguyên
+                        </p>
+
                     </div>
 
-                    <h2>
-                        Thông tin Phúc Nguyên
-                        <span>✦</span>
-                    </h2>
 
-                    <p>
-                        Cùng tìm hiểu về Phúc Nguyên
-                    </p>
+                    <div class="about-grid">
 
-                </div>
+                        <!-- PERSONAL -->
 
+                        <div class="personal-card">
 
-                <div class="info-card glass-card">
-
-                    <div class="info-title">
-                        ✦ THÔNG TIN CÁ NHÂN
-                    </div>
-
-                    <div class="info-grid">
-
-                        <div class="personal-details">
-
-                            <div class="info-row">
-                                <span>Họ và tên</span>
-                                <strong>
-                                    Nguyễn Thanh Phúc Nguyên
-                                </strong>
+                            <div class="card-label">
+                                ✦ THÔNG TIN CÁ NHÂN
                             </div>
 
-                            <div class="info-row">
-                                <span>Nghệ danh</span>
-                                <strong>
-                                    PN
-                                </strong>
-                            </div>
+                            <div class="personal-content">
 
-                            <div class="info-row">
-                                <span>Ngày sinh</span>
-                                <strong>
-                                    12/12/2005
-                                </strong>
-                            </div>
+                                <div class="personal-text">
 
-                            <div class="info-row">
-                                <span>Quê quán</span>
-                                <strong>
-                                    Đà Lạt - Việt Nam
-                                </strong>
-                            </div>
+                                    <div class="info-row">
+                                        <span>Tên đầy đủ</span>
+                                        <strong>
+                                            Nguyễn Thanh Phúc Nguyên
+                                        </strong>
+                                    </div>
 
-                            <div class="info-row">
-                                <span>Vị trí</span>
-                                <strong>
-                                    Ca sĩ / Performer
-                                </strong>
-                            </div>
+                                    <div class="info-row">
+                                        <span>Nghệ danh</span>
+                                        <strong>PN</strong>
+                                    </div>
 
-                            <div class="info-row">
-                                <span>Sở thích</span>
-                                <strong>
-                                    Âm nhạc, chơi piano,
-                                    chụp ảnh, ...
-                                </strong>
-                            </div>
+                                    <div class="info-row">
+                                        <span>Ngày sinh</span>
+                                        <strong>12/12/2005</strong>
+                                    </div>
 
-                            <div class="info-row philosophy">
-                                <span>Phương châm</span>
-                                <strong>
-                                    “Luôn nỗ lực hết mình
-                                    về không ngừng tiến về phía trước.”
-                                </strong>
+                                    <div class="info-row">
+                                        <span>Quê quán</span>
+                                        <strong>
+                                            Đà Lạt - Việt Nam
+                                        </strong>
+                                    </div>
+
+                                    <div class="info-row">
+                                        <span>Sở thích</span>
+                                        <strong>
+                                            Âm nhạc, chơi piano,
+                                            chụp ảnh, ...
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="portrait-box">
+
+                                    <img
+                                        src="ANH CD.png"
+                                        alt="Ảnh chân dung Phúc Nguyên"
+                                        onerror="this.style.display='none'; this.parentElement.classList.add('image-placeholder')"
+                                    >
+
+                                    <div class="portrait-placeholder">
+                                        <span>✦</span>
+                                        <small>
+                                            ẢNH CHÂN DUNG
+                                        </small>
+                                    </div>
+
+                                </div>
+
                             </div>
 
                         </div>
 
 
-                        <div class="portrait-box">
+                        <!-- JOURNEY -->
 
-                            <img
-                                src="ANH CD.png"
-                                alt="Ảnh chân dung Phúc Nguyên"
+                        <div class="accordion-card">
+
+                            <button
+                                class="accordion-header"
+                                data-target="idolJourney"
+                            >
+                                <span>
+                                    HÀNH TRÌNH TRỞ THÀNH IDOL
+                                </span>
+
+                                <span class="plus">
+                                    +
+                                </span>
+                            </button>
+
+                            <div
+                                class="accordion-content"
+                                id="idolJourney"
                             >
 
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- JOURNEY -->
-
-                <div class="accordion-card">
-
-                    <button class="accordion-header">
-
-                        <span>
-                            HÀNH TRÌNH TRỞ THÀNH IDOL
-                        </span>
-
-                        <span>+</span>
-
-                    </button>
-
-                    <div class="accordion-content">
-
-                        <div class="timeline">
-
-                            <div class="timeline-item">
-                                <span>01</span>
-                                <div>
-                                    <strong>
-                                        Trước debut
-                                    </strong>
-                                    <p>
-                                        Hành trình và những
-                                        dấu mốc đầu tiên.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <span>02</span>
-                                <div>
-                                    <strong>
-                                        Debut
-                                    </strong>
-                                    <p>
-                                        Chính thức bước lên
-                                        sân khấu với vai trò idol.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <span>03</span>
-                                <div>
-                                    <strong>
-                                        Hiện tại
-                                    </strong>
-                                    <p>
-                                        Những hành trình mới
-                                        đang được viết tiếp.
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PHOTO JOURNEY -->
-
-                <div class="accordion-card">
-
-                    <button class="accordion-header">
-
-                        <span>
-                            HÌNH ẢNH HÀNH TRÌNH
-                        </span>
-
-                        <span>+</span>
-
-                    </button>
-
-                    <div class="accordion-content">
-
-                        <div class="coming-gallery">
-
-                            <div>
-                                <span>✦</span>
                                 <p>
-                                    Hình ảnh hành trình
-                                    sẽ được cập nhật sau.
+                                    Từ những ngày đầu theo đuổi
+                                    âm nhạc cho đến hành trình
+                                    trở thành UPRIZE PN,
+                                    mỗi bước đi đều là một
+                                    mảnh ghép đáng nhớ.
                                 </p>
+
+                                <div class="journey-line">
+
+                                    <div class="journey-item">
+                                        <span>01</span>
+                                        <b>Before Debut</b>
+                                    </div>
+
+                                    <div class="journey-item">
+                                        <span>02</span>
+                                        <b>Training</b>
+                                    </div>
+
+                                    <div class="journey-item">
+                                        <span>03</span>
+                                        <b>Debut</b>
+                                    </div>
+
+                                    <div class="journey-item">
+                                        <span>04</span>
+                                        <b>Present</b>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- IMAGE JOURNEY -->
+
+                        <div class="accordion-card">
+
+                            <button
+                                class="accordion-header"
+                                data-target="imageJourney"
+                            >
+                                <span>
+                                    HÌNH ẢNH HÀNH TRÌNH
+                                </span>
+
+                                <span class="plus">
+                                    +
+                                </span>
+                            </button>
+
+                            <div
+                                class="accordion-content"
+                                id="imageJourney"
+                            >
+
+                                <div class="update-placeholder">
+
+                                    <span>✦</span>
+
+                                    <p>
+                                        Hình ảnh hành trình
+                                        sẽ được cập nhật sau.
+                                    </p>
+
+                                </div>
+
                             </div>
 
                         </div>
@@ -441,98 +399,268 @@
             </section>
 
 
-
             <!-- =================================================
-                 SECTION 02 — PROJECTS
+                 PROJECTS
             ================================================== -->
 
             <section
-                id="section-projects"
+                id="projects"
                 class="page-section"
             >
 
-                <div class="section-heading">
+                <div class="glass-panel">
 
-                    <div class="eyebrow">
-                        PROJECT BY OTTER'S CORNER ✦
+                    <div class="section-heading">
+
+                        <span class="heading-mini">
+                            PROJECT BY OTTER'S CORNER
+                        </span>
+
+                        <h1>
+                            Projects
+                            <span>✦</span>
+                        </h1>
+
+                        <p>
+                            Những dự án ý nghĩa dành cho
+                            Phúc Nguyên
+                        </p>
+
                     </div>
 
-                    <h2>
-                        Projects
-                        <span>✦</span>
-                    </h2>
 
-                    <p>
-                        Những dự án ý nghĩa dành cho Phúc Nguyên
-                    </p>
-
-                </div>
+                    <div class="project-grid">
 
 
-                <div
-                    id="projectGrid"
-                    class="project-grid"
-                >
+                        <!-- PROJECT 1 -->
 
-                    <!-- JS sẽ render 4 project -->
+                        <article
+                            class="project-card"
+                            data-project="project1"
+                        >
+
+                            <div class="project-number">
+                                01
+                            </div>
+
+                            <h2>
+                                CHEER TO GRADUATION
+                                <br>
+                                & ROAD TO DEBUT
+                            </h2>
+
+                            <span class="project-subtitle">
+                                Birthday / Graduation Project
+                            </span>
+
+                            <div class="project-cover video-cover">
+
+                                <video
+                                    src="PJ1.mp4"
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                                ></video>
+
+                                <div class="cover-overlay">
+                                    <span>VIEW PROJECT</span>
+                                </div>
+
+                            </div>
+
+                            <button class="view-project">
+                                Xem chi tiết →
+                            </button>
+
+                        </article>
+
+
+                        <!-- PROJECT 2 -->
+
+                        <article
+                            class="project-card"
+                            data-project="project2"
+                        >
+
+                            <div class="project-number">
+                                02
+                            </div>
+
+                            <h2>
+                                PHƯỚN HER CONCERT
+                                <br>
+                                FOR UPRIZE PN
+                            </h2>
+
+                            <span class="project-subtitle">
+                                Phúc Khởi Hưng Nguyên
+                            </span>
+
+                            <div class="project-cover">
+
+                                <img
+                                    src="PJ2.png"
+                                    alt="Phướn HER Concert"
+                                    onerror="this.parentElement.classList.add('image-placeholder')"
+                                >
+
+                                <div class="cover-overlay">
+                                    <span>VIEW PROJECT</span>
+                                </div>
+
+                            </div>
+
+                            <button class="view-project">
+                                Xem chi tiết →
+                            </button>
+
+                        </article>
+
+
+                        <!-- PROJECT 3 -->
+
+                        <article
+                            class="project-card"
+                            data-project="project3"
+                        >
+
+                            <div class="project-number">
+                                03
+                            </div>
+
+                            <h2>
+                                PHOTO FRAME
+                                <br>
+                                x TEDxTPC2026
+                            </h2>
+
+                            <span class="project-subtitle">
+                                Maestro
+                            </span>
+
+                            <div class="project-cover video-cover">
+
+                                <video
+                                    src="PJ3.mp4"
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                                ></video>
+
+                                <div class="cover-overlay">
+                                    <span>VIEW PROJECT</span>
+                                </div>
+
+                            </div>
+
+                            <button class="view-project">
+                                Xem chi tiết →
+                            </button>
+
+                        </article>
+
+
+                        <!-- PROJECT 4 -->
+
+                        <article
+                            class="project-card upcoming-project"
+                            data-project="project4"
+                        >
+
+                            <div class="project-number">
+                                04
+                            </div>
+
+                            <h2>
+                                PROJECT
+                                <br>
+                                SẮP TỚI...
+                            </h2>
+
+                            <span class="project-subtitle">
+                                Coming soon
+                            </span>
+
+                            <div class="project-cover future-cover">
+
+                                <div class="future-symbol">
+                                    ✦
+                                </div>
+
+                                <span>
+                                    COMING SOON
+                                </span>
+
+                            </div>
+
+                            <button class="view-project">
+                                Xem chi tiết →
+                            </button>
+
+                        </article>
+
+                    </div>
 
                 </div>
 
             </section>
 
 
-
             <!-- =================================================
-                 SECTION 03 — FINANCE
+                 FINANCE
             ================================================== -->
 
             <section
-                id="section-finance"
+                id="finance"
                 class="page-section"
             >
 
-                <div class="section-heading">
+                <div class="glass-panel finance-panel">
 
-                    <div class="eyebrow">
-                        TRANSPARENT — CLEAR — TRUST ✦
+                    <div class="section-heading">
+
+                        <span class="heading-mini">
+                            TRANSPARENCY
+                        </span>
+
+                        <h1>
+                            Thu & Chi Project
+                            <span>✦</span>
+                        </h1>
+
+                        <p>
+                            Minh bạch · Rõ ràng · Tin cậy
+                        </p>
+
                     </div>
 
-                    <h2>
-                        Thu & Chi Project
-                        <span>✦</span>
-                    </h2>
 
-                    <p>
-                        Minh bạch — Rõ ràng — Tin cậy
-                    </p>
+                    <div class="project-select-area">
 
-                </div>
-
-
-                <div class="finance-card glass-card">
-
-                    <div class="finance-selector">
-
-                        <label>
+                        <label for="financeProject">
                             Chọn project
                         </label>
 
-                        <select id="projectSelect">
+                        <select id="financeProject">
 
-                            <option value="pj1">
-                                Cheer to Graduation & Road to Debut
+                            <option value="project1">
+                                CHEER TO GRADUATION
+                                & ROAD TO DEBUT
                             </option>
 
-                            <option value="pj2">
-                                Phướn HER Concert for UPRIZE PN
+                            <option value="project2">
+                                Phướn HER Concert
+                                for UPRIZE PN
                             </option>
 
-                            <option value="pj3">
-                                Photo Frame x TEDxTPC2026
+                            <option value="project3">
+                                PHOTO FRAME x TEDxTPC2026
                             </option>
 
-                            <option value="pj4">
-                                Project tương lai
+                            <option value="project4">
+                                Project sắp tới...
                             </option>
 
                         </select>
@@ -542,25 +670,48 @@
 
                     <div class="finance-summary">
 
-                        <div class="summary-box">
-                            <span>TỔNG THU</span>
+                        <div class="summary-box income">
+
+                            <span>
+                                TỔNG THU
+                            </span>
+
                             <strong id="totalIncome">
                                 0đ
                             </strong>
+
+                            <i>↓</i>
+
                         </div>
 
+
                         <div class="summary-box expense">
-                            <span>TỔNG CHI</span>
+
+                            <span>
+                                TỔNG CHI
+                            </span>
+
                             <strong id="totalExpense">
                                 0đ
                             </strong>
+
+                            <i>↑</i>
+
                         </div>
 
+
                         <div class="summary-box remaining">
-                            <span>CÒN LẠI</span>
-                            <strong id="totalRemain">
+
+                            <span>
+                                CÒN LẠI
+                            </span>
+
+                            <strong id="totalRemaining">
                                 0đ
                             </strong>
+
+                            <i>✓</i>
+
                         </div>
 
                     </div>
@@ -588,7 +739,7 @@
 
                             </thead>
 
-                            <tbody id="financeTable">
+                            <tbody id="financeTableBody">
 
                             </tbody>
 
@@ -598,8 +749,9 @@
 
 
                     <div class="finance-note">
-                        ✦ Các project đầu tiên sử dụng quỹ nội bộ.
-                        Mọi số liệu hiện tại được ghi nhận là 0đ.
+                        ✦ Ba project đầu tiên sử dụng
+                        quỹ nội bộ nên phần thu chi hiện tại
+                        được ghi nhận là 0đ.
                     </div>
 
                 </div>
@@ -607,32 +759,35 @@
             </section>
 
 
-
             <!-- =================================================
-                 SECTION 04 — STARS / DONATE
+                 STAR / DONATE
             ================================================== -->
 
             <section
-                id="section-stars"
+                id="stars"
                 class="page-section stars-section"
             >
 
-                <div
-                    id="nightSky"
-                    class="night-sky"
-                >
+                <div class="night-sky">
+
+                    <div
+                        class="night-stars"
+                        id="nightStars"
+                    ></div>
+
 
                     <div class="moon"></div>
 
-                    <div class="stars-title">
 
-                        <div class="eyebrow">
+                    <div class="stars-content">
+
+                        <span class="star-mini-title">
                             A LITTLE STAR FOR PN
-                        </div>
+                        </span>
 
-                        <h2>
+                        <h1>
                             Thắp sáng một vì sao
-                        </h2>
+                        </h1>
 
                         <div class="big-star">
                             ✦
@@ -645,22 +800,24 @@
 
 
                         <a
-                            class="donate-button"
                             href="https://forms.gle/D47nMUWBiiyie2gSA"
                             target="_blank"
                             rel="noopener noreferrer"
+                            class="donate-button"
                         >
                             ✦ GỬI LỜI CHÚC & DONATE
                         </a>
 
 
-                        <div class="privacy-note">
+                        <div class="privacy-box">
 
                             🔒
+
                             <span>
-                                Thông tin gửi trong form được bảo mật.
-                                Chỉ <strong>Họ và tên</strong> và
-                                <strong>lời chúc</strong> được hiển thị
+                                Thông tin gửi trong form được
+                                bảo mật. Chỉ
+                                <b>Họ và tên</b> và
+                                <b>lời chúc</b> được hiển thị
                                 công khai trên bầu trời.
                             </span>
 
@@ -669,18 +826,16 @@
                     </div>
 
 
+                    <!-- WISH STARS -->
+
                     <div
                         id="wishStars"
                         class="wish-stars"
-                    >
-
-                        <!-- Sao được JS tạo ở đây -->
-
-                    </div>
+                    ></div>
 
 
-                    <div class="star-bottom-text">
-                        ✦ Mỗi vì sao là một lời yêu thương ✦
+                    <div class="stars-bottom-hint">
+                        Chạm vào một vì sao để mở lá thư ✦
                     </div>
 
                 </div>
@@ -692,106 +847,90 @@
     </main>
 
 
-    <!-- =================================================
-         PROJECT MODAL
-    ================================================== -->
+    <!-- FOOTER -->
 
-    <div
-        id="projectModal"
-        class="modal"
-    >
+    <footer class="footer">
+        © Otter's Corner - Just for Phuc Nguyen
+    </footer>
 
-        <div class="modal-backdrop"></div>
+</div>
 
-        <div class="project-modal-card">
 
-            <button
-                id="closeProjectModal"
-                class="close-modal"
-            >
-                ×
-            </button>
+<!-- =========================================================
+     PROJECT MODAL
+========================================================= -->
 
-            <div
-                id="projectModalMedia"
-                class="modal-media"
-            ></div>
+<div
+    id="projectModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-            <div class="modal-project-content">
+    <div class="modal-backdrop"></div>
 
-                <div
-                    id="projectModalNumber"
-                    class="modal-number"
-                ></div>
+    <div class="project-modal-content">
 
-                <h3 id="projectModalTitle"></h3>
+        <button
+            id="closeProjectModal"
+            class="modal-close"
+        >
+            ×
+        </button>
 
-                <div
-                    id="projectModalDescription"
-                    class="modal-description"
-                ></div>
-
-            </div>
-
-        </div>
+        <div id="projectModalBody"></div>
 
     </div>
 
+</div>
 
-    <!-- =================================================
-         LETTER MODAL
-    ================================================== -->
 
-    <div
-        id="letterModal"
-        class="letter-modal"
-    >
+<!-- =========================================================
+     LETTER MODAL
+========================================================= -->
 
-        <div class="letter-overlay"></div>
+<div
+    id="letterModal"
+    class="letter-modal"
+    aria-hidden="true"
+>
 
-        <div class="letter-wrapper">
+    <div class="letter-backdrop"></div>
 
-            <button
-                id="closeLetter"
-                class="letter-close"
-            >
-                ×
-            </button>
+    <div class="letter-container">
 
-            <div class="letter-envelope">
+        <button
+            id="closeLetter"
+            class="letter-close"
+        >
+            ×
+        </button>
 
-                <div class="letter-flap"></div>
+        <div class="letter-paper">
 
-                <div class="letter-paper">
+            <div class="letter-seal">
+                ✦
+            </div>
 
-                    <div class="letter-decoration">
-                        ✦
-                    </div>
+            <div class="letter-content">
 
-                    <div
-                        id="letterName"
-                        class="letter-name"
-                    >
-                    </div>
+                <span class="letter-label">
+                    A LITTLE LETTER FOR PN
+                </span>
 
-                    <div class="letter-divider">
-                        ─── ✦ ───
-                    </div>
+                <h2 id="letterName">
+                    Một vì sao
+                </h2>
 
-                    <p
-                        id="letterWish"
-                        class="letter-wish"
-                    >
-                    </p>
+                <div class="letter-line"></div>
 
-                    <div class="letter-sign">
-                        With love,
-                        <br>
-                        <strong>
-                            Otter's Corner
-                        </strong>
-                    </div>
+                <p id="letterWish">
+                    Lời chúc sẽ xuất hiện tại đây.
+                </p>
 
+                <div class="letter-sign">
+                    With love,
+                    <br>
+                    Otter's Corner ♡
                 </div>
 
             </div>
@@ -800,14 +939,33 @@
 
     </div>
 
+</div>
 
-    <!-- =================================================
-         FOOTER
-    ================================================== -->
 
-    <footer>
-        © Otter’s Corner - Just for Phuc Nguyen
-    </footer>
+<!-- =========================================================
+     SIDE MENU
+========================================================= -->
+
+<div
+    id="mobileMenu"
+    class="mobile-menu"
+>
+
+    <button data-section="about">
+        01 · Thông tin Phúc Nguyên
+    </button>
+
+    <button data-section="projects">
+        02 · Projects
+    </button>
+
+    <button data-section="finance">
+        03 · Thu & Chi Project
+    </button>
+
+    <button data-section="stars">
+        04 · Gửi lời chúc & Donate
+    </button>
 
 </div>
 
