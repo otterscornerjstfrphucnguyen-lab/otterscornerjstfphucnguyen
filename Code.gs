@@ -1,204 +1,97 @@
 /************************************************************
  * OTTER'S CORNER × PHÚC NGUYÊN
- *
- * GOOGLE APPS SCRIPT BACKEND
+ * GOOGLE APPS SCRIPT
  *
  * Chức năng:
- * 1. Đọc Google Sheet câu trả lời.
- * 2. CHỈ trả về:
- *      - Họ và tên
- *      - Lời chúc
- * 3. Không trả về email / số tiền / thông tin riêng tư khác.
- * 4. Hỗ trợ JSONP để GitHub Pages có thể đọc dữ liệu.
+ * 1. Đọc lời chúc từ Google Sheet
+ * 2. Chỉ public HỌ TÊN + LỜI CHÚC
+ * 3. Không public email / số tiền / thông tin riêng tư
+ * 4. Frontend GitHub gọi API ?action=wishes
  ************************************************************/
 
 
 /* =========================================================
-   CONFIG
+   CẤU HÌNH
 ========================================================= */
 
 
 /*
- * ID Google Sheet của bạn.
- *
- * Lấy từ link:
- *
- * docs.google.com/spreadsheets/d/
- * 1z0Cvoltb0STKUVKDeYnIQfkzhRyT7CsSreyg_638dt4
- *
+ * ID Google Sheet của bạn
  */
-
 const SPREADSHEET_ID =
   "1z0Cvoltb0STKUVKDeYnIQfkzhRyT7CsSreyg_638dt4";
 
 
 /*
- * GID sheet câu trả lời mà bạn đã gửi.
+ * GID của sheet câu trả lời
  */
-
 const SHEET_GID =
   1010577208;
 
 
 /*
- * Số lượng lời chúc tối đa trả về.
+ * Tên câu hỏi lời chúc.
  *
- * Nếu có rất nhiều lời chúc,
- * website sẽ không bị quá nặng.
+ * Script sẽ tìm header có chữ
+ * "lời chúc" / "chúc" / tương tự.
  */
+const WISH_HEADER_KEYWORDS = [
+  "hãy gửi một lời chúc",
+  "lời chúc",
+  "lời nhắn",
+  "wish"
+];
 
-const MAX_WISHES =
-  250;
+
+/*
+ * Các tên cột có thể chứa tên người gửi.
+ */
+const NAME_HEADER_KEYWORDS = [
+  "họ và tên",
+  "họ tên",
+  "tên",
+  "name"
+];
 
 
 /* =========================================================
    WEB APP
 ========================================================= */
 
-
 function doGet(e) {
 
-  try {
+  const action =
+    e &&
+    e.parameter &&
+    e.parameter.action
+      ? e.parameter.action
+      : "wishes";
 
-    const wishes =
-      getPublicWishes();
 
+  if (action === "wishes") {
 
-    const result = {
-
+    return jsonResponse({
       success: true,
-
-      wishes: wishes,
-
-      updatedAt:
-        new Date().toISOString()
-
-    };
-
-
-    /*
-     * Nếu frontend gửi:
-     *
-     * ?callback=abc123
-     *
-     * thì trả JSONP.
-     */
-
-    const callback =
-      e &&
-      e.parameter &&
-      e.parameter.callback;
-
-
-    if (callback) {
-
-      /*
-       * Chặn callback không hợp lệ.
-       */
-
-      if (
-        !/^[a-zA-Z_$][0-9a-zA-Z_$]*$/
-          .test(callback)
-      ) {
-
-        return ContentService
-          .createTextOutput(
-            "Invalid callback"
-          )
-          .setMimeType(
-            ContentService.MimeType.TEXT
-          );
-
-      }
-
-
-      const json =
-        JSON.stringify(result);
-
-
-      return ContentService
-        .createTextOutput(
-          callback +
-          "(" +
-          json +
-          ");"
-        )
-        .setMimeType(
-          ContentService.MimeType.JAVASCRIPT
-        );
-
-    }
-
-
-    /*
-     * Nếu mở trực tiếp Apps Script URL
-     * thì trả JSON bình thường.
-     */
-
-    return ContentService
-      .createTextOutput(
-        JSON.stringify(result)
-      )
-      .setMimeType(
-        ContentService.MimeType.JSON
-      );
-
-
-  } catch (error) {
-
-    const result = {
-
-      success: false,
-
-      wishes: [],
-
-      error:
-        String(error)
-
-    };
-
-
-    const callback =
-      e &&
-      e.parameter &&
-      e.parameter.callback;
-
-
-    if (callback) {
-
-      return ContentService
-        .createTextOutput(
-          callback +
-          "(" +
-          JSON.stringify(result) +
-          ");"
-        )
-        .setMimeType(
-          ContentService.MimeType.JAVASCRIPT
-        );
-
-    }
-
-
-    return ContentService
-      .createTextOutput(
-        JSON.stringify(result)
-      )
-      .setMimeType(
-        ContentService.MimeType.JSON
-      );
+      wishes: getPublicWishes()
+    });
 
   }
+
+
+  return jsonResponse({
+    success: true,
+    message:
+      "Otter's Corner × Phúc Nguyên API is running."
+  });
 
 }
 
 
 /* =========================================================
-   GET PUBLIC WISHES
+   LẤY SHEET
 ========================================================= */
 
-
-function getPublicWishes() {
+function getResponseSheet() {
 
   const spreadsheet =
     SpreadsheetApp.openById(
@@ -206,17 +99,13 @@ function getPublicWishes() {
     );
 
 
-  /*
-   * Tìm sheet theo GID.
-   */
-
   const sheets =
     spreadsheet.getSheets();
 
 
-  let sheet = null;
-
-
+  /*
+   * Ưu tiên tìm đúng GID.
+   */
   for (
     let i = 0;
     i < sheets.length;
@@ -225,13 +114,10 @@ function getPublicWishes() {
 
     if (
       sheets[i].getSheetId() ===
-      SHEET_GID
+      Number(SHEET_GID)
     ) {
 
-      sheet =
-        sheets[i];
-
-      break;
+      return sheets[i];
 
     }
 
@@ -242,419 +128,253 @@ function getPublicWishes() {
    * Nếu không tìm thấy GID,
    * dùng sheet đầu tiên.
    */
+  return sheets[0];
 
-  if (!sheet) {
-
-    sheet =
-      sheets[0];
-
-  }
+}
 
 
-  if (!sheet) {
+/* =========================================================
+   TÌM CỘT
+========================================================= */
 
-    return [];
+function normalizeText(text) {
 
-  }
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+}
 
 
-  const values =
-    sheet
-      .getDataRange()
-      .getDisplayValues();
+function findColumnIndex(
+  headers,
+  keywords
+) {
+
+  const normalizedHeaders =
+    headers.map(normalizeText);
 
 
-  if (
-    !values ||
-    values.length < 2
+  for (
+    let i = 0;
+    i < normalizedHeaders.length;
+    i++
   ) {
 
-    return [];
+    for (
+      let j = 0;
+      j < keywords.length;
+      j++
+    ) {
+
+      const keyword =
+        normalizeText(
+          keywords[j]
+        );
+
+
+      if (
+        normalizedHeaders[i]
+          .includes(keyword)
+      ) {
+
+        return i;
+
+      }
+
+    }
 
   }
 
 
-  const headers =
-    values[0]
-      .map(
-        h =>
-          normalizeHeader(h)
+  return -1;
+
+}
+
+
+/* =========================================================
+   ĐỌC LỜI CHÚC
+========================================================= */
+
+function getPublicWishes() {
+
+  try {
+
+    const sheet =
+      getResponseSheet();
+
+
+    if (!sheet) {
+      return [];
+    }
+
+
+    const lastRow =
+      sheet.getLastRow();
+
+    const lastColumn =
+      sheet.getLastColumn();
+
+
+    /*
+     * Chưa có dữ liệu
+     */
+    if (
+      lastRow < 2 ||
+      lastColumn < 1
+    ) {
+
+      return [];
+
+    }
+
+
+    const values =
+      sheet
+        .getRange(
+          1,
+          1,
+          lastRow,
+          lastColumn
+        )
+        .getDisplayValues();
+
+
+    const headers =
+      values[0];
+
+
+    const nameColumn =
+      findColumnIndex(
+        headers,
+        NAME_HEADER_KEYWORDS
       );
 
 
-  /*
-   * Tìm cột tên.
-   */
+    const wishColumn =
+      findColumnIndex(
+        headers,
+        WISH_HEADER_KEYWORDS
+      );
 
-  const nameColumn =
-    findNameColumn(
-      headers
+
+    /*
+     * Nếu không tìm thấy cột lời chúc,
+     * không trả dữ liệu riêng tư.
+     */
+    if (wishColumn === -1) {
+
+      return [];
+
+    }
+
+
+    const result = [];
+
+
+    /*
+     * Đọc từ dòng 2.
+     */
+    for (
+      let row = 1;
+      row < values.length;
+      row++
+    ) {
+
+      const wish =
+        String(
+          values[row][wishColumn] || ""
+        ).trim();
+
+
+      /*
+       * Không có lời chúc -> bỏ qua.
+       */
+      if (!wish) {
+        continue;
+      }
+
+
+      let name =
+        "Một người thương mến";
+
+
+      if (
+        nameColumn !== -1
+      ) {
+
+        const sheetName =
+          String(
+            values[row][nameColumn] || ""
+          ).trim();
+
+
+        if (sheetName) {
+          name = sheetName;
+        }
+
+      }
+
+
+      /*
+       * CHỈ trả về:
+       * - name
+       * - wish
+       *
+       * Không trả:
+       * - email
+       * - timestamp
+       * - số tiền
+       * - câu trả lời khác
+       * - thông tin riêng tư
+       */
+      result.push({
+
+        id:
+          row,
+
+        name:
+          cleanPublicText(name),
+
+        wish:
+          cleanPublicText(wish)
+
+      });
+
+    }
+
+
+    return result;
+
+  } catch (error) {
+
+    console.error(
+      error
     );
-
-
-  /*
-   * Tìm cột lời chúc.
-   */
-
-  const wishColumn =
-    findWishColumn(
-      headers
-    );
-
-
-  /*
-   * Nếu không tìm thấy lời chúc
-   * thì không trả dữ liệu.
-   */
-
-  if (
-    wishColumn === -1
-  ) {
 
     return [];
 
   }
 
-
-  const wishes = [];
-
-
-  /*
-   * Duyệt từ dưới lên để lời chúc mới
-   * xuất hiện gần vị trí trung tâm.
-   */
-
-  for (
-    let rowIndex =
-      values.length - 1;
-
-    rowIndex >= 1;
-
-    rowIndex--
-  ) {
-
-    const row =
-      values[rowIndex];
-
-
-    if (!row) {
-      continue;
-    }
-
-
-    let name =
-      "";
-
-
-    let message =
-      "";
-
-
-    if (
-      nameColumn >= 0
-    ) {
-
-      name =
-        String(
-          row[nameColumn] ||
-          ""
-        ).trim();
-
-    }
-
-
-    message =
-      String(
-        row[wishColumn] ||
-        ""
-      ).trim();
-
-
-    /*
-     * Không có lời chúc
-     * thì không tạo sao.
-     */
-
-    if (!message) {
-
-      continue;
-
-    }
-
-
-    /*
-     * Bảo vệ dữ liệu public:
-     *
-     * Không trả:
-     * email
-     * số điện thoại
-     * tiền donate
-     * timestamp
-     * bất kỳ cột nào khác.
-     */
-
-    wishes.push({
-
-      name:
-        sanitizePublicText(
-          name,
-          80
-        ),
-
-      message:
-        sanitizePublicText(
-          message,
-          1200
-        )
-
-    });
-
-
-    if (
-      wishes.length >=
-      MAX_WISHES
-    ) {
-
-      break;
-
-    }
-
-  }
-
-
-  /*
-   * Đảo lại để thứ tự từ cũ -> mới.
-   */
-
-  wishes.reverse();
-
-
-  return wishes;
-
 }
 
 
 /* =========================================================
-   FIND NAME COLUMN
+   LÀM SẠCH TEXT
 ========================================================= */
 
+function cleanPublicText(text) {
 
-function findNameColumn(
-  headers
-) {
-
-  const exactCandidates = [
-
-    "ho va ten",
-
-    "ho ten",
-
-    "ten",
-
-    "ten cua ban",
-
-    "ho va ten cua ban",
-
-    "ten nguoi gui",
-
-    "ho ten nguoi gui"
-
-  ];
-
-
-  /*
-   * Ưu tiên exact match.
-   */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    if (
-      exactCandidates.includes(
-        headers[i]
-      )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  /*
-   * Sau đó tìm header có chứa
-   * "ho va ten".
-   */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    if (
-      headers[i].includes(
-        "ho va ten"
-      )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  return -1;
-
-}
-
-
-/* =========================================================
-   FIND WISH COLUMN
-========================================================= */
-
-
-function findWishColumn(
-  headers
-) {
-
-  const candidates = [
-
-    "hay gui mot loi chuc tot lanh den phuc nguyen de thap sang mot vi sao tren bau troi ban nhe",
-
-    "loi chuc",
-
-    "loi chuc den phuc nguyen",
-
-    "gui loi chuc",
-
-    "chuc phuc"
-
-  ];
-
-
-  /*
-   * Exact.
-   */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    if (
-      candidates.includes(
-        headers[i]
-      )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  /*
-   * Tìm bằng từ khóa.
-   */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    const header =
-      headers[i];
-
-
-    if (
-      header.includes(
-        "loi chuc"
-      ) &&
-      (
-        header.includes(
-          "phuc nguyen"
-        ) ||
-        header.includes(
-          "vi sao"
-        )
-      )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  /*
-   * Fallback:
-   *
-   * nếu không nhận diện được,
-   * tìm cột có "loi chuc".
-   */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    if (
-      headers[i].includes(
-        "loi chuc"
-      )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  return -1;
-
-}
-
-
-/* =========================================================
-   NORMALIZE HEADER
-========================================================= */
-
-
-function normalizeHeader(
-  value
-) {
-
-  return String(
-    value || ""
-  )
-    .trim()
-    .toLowerCase()
-    .normalize(
-      "NFD"
-    )
+  return String(text || "")
     .replace(
-      /[\u0300-\u036f]/g,
+      /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
       ""
     )
     .replace(
-      /đ/g,
-      "d"
-    )
-    .replace(
-      /[^a-z0-9]+/g,
-      " "
+      /<[^>]*>/g,
+      ""
     )
     .trim();
 
@@ -662,44 +382,18 @@ function normalizeHeader(
 
 
 /* =========================================================
-   SANITIZE
+   JSON RESPONSE
 ========================================================= */
 
+function jsonResponse(data) {
 
-function sanitizePublicText(
-  value,
-  maxLength
-) {
-
-  let text =
-    String(
-      value || ""
+  return ContentService
+    .createTextOutput(
+      JSON.stringify(data)
     )
-      .trim()
-      .slice(
-        0,
-        maxLength
-      );
-
-
-  /*
-   * Không cho HTML/script
-   * đi vào dữ liệu public.
-   */
-
-  text =
-    text
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      );
-
-
-  return text;
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
 
 }
 
@@ -708,19 +402,13 @@ function sanitizePublicText(
    TEST
 ========================================================= */
 
-
-/*
- * Bạn có thể chạy hàm này trong Apps Script
- * để kiểm tra Sheet có đọc được hay không.
- */
-
-function testGetPublicWishes() {
+function testWishes() {
 
   const wishes =
     getPublicWishes();
 
 
-  Logger.log(
+  console.log(
     JSON.stringify(
       wishes,
       null,
