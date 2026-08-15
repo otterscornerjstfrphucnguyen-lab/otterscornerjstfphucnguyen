@@ -1,307 +1,189 @@
-/*
-=========================================================
- OTTER'S CORNER — GOOGLE APPS SCRIPT
- PHÚC NGUYÊN
-=========================================================
-
-MỤC ĐÍCH:
-
-Website CHỈ nhận:
-
-1. Họ và tên
-2. Lời chúc
-
-Các thông tin khác KHÔNG được gửi về website:
-
-- Email
-- Số điện thoại
-- Facebook / Instagram / Threads
-- Số tiền donate
-- Bill chuyển khoản
-
-=========================================================
-*/
+/**
+ * =========================================================
+ * OTTER'S CORNER - PUBLIC WISH API
+ * =========================================================
+ *
+ * API CHỈ TRẢ:
+ *   - Họ và tên
+ *   - Lời chúc
+ *
+ * KHÔNG TRẢ:
+ *   - Email
+ *   - Số điện thoại
+ *   - Facebook / Instagram / Threads
+ *   - Số tiền donate
+ *   - Bill chuyển khoản
+ *
+ */
 
 
-/*
-=========================================================
- GOOGLE SHEET
-=========================================================
-*/
-
-const SHEET_ID =
+const SPREADSHEET_ID =
   "1_f4yFSaR9QrMNIUk8iA0Maw4C2Z2-S25vRwS6qaQaiw";
 
 
-const SHEET_NAME =
-  "Câu trả lời biểu mẫu 1";
-
-
-/*
-=========================================================
- API
-=========================================================
-*/
-
+/**
+ * GET
+ */
 function doGet() {
 
-  const result =
-    getPublicWishes();
+  try {
 
-
-  return ContentService
-
-    .createTextOutput(
-      JSON.stringify(result)
-    )
-
-    .setMimeType(
-      ContentService.MimeType.JSON
-    );
-
-}
-
-
-/*
-=========================================================
- LẤY DỮ LIỆU CÔNG KHAI
-=========================================================
-*/
-
-function getPublicWishes() {
-
-  const sheet =
-    SpreadsheetApp
-      .openById(SHEET_ID)
-      .getSheetByName(SHEET_NAME);
-
-
-  if (!sheet) {
-
-    throw new Error(
-      "Không tìm thấy sheet: " +
-      SHEET_NAME
-    );
-
-  }
-
-
-  const values =
-    sheet
-      .getDataRange()
-      .getDisplayValues();
-
-
-  if (
-    values.length < 2
-  ) {
-
-    return [];
-
-  }
-
-
-  /*
-    Hàng đầu tiên
-    = tiêu đề Google Form
-  */
-
-  const headers =
-    values[0].map(
-      normalizeHeader
-    );
-
-
-  /*
-    Tìm cột Họ và Tên
-  */
-
-  const nameIndex =
-    findHeader(
-      headers,
-      [
-        "họ và tên",
-        "ho va ten",
-        "họ tên",
-        "ho ten"
-      ]
-    );
-
-
-  /*
-    Tìm cột lời chúc
-  */
-
-  const wishIndex =
-    findHeader(
-      headers,
-      [
-
-        "hãy gửi một lời chúc tốt lành đến phúc nguyên để thắp sáng một vì sao trên bầu trời bạn nhé",
-
-        "lời chúc",
-
-        "loi chuc"
-
-      ]
-    );
-
-
-  /*
-    FALLBACK
-
-    Theo sheet bạn đã gửi:
-
-    B = Họ và Tên
-    H = Lời chúc
-
-    Javascript bắt đầu từ 0:
-
-    B = index 1
-    H = index 7
-  */
-
-  const safeNameIndex =
-    nameIndex >= 0
-      ? nameIndex
-      : 1;
-
-
-  const safeWishIndex =
-    wishIndex >= 0
-      ? wishIndex
-      : 7;
-
-
-  const result = [];
-
-
-  /*
-    Đọc từng dòng
-  */
-
-  for (
-    let i = 1;
-    i < values.length;
-    i++
-  ) {
-
-    const row =
-      values[i];
-
-
-    const name =
-      cleanText(
-        row[safeNameIndex]
+    const spreadsheet =
+      SpreadsheetApp.openById(
+        SPREADSHEET_ID
       );
 
+    const sheet =
+      spreadsheet.getSheets()[0];
 
-    const message =
-      cleanText(
-        row[safeWishIndex]
-      );
+    const values =
+      sheet.getDataRange().getDisplayValues();
 
-
-    /*
-      Chỉ tạo sao khi:
-
-      có tên
-      +
-      có lời chúc
-    */
 
     if (
-      !name ||
-      !message
+      !values ||
+      values.length < 2
     ) {
 
-      continue;
+      return jsonResponse([]);
 
     }
 
 
+    const headers =
+      values[0].map(
+        header =>
+          String(header)
+            .trim()
+            .toLowerCase()
+      );
+
+
     /*
-      QUAN TRỌNG:
-
-      Chỉ push 2 trường.
-
-      Không push các dữ liệu riêng tư.
+      Tìm cột Họ và Tên
     */
 
-    result.push({
+    const nameIndex =
+      findHeader(
+        headers,
+        [
+          "họ và tên",
+          "họ và tên:",
+          "ho va ten",
+          "ho ten"
+        ]
+      );
 
-      name:
-        name,
+
+    /*
+      Tìm cột lời chúc.
+      Không cần ghi chính xác 100%.
+    */
+
+    const messageIndex =
+      findHeaderContains(
+        headers,
+        [
+          "lời chúc",
+          "loi chuc",
+          "hãy gửi một lời chúc",
+          "hãy gửi lời chúc"
+        ]
+      );
+
+
+    /*
+      Nếu không tìm thấy cột
+    */
+
+    if (
+      nameIndex === -1 ||
+      messageIndex === -1
+    ) {
+
+      return jsonResponse([]);
+
+    }
+
+
+    const result = [];
+
+
+    for (
+      let i = 1;
+      i < values.length;
+      i++
+    ) {
+
+      const row =
+        values[i];
+
+
+      const name =
+        String(
+          row[nameIndex] || ""
+        ).trim();
+
+
+      const message =
+        String(
+          row[messageIndex] || ""
+        ).trim();
+
+
+      /*
+        Chỉ public nếu có cả tên
+        và lời chúc.
+      */
+
+      if (
+        !name ||
+        !message
+      ) {
+
+        continue;
+
+      }
+
+
+      result.push({
+
+        name: name,
+
+        message: message
+
+      });
+
+    }
+
+
+    return jsonResponse(result);
+
+
+  } catch (error) {
+
+    return jsonResponse({
+
+      error: true,
 
       message:
-        message
+        String(error)
 
     });
 
   }
 
-
-  return result;
-
 }
 
 
-/*
-=========================================================
- CHUẨN HÓA HEADER
-=========================================================
-*/
-
-function normalizeHeader(
-  value
-) {
-
-  return String(
-    value || ""
-  )
-
-    .trim()
-
-    .toLowerCase()
-
-    .normalize(
-      "NFD"
-    )
-
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-
-    .replace(
-      /\s+/g,
-      " "
-    );
-
-}
-
-
-/*
-=========================================================
- TÌM HEADER
-=========================================================
-*/
-
+/**
+ * Tìm header chính xác
+ */
 function findHeader(
   headers,
-  candidates
+  possibleNames
 ) {
 
-  const normalizedCandidates =
-    candidates.map(
-      normalizeHeader
-    );
-
-
-  /*
-    Tìm chính xác trước
-  */
-
   for (
     let i = 0;
     i < headers.length;
@@ -309,39 +191,8 @@ function findHeader(
   ) {
 
     if (
-      normalizedCandidates
-        .includes(
-          headers[i]
-        )
-    ) {
-
-      return i;
-
-    }
-
-  }
-
-
-  /*
-    Nếu không có,
-    tìm gần đúng.
-  */
-
-  for (
-    let i = 0;
-    i < headers.length;
-    i++
-  ) {
-
-    if (
-      normalizedCandidates.some(
-        candidate =>
-          headers[i].includes(
-            candidate
-          ) ||
-          candidate.includes(
-            headers[i]
-          )
+      possibleNames.includes(
+        headers[i]
       )
     ) {
 
@@ -351,29 +202,61 @@ function findHeader(
 
   }
 
+  return -1;
+
+}
+
+
+/**
+ * Tìm header có chứa từ khóa
+ */
+function findHeaderContains(
+  headers,
+  keywords
+) {
+
+  for (
+    let i = 0;
+    i < headers.length;
+    i++
+  ) {
+
+    for (
+      let j = 0;
+      j < keywords.length;
+      j++
+    ) {
+
+      if (
+        headers[i].includes(
+          keywords[j]
+        )
+      ) {
+
+        return i;
+
+      }
+
+    }
+
+  }
 
   return -1;
 
 }
 
 
-/*
-=========================================================
- CLEAN TEXT
-=========================================================
-*/
+/**
+ * JSON response
+ */
+function jsonResponse(data) {
 
-function cleanText(
-  value
-) {
-
-  return String(
-    value || ""
-  )
-    .trim()
-    .slice(
-      0,
-      5000
+  return ContentService
+    .createTextOutput(
+      JSON.stringify(data)
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
     );
 
 }
