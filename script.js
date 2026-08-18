@@ -1,354 +1,206 @@
-/* =========================================================
-   OTTER'S CORNER
-   MAIN JAVASCRIPT
-========================================================= */
+/*************************************************
+ * OTTER'S CORNER
+ * FRONTEND
+ *************************************************/
 
 
-/* =========================================================
-   GOOGLE APPS SCRIPT
-========================================================= */
-
-const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbx53Hh_zgUDBsv958bp0yU-xa2JD-VCFZnAz0Ohm2qPzvEiiNKZNsA6zh4yOadsQfVh/exec";
+const API_URL =
+  "https://script.google.com/macros/s/AKfycby_fPh-8aExvjh4mN3dH3nmbEFdHVHIPNFHMb3dMU58ouaZpXoq56VyKvUmo0blMf12/exec";
 
 
-/* =========================================================
+/* =========================================
+   GLOBAL DATA
+========================================= */
+
+let wishes = [];
+let projects = [];
+let finances = [];
+
+let musicStarted = false;
+
+
+/* =========================================
    DOM
-========================================================= */
+========================================= */
 
-const introScreen =
-  document.getElementById("introScreen");
+const intro =
+  document.getElementById("intro");
+
+const app =
+  document.getElementById("app");
 
 const enterButton =
   document.getElementById("enterButton");
 
-const mainSite =
-  document.getElementById("mainSite");
+const music =
+  document.getElementById("backgroundMusic");
 
 const musicButton =
   document.getElementById("musicButton");
 
-const musicIcon =
-  document.getElementById("musicIcon");
 
-const musicText =
-  document.getElementById("musicText");
+/* =========================================
+   START
+========================================= */
 
-const backgroundMusic =
-  document.getElementById("backgroundMusic");
-
-const wishStars =
-  document.getElementById("wishStars");
-
-const wishEmpty =
-  document.getElementById("wishEmpty");
-
-const wishModal =
-  document.getElementById("wishModal");
-
-const closeLetter =
-  document.getElementById("closeLetter");
-
-const letterName =
-  document.getElementById("letterName");
-
-const letterMessage =
-  document.getElementById("letterMessage");
-
-
-/* =========================================================
-   INTRO STARS
-========================================================= */
-
-function createIntroStars() {
-
-  const container =
-    document.getElementById("introStars");
-
-  if (!container) return;
-
-  const count =
-    window.innerWidth < 600
-      ? 35
-      : 70;
-
-  container.innerHTML = "";
-
-  for (let i = 0; i < count; i++) {
-
-    const star =
-      document.createElement("span");
-
-    star.className = "star";
-
-    star.style.left =
-      `${Math.random() * 100}%`;
-
-    star.style.top =
-      `${Math.random() * 100}%`;
-
-    star.style.animationDelay =
-      `${Math.random() * 3}s`;
-
-    star.style.animationDuration =
-      `${1.5 + Math.random() * 3}s`;
-
-    const size =
-      2 + Math.random() * 4;
-
-    star.style.width =
-      `${size}px`;
-
-    star.style.height =
-      `${size}px`;
-
-    container.appendChild(star);
-  }
-}
-
-
-/* =========================================================
-   BACKGROUND STARS
-========================================================= */
-
-function createBackgroundStars() {
-
-  const container =
-    document.getElementById("backgroundStars");
-
-  if (!container) return;
-
-  const count =
-    window.innerWidth < 600
-      ? 30
-      : 65;
-
-  container.innerHTML = "";
-
-  for (let i = 0; i < count; i++) {
-
-    const star =
-      document.createElement("span");
-
-    star.className = "star";
-
-    star.style.left =
-      `${Math.random() * 100}%`;
-
-    star.style.top =
-      `${Math.random() * 100}%`;
-
-    star.style.animationDelay =
-      `${Math.random() * 4}s`;
-
-    star.style.animationDuration =
-      `${1.8 + Math.random() * 3}s`;
-
-    const size =
-      2 + Math.random() * 3;
-
-    star.style.width =
-      `${size}px`;
-
-    star.style.height =
-      `${size}px`;
-
-    container.appendChild(star);
-  }
-}
-
-
-createIntroStars();
-createBackgroundStars();
-
-
-/* =========================================================
-   ENTER WEBSITE
-========================================================= */
-
-enterButton.addEventListener(
-  "click",
-  async () => {
-
-    introScreen.classList.add("hide");
-
-    setTimeout(() => {
-
-      introScreen.style.display =
-        "none";
-
-      mainSite.classList.remove("hidden");
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }, 700);
-
-
-    /*
-      Trình duyệt thường chặn autoplay.
-      Vì vậy chúng ta chỉ thử phát nhạc
-      sau thao tác click của người dùng.
-    */
-
-    try {
-
-      await backgroundMusic.play();
-
-      musicIcon.textContent = "♫";
-      musicText.textContent = "Đang phát";
-
-    } catch (error) {
-
-      musicIcon.textContent = "♫";
-      musicText.textContent = "Bật nhạc";
-
-    }
-
-  }
+document.addEventListener(
+  "DOMContentLoaded",
+  init
 );
 
 
-/* =========================================================
-   MUSIC
-========================================================= */
+async function init() {
 
-let musicPlaying = false;
+  createStars(
+    document.getElementById("introStars"),
+    55
+  );
 
 
-musicButton.addEventListener(
-  "click",
-  async () => {
+  createStars(
+    document.getElementById("globalStars"),
+    45
+  );
 
-    if (backgroundMusic.paused) {
+
+  setupNavigation();
+
+  setupAccordion();
+
+  setupModal();
+
+  setupWishModal();
+
+  setupMusic();
+
+  setupEnter();
+
+
+  renderProjects();
+
+  renderFinanceSelect();
+
+
+  /*
+   * Gọi API Google Apps Script
+   */
+  await loadAPI();
+}
+
+
+/* =========================================
+   ENTER
+========================================= */
+
+function setupEnter() {
+
+  enterButton.addEventListener(
+    "click",
+    async function() {
+
+      intro.classList.add("hide");
+
+      setTimeout(function() {
+
+        intro.style.display = "none";
+
+        app.classList.remove("hidden");
+
+        window.scrollTo({
+          top: 0,
+          behavior: "instant"
+        });
+
+      }, 800);
+
+
+      /*
+       * Trình duyệt thường chỉ cho autoplay
+       * sau khi người dùng click.
+       *
+       * Vì vậy bắt đầu nhạc ở đây.
+       */
 
       try {
 
-        await backgroundMusic.play();
+        await music.play();
 
-        musicPlaying = true;
+        musicStarted = true;
 
-        musicIcon.textContent = "♫";
-        musicText.textContent = "Đang phát";
+        musicButton.textContent =
+          "♪ MUSIC ON";
 
       } catch (error) {
 
-        console.error(
-          "Không thể phát nhạc:",
+        console.log(
+          "Không thể autoplay:",
           error
         );
 
       }
 
-    } else {
-
-      backgroundMusic.pause();
-
-      musicPlaying = false;
-
-      musicIcon.textContent = "♪";
-      musicText.textContent = "Bật nhạc";
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   SECTION NAVIGATION
-========================================================= */
-
-const menuCards =
-  document.querySelectorAll(".menu-card");
-
-const contentSections =
-  document.querySelectorAll(".content-section");
-
-const wishSection =
-  document.getElementById("wishSection");
-
-
-function closeAllSections() {
-
-  contentSections.forEach(section => {
-
-    section.classList.remove("active");
-
-  });
-
-  if (wishSection) {
-
-    wishSection.classList.remove("active");
-
-  }
-
-}
-
-
-function openSection(id) {
-
-  closeAllSections();
-
-  const section =
-    document.getElementById(id);
-
-  if (!section) return;
-
-  section.classList.add("active");
-
-  setTimeout(() => {
-
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
-  }, 50);
-
-}
-
-
-menuCards.forEach(card => {
-
-  card.addEventListener(
-    "click",
-    () => {
-
-      const sectionId =
-        card.dataset.section;
-
-      if (sectionId === "wishSection") {
-
-        openWishSection();
-
-      } else {
-
-        openSection(sectionId);
-
-      }
-
     }
   );
+}
 
-});
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function setupNavigation() {
+
+  const navButtons =
+    document.querySelectorAll(
+      ".nav-card"
+    );
 
 
-/* =========================================================
-   CLOSE CONTENT
-========================================================= */
-
-document
-  .querySelectorAll(".close-section")
-  .forEach(button => {
+  navButtons.forEach(function(button) {
 
     button.addEventListener(
       "click",
-      () => {
+      function() {
 
-        closeAllSections();
+        const section =
+          button.dataset.section;
+
+
+        navButtons.forEach(function(item) {
+
+          item.classList.remove(
+            "active"
+          );
+
+        });
+
+
+        button.classList.add("active");
+
+
+        document
+          .querySelectorAll(".page-section")
+          .forEach(function(page) {
+
+            page.classList.remove(
+              "active"
+            );
+
+          });
+
+
+        const target =
+          document.getElementById(section);
+
+
+        if (target) {
+
+          target.classList.add(
+            "active"
+          );
+
+        }
+
 
         window.scrollTo({
           top: 0,
@@ -359,199 +211,107 @@ document
     );
 
   });
-
-
-/* =========================================================
-   FINANCE
-========================================================= */
-
-const projectSelect =
-  document.getElementById("projectSelect");
-
-const totalIncome =
-  document.getElementById("totalIncome");
-
-const totalExpense =
-  document.getElementById("totalExpense");
-
-const remainingMoney =
-  document.getElementById("remainingMoney");
-
-
-function updateFinance() {
-
-  /*
-    3 project đầu tiên dùng quỹ nội bộ
-    => tất cả hiển thị 0đ.
-
-    Có thể thay dữ liệu ở đây sau này
-    nếu muốn public thu chi.
-  */
-
-  totalIncome.textContent = "0đ";
-  totalExpense.textContent = "0đ";
-  remainingMoney.textContent = "0đ";
-
 }
 
 
-projectSelect.addEventListener(
-  "change",
-  updateFinance
-);
+/* =========================================
+   ACCORDION
+========================================= */
 
-updateFinance();
+function setupAccordion() {
+
+  document
+    .querySelectorAll(".accordion-header")
+    .forEach(function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          const accordion =
+            button.parentElement;
+
+          accordion.classList.toggle(
+            "open"
+          );
 
 
-/* =========================================================
-   OPEN WISH SECTION
-========================================================= */
+          const icon =
+            button.querySelector("b");
 
-function openWishSection() {
 
-  closeAllSections();
+          icon.textContent =
+            accordion.classList.contains(
+              "open"
+            )
+              ? "−"
+              : "+";
 
-  wishSection.classList.add("active");
+        }
+      );
 
-  wishSection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-  /*
-    Mỗi lần mở mục 4 sẽ tải dữ liệu mới.
-  */
-
-  loadPublicWishes();
-
+    });
 }
 
 
-/* =========================================================
-   WISH DATA
-========================================================= */
+/* =========================================
+   MUSIC
+========================================= */
 
-let wishData = [];
+function setupMusic() {
 
+  musicButton.addEventListener(
+    "click",
+    async function() {
 
-/*
-  Các màu được yêu cầu:
-  vàng
-  trắng
-  baby blue
-  hồng pastel
-*/
+      if (music.paused) {
 
-const starColors = [
-  "#f7d77a",
-  "#ffffff",
-  "#bfe7ff",
-  "#f6c7d8"
-];
+        try {
 
+          await music.play();
 
-/* =========================================================
-   NORMALIZE API DATA
-========================================================= */
+          musicButton.textContent =
+            "♪ MUSIC ON";
 
-function normalizeWish(item) {
+          musicButton.classList.remove(
+            "off"
+          );
 
-  if (!item) return null;
+        } catch (error) {
 
-  /*
-    Apps Script có thể trả về:
+          console.log(error);
 
-    {
-      name: "...",
-      wish: "..."
+        }
+
+      } else {
+
+        music.pause();
+
+        musicButton.textContent =
+          "♪ MUSIC OFF";
+
+        musicButton.classList.add(
+          "off"
+        );
+
+      }
+
     }
-
-    hoặc:
-
-    {
-      name: "...",
-      message: "..."
-    }
-
-    hoặc:
-
-    {
-      sender: "...",
-      wish: "..."
-    }
-
-    Ta hỗ trợ nhiều tên để website
-    không dễ lỗi.
-  */
-
-  const name =
-    item.name ||
-    item.sender ||
-    item.fullName ||
-    item.fullname ||
-    item.ten ||
-    "Một người bạn";
-
-
-  const wish =
-    item.wish ||
-    item.message ||
-    item.chuc ||
-    item.loiChuc ||
-    item["Lời chúc"] ||
-    "";
-
-
-  if (!String(wish).trim()) {
-
-    return null;
-
-  }
-
-
-  return {
-
-    name:
-      String(name).trim(),
-
-    wish:
-      String(wish).trim()
-
-  };
-
+  );
 }
 
 
-/* =========================================================
-   LOAD WISHES FROM APPS SCRIPT
-========================================================= */
+/* =========================================
+   API
+========================================= */
 
-async function loadPublicWishes() {
-
-  /*
-    Nếu URL chưa được điền
-    thì không gọi API.
-  */
-
-  if (
-    !SCRIPT_URL ||
-    SCRIPT_URL.includes("THAY_URL")
-  ) {
-
-    console.warn(
-      "Chưa cấu hình Google Apps Script."
-    );
-
-    return;
-
-  }
-
+async function loadAPI() {
 
   try {
 
     const response =
       await fetch(
-        SCRIPT_URL,
+        API_URL + "?action=all&v=" + Date.now(),
         {
           method: "GET",
           cache: "no-store"
@@ -562,7 +322,7 @@ async function loadPublicWishes() {
     if (!response.ok) {
 
       throw new Error(
-        `HTTP ${response.status}`
+        "HTTP " + response.status
       );
 
     }
@@ -573,356 +333,898 @@ async function loadPublicWishes() {
 
 
     console.log(
-      "Google Apps Script:",
+      "API DATA:",
       data
     );
 
 
-    /*
-      API có thể trả:
+    if (!data.success) {
 
-      [
-        {...},
-        {...}
-      ]
-
-      hoặc:
-
-      {
-        wishes: [...]
-      }
-
-      hoặc:
-
-      {
-        data: [...]
-      }
-    */
-
-    let rawWishes = [];
-
-
-    if (Array.isArray(data)) {
-
-      rawWishes = data;
-
-    } else if (
-      Array.isArray(data.wishes)
-    ) {
-
-      rawWishes = data.wishes;
-
-    } else if (
-      Array.isArray(data.data)
-    ) {
-
-      rawWishes = data.data;
+      throw new Error(
+        data.error ||
+        "API trả về lỗi."
+      );
 
     }
 
 
-    wishData =
-      rawWishes
-        .map(normalizeWish)
-        .filter(Boolean);
+    /*
+     * Lời chúc
+     */
+
+    wishes =
+      Array.isArray(data.wishes)
+        ? data.wishes
+        : [];
 
 
-    renderWishes();
+    /*
+     * Project
+     */
+
+    if (
+      Array.isArray(data.projects) &&
+      data.projects.length
+    ) {
+
+      projects =
+        data.projects;
+
+      renderProjects();
+
+    }
+
+
+    /*
+     * Finance
+     */
+
+    if (
+      Array.isArray(data.finance) &&
+      data.finance.length
+    ) {
+
+      finances =
+        data.finance;
+
+      renderFinanceSelect();
+
+    }
+
+
+    /*
+     * Quan trọng:
+     * render sao sau khi API trả dữ liệu.
+     */
+
+    renderWishStars();
+
+
+    console.log(
+      "Số lời chúc nhận được:",
+      wishes.length
+    );
 
 
   } catch (error) {
 
     console.error(
-      "Không thể lấy lời chúc:",
+      "API ERROR:",
       error
     );
 
-    /*
-      Không hiện lỗi xấu trên giao diện.
-      Bầu trời vẫn giữ nguyên.
-    */
 
-    wishData = [];
-
-    renderWishes();
+    showWishError(
+      "Không thể kết nối dữ liệu lời chúc."
+    );
 
   }
+}
+
+
+/* =========================================
+   PROJECTS
+========================================= */
+
+function renderProjects() {
+
+  const grid =
+    document.getElementById(
+      "projectsGrid"
+    );
+
+
+  if (!grid) return;
+
+
+  grid.innerHTML = "";
+
+
+  projects.forEach(function(project) {
+
+    const card =
+      document.createElement("article");
+
+
+    card.className =
+      "project-card";
+
+
+    let media = "";
+
+
+    if (
+      project.type === "video"
+    ) {
+
+      media = `
+        <video
+          src="${project.cover}"
+          muted
+          autoplay
+          loop
+          playsinline
+        ></video>
+      `;
+
+    } else if (
+      project.cover
+    ) {
+
+      media = `
+        <img
+          src="${project.cover}"
+          alt="${escapeHTML(project.title)}"
+          loading="lazy"
+        >
+      `;
+
+    } else {
+
+      media = `
+        <div class="project-placeholder">
+          COMING SOON ✦
+        </div>
+      `;
+
+    }
+
+
+    card.innerHTML = `
+
+      <div class="project-media">
+        ${media}
+      </div>
+
+      <div class="project-body">
+
+        <span class="project-number">
+          ${escapeHTML(project.number)}
+        </span>
+
+        <h3>
+          ${escapeHTML(project.shortTitle)}
+        </h3>
+
+        <div class="project-date">
+          ${escapeHTML(project.date)}
+        </div>
+
+        <button
+          class="project-detail"
+          data-project="${escapeHTML(project.id)}"
+        >
+          Xem chi tiết →
+        </button>
+
+      </div>
+    `;
+
+
+    grid.appendChild(card);
+
+  });
+
+
+  grid
+    .querySelectorAll(".project-detail")
+    .forEach(function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          openProject(
+            button.dataset.project
+          );
+
+        }
+      );
+
+    });
+}
+
+
+/* =========================================
+   PROJECT MODAL
+========================================= */
+
+function setupModal() {
+
+  const modal =
+    document.getElementById(
+      "projectModal"
+    );
+
+
+  const close =
+    document.getElementById(
+      "closeModal"
+    );
+
+
+  const overlay =
+    modal.querySelector(
+      ".modal-overlay"
+    );
+
+
+  close.addEventListener(
+    "click",
+    closeProject
+  );
+
+
+  overlay.addEventListener(
+    "click",
+    closeProject
+  );
 
 }
 
 
-/* =========================================================
-   RENDER WISH STARS
-========================================================= */
+function openProject(id) {
 
-function renderWishes() {
+  const project =
+    projects.find(function(item) {
 
-  wishStars.innerHTML = "";
+      return item.id === id;
+
+    });
 
 
-  if (!wishData.length) {
+  if (!project) return;
 
-    wishEmpty.classList.remove("hide");
+
+  const modal =
+    document.getElementById(
+      "projectModal"
+    );
+
+
+  const content =
+    document.getElementById(
+      "modalContent"
+    );
+
+
+  let gallery = "";
+
+
+  if (
+    Array.isArray(project.images) &&
+    project.images.length
+  ) {
+
+    gallery = `
+      <div class="modal-gallery">
+
+        ${project.images
+          .map(function(image) {
+
+            return `
+              <img
+                src="${image}"
+                alt=""
+                loading="lazy"
+              >
+            `;
+
+          })
+          .join("")}
+
+      </div>
+    `;
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="modal-title">
+      ${escapeHTML(project.title)}
+    </div>
+
+    <div class="modal-description">
+      ${escapeHTML(project.description)}
+    </div>
+
+    ${gallery}
+
+  `;
+
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+
+  document.body.style.overflow =
+    "hidden";
+}
+
+
+function closeProject() {
+
+  const modal =
+    document.getElementById(
+      "projectModal"
+    );
+
+
+  modal.classList.add(
+    "hidden"
+  );
+
+
+  document.body.style.overflow =
+    "";
+}
+
+
+/* =========================================
+   FINANCE
+========================================= */
+
+function renderFinanceSelect() {
+
+  const select =
+    document.getElementById(
+      "financeSelect"
+    );
+
+
+  if (!select) return;
+
+
+  select.innerHTML = "";
+
+
+  finances.forEach(function(item) {
+
+    const option =
+      document.createElement("option");
+
+
+    option.value =
+      item.id;
+
+
+    option.textContent =
+      item.project;
+
+
+    select.appendChild(option);
+
+  });
+
+
+  select.addEventListener(
+    "change",
+    renderFinance
+  );
+
+
+  renderFinance();
+}
+
+
+function renderFinance() {
+
+  const select =
+    document.getElementById(
+      "financeSelect"
+    );
+
+
+  if (!select) return;
+
+
+  const finance =
+    finances.find(function(item) {
+
+      return item.id ===
+        select.value;
+
+    });
+
+
+  if (!finance) return;
+
+
+  document.getElementById(
+    "totalIncome"
+  ).textContent =
+    money(finance.income);
+
+
+  document.getElementById(
+    "totalExpense"
+  ).textContent =
+    money(finance.expense);
+
+
+  document.getElementById(
+    "totalBalance"
+  ).textContent =
+    money(finance.balance);
+
+
+  const tbody =
+    document.getElementById(
+      "financeTable"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  if (
+    !finance.transactions ||
+    !finance.transactions.length
+  ) {
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="7"
+          style="
+            text-align:center;
+            padding:35px;
+          "
+        >
+          Project sử dụng quỹ nội bộ — 0đ ✦
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+  }
+
+
+  finance.transactions.forEach(
+    function(transaction) {
+
+      const tr =
+        document.createElement("tr");
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${escapeHTML(transaction.date || "")}
+        </td>
+
+        <td>
+          ${escapeHTML(transaction.type || "")}
+        </td>
+
+        <td>
+          ${escapeHTML(transaction.quantity || "")}
+        </td>
+
+        <td>
+          ${money(transaction.unitPrice || 0)}
+        </td>
+
+        <td>
+          ${money(transaction.total || 0)}
+        </td>
+
+        <td>
+          ${money(transaction.deposit || 0)}
+        </td>
+
+        <td>
+          ${
+            transaction.proof
+              ? `
+                <a
+                  href="${transaction.proof}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  🔗
+                </a>
+              `
+              : "—"
+          }
+        </td>
+
+      `;
+
+
+      tbody.appendChild(tr);
+
+    }
+  );
+}
+
+
+/* =========================================
+   WISH STARS
+========================================= */
+
+function renderWishStars() {
+
+  const container =
+    document.getElementById(
+      "wishStars"
+    );
+
+
+  const loading =
+    document.getElementById(
+      "wishLoading"
+    );
+
+
+  const empty =
+    document.getElementById(
+      "wishEmpty"
+    );
+
+
+  if (!container) return;
+
+
+  container.innerHTML = "";
+
+
+  if (loading) {
+
+    loading.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  if (!wishes.length) {
+
+    if (empty) {
+
+      empty.classList.remove(
+        "hidden"
+      );
+
+      empty.textContent =
+        "Chưa có lời chúc nào được hiển thị.";
+
+    }
 
     return;
 
   }
 
 
-  wishEmpty.classList.add("hide");
+  if (empty) {
+
+    empty.classList.add(
+      "hidden"
+    );
+
+  }
 
 
-  wishData.forEach(
-    (wish, index) => {
+  /*
+   * Tạo vị trí đẹp và không chồng sao.
+   */
+
+  const positions = [
+    [13, 18],
+    [29, 65],
+    [47, 27],
+    [65, 68],
+    [82, 20],
+    [75, 43],
+    [22, 42],
+    [53, 76],
+    [90, 65],
+    [40, 52],
+    [8, 78]
+  ];
+
+
+  wishes.forEach(
+    function(wish, index) {
 
       const star =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
-
-      star.type = "button";
 
       star.className =
         "wish-star";
 
-      star.setAttribute(
-        "aria-label",
-        "Mở lời chúc"
-      );
+
+      star.type =
+        "button";
+
+
+      const position =
+        positions[
+          index %
+          positions.length
+        ];
 
 
       /*
-        Không hiện tên bên ngoài.
-        Chỉ hiện ngôi sao.
-      */
+       * Một chút random để các sao
+       * không quá đều.
+       */
 
-      star.textContent = "★";
+      const left =
+        position[0] +
+        ((index * 7) % 6 - 3);
 
 
-      const color =
-        starColors[
-          index % starColors.length
-        ];
+      const top =
+        position[1] +
+        ((index * 11) % 7 - 3);
+
+
+      star.style.left =
+        left + "%";
+
+
+      star.style.top =
+        top + "%";
 
 
       star.style.setProperty(
         "--star-color",
-        color
-      );
-
-
-      /*
-        Phân bố sao trong vùng trời.
-        Tránh khu vực tiêu đề.
-      */
-
-      const left =
-        5 + Math.random() * 90;
-
-
-      const top =
-        25 + Math.random() * 62;
-
-
-      star.style.left =
-        `${left}%`;
-
-      star.style.top =
-        `${top}%`;
-
-
-      star.style.setProperty(
-        "--duration",
-        `${3 + Math.random() * 3}s`
+        wish.color ||
+        "#9dd7ff"
       );
 
 
       star.style.animationDelay =
-        `${Math.random() * 2}s`;
+        (index * .3) + "s";
+
+
+      star.innerHTML =
+        "✦";
+
+
+      star.title =
+        "Một lời chúc dành cho Phúc Nguyên";
 
 
       star.addEventListener(
         "click",
-        () => {
+        function() {
 
-          openLetter(wish);
+          openWish(wish);
 
         }
       );
 
 
-      wishStars.appendChild(star);
+      container.appendChild(
+        star
+      );
 
     }
+  );
+}
+
+
+/* =========================================
+   WISH LETTER
+========================================= */
+
+function setupWishModal() {
+
+  const modal =
+    document.getElementById(
+      "wishModal"
+    );
+
+
+  const close =
+    document.getElementById(
+      "closeWish"
+    );
+
+
+  const overlay =
+    modal.querySelector(
+      ".wish-overlay"
+    );
+
+
+  close.addEventListener(
+    "click",
+    closeWish
+  );
+
+
+  overlay.addEventListener(
+    "click",
+    closeWish
   );
 
 }
 
 
-/* =========================================================
-   OPEN LETTER
-========================================================= */
+function openWish(wish) {
 
-function openLetter(wish) {
-
-  if (!wish) return;
-
-
-  letterName.textContent =
-    wish.name ||
-    "Một người bạn";
+  document.getElementById(
+    "letterText"
+  ).textContent =
+    wish.wish;
 
 
-  letterMessage.textContent =
-    wish.wish ||
-    "Một lời chúc thật đẹp.";
+  document.getElementById(
+    "letterName"
+  ).textContent =
+    "— " +
+    wish.name;
 
 
-  wishModal.classList.add("show");
-
-  wishModal.setAttribute(
-    "aria-hidden",
-    "false"
-  );
+  document
+    .getElementById("wishModal")
+    .classList.remove(
+      "hidden"
+    );
 
 
   document.body.style.overflow =
     "hidden";
-
 }
 
 
-/* =========================================================
-   CLOSE LETTER
-========================================================= */
+function closeWish() {
 
-function closeWishLetter() {
-
-  wishModal.classList.remove("show");
-
-  wishModal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
+  document
+    .getElementById("wishModal")
+    .classList.add(
+      "hidden"
+    );
 
 
   document.body.style.overflow =
     "";
-
 }
 
 
-closeLetter.addEventListener(
-  "click",
-  closeWishLetter
-);
+function showWishError(message) {
+
+  const loading =
+    document.getElementById(
+      "wishLoading"
+    );
 
 
-document
-  .querySelector(".wish-modal-overlay")
-  .addEventListener(
-    "click",
-    closeWishLetter
-);
+  if (!loading) return;
 
 
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closeWishLetter();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   WISH CLOSE BUTTON
-========================================================= */
-
-document
-  .querySelector(".wish-close")
-  .addEventListener(
-    "click",
-    () => {
-
-      wishSection.classList.remove(
-        "active"
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
+  loading.classList.remove(
+    "hidden"
   );
 
 
-/* =========================================================
-   PREVENT BROKEN IMAGES
-========================================================= */
+  loading.textContent =
+    message;
+}
 
-document
-  .querySelectorAll("img")
-  .forEach(image => {
 
-    image.addEventListener(
-      "error",
-      () => {
+/* =========================================
+   STARS BACKGROUND
+========================================= */
 
-        image.style.opacity = "0.25";
+function createStars(container, count) {
 
-        console.warn(
-          "Không tìm thấy file:",
-          image.getAttribute("src")
-        );
+  if (!container) return;
 
-      }
+
+  for (
+    let i = 0;
+    i < count;
+    i++
+  ) {
+
+    const star =
+      document.createElement(
+        "span"
+      );
+
+
+    star.className =
+      "star";
+
+
+    star.textContent =
+      Math.random() > .65
+        ? "✦"
+        : "·";
+
+
+    star.style.left =
+      Math.random() * 100 + "%";
+
+
+    star.style.top =
+      Math.random() * 100 + "%";
+
+
+    star.style.setProperty(
+      "--size",
+      (Math.random() * 13 + 5) +
+      "px"
     );
 
-  });
+
+    star.style.setProperty(
+      "--duration",
+      (Math.random() * 3 + 2) +
+      "s"
+    );
 
 
-/* =========================================================
-   PAGE VISIBILITY
-========================================================= */
+    star.style.setProperty(
+      "--delay",
+      (Math.random() * 5) +
+      "s"
+    );
 
-document.addEventListener(
-  "visibilitychange",
-  () => {
 
-    if (
-      document.hidden &&
-      !backgroundMusic.paused
-    ) {
-
-      /*
-        Không tự pause.
-        Giữ nguyên nhạc khi chuyển tab
-        tùy trình duyệt.
-      */
-
-    }
+    container.appendChild(
+      star
+    );
 
   }
-);
+}
 
 
-/* =========================================================
-   INITIAL
-========================================================= */
+/* =========================================
+   UTILITIES
+========================================= */
 
-console.log(
-  "✦ Otter's Corner website loaded."
-);
+function money(value) {
 
-console.log(
-  "Google Apps Script:",
-  SCRIPT_URL
-);
+  const number =
+    Number(value) || 0;
+
+
+  return number.toLocaleString(
+    "vi-VN"
+  ) + "đ";
+}
+
+
+function escapeHTML(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
